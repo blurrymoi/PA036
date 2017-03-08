@@ -1,0 +1,22 @@
+Evaluated project: Gold Team - https://github.com/m-mato/sem
+Evaluated by: Blahutova Lucia, 409812
+
+1.) Evaluation checklist
+- compile the project and run tests using “mvn clean install” : I could compile to project, but tests didn't run [-2 points]
+- test failures:  no test failures, when I run them manually [ok]
+- other project requirements: DataAccessException is not thrown in DAO layer [-1 point]
+- contributing of members: I think all members contributed [ok]
+
+2.) General comments
+I don't know, why tests didn't run after mvn clean install, it's a pity that they didn't because I think that the team did lot of work on test methods. Project has good 
+structure into maven modules. I think that each member was contributing enough. 
+
+3.) Strong points
+Detailed tests and good non-trivial methods. 
+
+4.) Weak points 
+Missing JavaDoc, test didn't run after mvn clean install.
+
+5.) Other points
+I think that the "idea" and general working on the project is good, it seems that the team just doesn't have enough time to make it precisely. It's a pity, maybe
+they could try to better time-management or better team communication.

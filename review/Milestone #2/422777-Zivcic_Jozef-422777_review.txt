@@ -1,0 +1,28 @@
+Evaluated project: https://github.com/m-mato/sem
+Evaluated by: Jozef Živčic 422777
+
+a) Checklist evaluation:
+  * -2b It was possible to compile the project using “mvn clean install”, but after issuing this command, no tests started.
+  * -1b I think that DataAccessException or its subclass is not thrown in case of any exception on DAO layer. I didn't find translation for exceptions in class DBConfig.
+  * OK There are no test failures after manual invocation.
+  * OK All team members were contributing enough.
+
+total points: 7
+
+b) General comments:
+  Project is well structured and contains many functions, which are above the scope of Milestone 2. Project can be compiled without problems, but tests don't start automatically after “mvn clean install”. All requirements for 2nd milestone are met except translation of exceptions. Despite some other notes bellow, I evaluate this project as very good.
+c) Strong points of the project:
+  * Notifications by mail, when certain events occur.
+  * There are many non-trivial business functions on Service Layer, especially in InvitationService.
+  * Tests for service layer use same logical structure, which makes them easy to read.
+  * Extensible testing of service layer.
+d) Weaknesses of the project:
+  * Missing JavaDoc on many methods.
+  * Some lines of code are too long, can be split and continue on the new line.
+  * There are some unused imports.
+e) other notes:
+  * Passwords are stored as plain text, but there are TODO notes in the code for changing it to hash.
+  * EventService#edit - not tested.
+  * Texts for e-mail messages can be in Property files.
+  * @Spy annotation on BeanMappingService can be used instead of setBeanMappingService on Facade classes.
+  * Code duplicity in InvitationServiceTest and NotificationServiceTest. In both classes is used private method getInvitation, which can be defined as static method in any helper class.

@@ -1,0 +1,49 @@
+Evaluated project: Gold Team - https://github.com/m-mato/sem
+Evaluated by: Martin Styk, 422580 
+
+-------------------------------------------------------------------------------------------------------
+a) Checklist evaluation:
+
+[NOK]		- -2 points if it is not possible to compile the project and run tests using “mvn clean install”;
+		- it is possible to compile the project, but tests are not executed, probably because of test misconfiguration where JUnit is used together with TestNG
+		- example:	@RunWith(MockitoJUnitRunner.class)
+				public class ResultFacadeTest extends AbstractTestNGSpringContextTests
+		- -2 points for this
+
+[OK]  		- -2 points if there are test failures;
+		- 132 service and 40 facade tests pass OK
+
+[OK/NOK]	- minimally -1 point for each of the unmet project requirements;
+		- exceptions from DAO layer are not translated to DataAccessExceptions
+			- these are usually IllegalArgumentExceptions thrown during validation on DAO layer. I haven't found exception translation post processor on DAO layer and these exceptions are not handled on service layer
+			- -1 points for this
+
+[OK]		- -1 point for each occurrence of a team member not contributing enough;
+
+TOTAL POINTS : 7
+---------------------------------------------------------------------------------------------------                   	
+b) General comments: 
+* from my point of view, all requirements except those mentioned above are satisfied
+* project is correctly decomposed into several maven modules. Project compiles, however mvn clean install logs warning about dependencies in sem-service/pom.xml
+* tests are not executed by mvn clean install
+* generally, code style is unified and project looks good
+* there is a lack of defensive programming approach on service and facade layer
+* testing on service layer is extensive - 132 tests, and also 40 facade tests test all methods. Tests are not triggered during the build, but when run manually all of them pass OK
+* tests use mock objects correctly
+* according to GitHub statistics, every team member contributed his part
+
+c) Strong points of the project: 
+* very nice non trivial functions implemented by Matej Majdis - notifications, invitations together with sending emails
+* services are well decomposed
+* use of dozer framework
+
+d) Weaknesses of the project: 
+* interfaces are missing JavaDoc
+	* Facade interfaces EventFacade, SportFacade, Sportman facade are not documented
+	* Service interfaces EmailService, EventService, InvitationService, NotificationService, ResultService, SportService, SportmanService are not documented
+* tests are misconfigured - JUnit and TestNG used together
+* I would prefer better exception handling on facade and service layer. Basically, "trivial" service and facade methods don't perform validation checks and when something is not right (i.e. null parameter passed to facade function) exceptions are thrown directly from DAO layer (these exceptions are not translated to DataAccessException). I would prefer checking some of invalid conditions on higher layers. On the other hand, your approach makes your facade/service methods clear. According to the Effective Java we should prefer defensive programming.
+  
+e) other notes:
+* I would prefer using @Inject instead of @Autowired
+* there are several unused imports in service classes
