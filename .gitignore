@@ -8,8 +8,7 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 
-.idea/*
 *.iml
+.idea/
 derby.log
-/sem-persistence/target/
 /sem-persistence/src/main/resources/database.properties
