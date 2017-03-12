@@ -12,18 +12,17 @@
         <class>cz.muni.pa165.sem.entity.Result</class>
         <class>cz.muni.pa165.sem.entity.Invitation</class>
         <properties>
-            <property name="hibernate.connection.url" value="jdbc:derby:memory:semDB;create=true"/>
-            <property name="hibernate.connection.driver_class" value="org.apache.derby.jdbc.EmbeddedDriver"/>
-            <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.DerbyTenSevenDialect"/>
-            <property name="hibernate.hbm2ddl.auto" value="create"/>
-            <property name="hibernate.show_sql" value="true"/>
-            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider" />
+            <property name="hibernate.archive.autodetection" value="class, hbm" />
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL9Dialect" />
+            <property name="hibernate.generateDdl" value="true" />
+            <property name="hibernate.hbm2ddl.auto" value="update" />
+            <property name="hibernate.show_sql" value="true" />
+            <property name="hibernate.format_sql" value="true" />
 
-            <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
-
-            <property name="javax.persistence.sql-load-script-source" value="META-INF/data.sql"/>
-            <property name="javax.persistence.sql-load-script-source" value="scripts/init-db.sql"/>
+            <!--IF WANT TO GENERATE THE SAME DATA DURING EVERY APPlication START, UNCOMMENT FOLLOWING LINES-->
+            <!--<property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>-->
+            <!--<property name="javax.persistence.sql-load-script-source" value="scripts/init-db-data.sql"/>-->
         </properties>
     </persistence-unit>
 

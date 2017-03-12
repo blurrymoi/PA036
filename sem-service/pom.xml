@@ -17,6 +17,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>sem-persistence</artifactId>
+            <type>test-jar</type>
             <version>${project.version}</version>
         </dependency>
         <dependency>

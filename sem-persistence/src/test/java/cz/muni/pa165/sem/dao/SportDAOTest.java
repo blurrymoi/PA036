@@ -21,7 +21,7 @@ import static org.testng.Assert.assertNotNull;
  * @author Matej Majdis
  */
 @Transactional
-@ContextConfiguration(locations = "classpath:dao-context.xml")
+@ContextConfiguration(locations = "classpath:dao-test-context.xml")
 @TestExecutionListeners(TransactionalTestExecutionListener.class)
 public class SportDAOTest extends AbstractTestNGSpringContextTests {
 

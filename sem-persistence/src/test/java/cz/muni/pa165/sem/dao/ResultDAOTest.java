@@ -25,7 +25,7 @@ import org.testng.annotations.Test;
  * @author Vit Hovezak
  */
 @Transactional
-@ContextConfiguration(locations = "classpath:dao-context.xml")
+@ContextConfiguration(locations = "classpath:dao-test-context.xml")
 @TestExecutionListeners(TransactionalTestExecutionListener.class)
 public class ResultDAOTest extends AbstractTestNGSpringContextTests {
     

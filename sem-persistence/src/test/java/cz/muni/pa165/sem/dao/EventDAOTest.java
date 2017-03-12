@@ -24,7 +24,7 @@ import java.util.List;
  * @author Kamil Triscik
  */
 @Transactional
-@ContextConfiguration(locations = "classpath:dao-context.xml")
+@ContextConfiguration(locations = "classpath:dao-test-context.xml")
 @TestExecutionListeners(TransactionalTestExecutionListener.class)
 public class EventDAOTest extends AbstractTestNGSpringContextTests {
 

@@ -19,7 +19,7 @@ import org.testng.annotations.*;
  * @author Veronika Aksamitova
  */
 @Transactional
-@ContextConfiguration(locations = "classpath:dao-context.xml")
+@ContextConfiguration(locations = "classpath:dao-test-context.xml")
 @TestExecutionListeners(TransactionalTestExecutionListener.class)
 public class SportsmanDAOTest extends AbstractTestNGSpringContextTests {    
     @Autowired
