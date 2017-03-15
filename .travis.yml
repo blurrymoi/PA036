@@ -5,3 +5,7 @@ jdk:
   - oraclejdk8
 
 script: mvn compile
+
+notifications:
+  slack: pa036team:wb1EMP9u4o50RIDNcDtSNfGS
+  email: false
