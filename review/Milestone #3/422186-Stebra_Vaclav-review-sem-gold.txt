@@ -11,7 +11,7 @@ Evauluation Checklist
     clean install && cd web && mvn tomcat7:run”
     [OK]
   - The web application must be available on the following HTTP context
-    http://localhost:8080/pa165
+    http://localhost:8080/pa036
     [OK]
   - Your application should use in-memory database. This means that
     after application restart (killing web container and starting it
@@ -43,7 +43,7 @@ Evauluation Checklist
     [OK]
   - At least one entity and operations on that entity must be exposed.
     [OK]
-  - The REST must be accessible at http://localhost:8080/pa165/rest
+  - The REST must be accessible at http://localhost:8080/pa036/rest
     [OK]
   - You should include a README file with instructions how to test the REST
     interface (e.g. CURL commands for command line).

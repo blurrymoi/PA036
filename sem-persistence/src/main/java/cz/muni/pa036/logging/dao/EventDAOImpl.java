@@ -1,8 +1,8 @@
-package cz.muni.pa165.sem.dao;
+package cz.muni.pa036.logging.dao;
 
-import cz.muni.pa165.sem.entity.Event;
-import cz.muni.pa165.sem.entity.Sport;
-import cz.muni.pa165.sem.entity.Sportsman;
+import cz.muni.pa036.logging.entity.Event;
+import cz.muni.pa036.logging.entity.Sport;
+import cz.muni.pa036.logging.entity.Sportsman;
 
 import java.util.ArrayList;
 import java.util.Calendar;

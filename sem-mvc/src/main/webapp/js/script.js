@@ -16,7 +16,7 @@
     $('.event-item').click(function() {
         var eventId = this.querySelector('[name=event-id]').innerHTML;
         alert("Selected event with id=" + eventId + ". Not done yet :p");
-        // reloadEvent("https://localhost:8080/pa165/events/" + eventId);
+        // reloadEvent("https://localhost:8080/pa036/events/" + eventId);
     });
 
     function reloadEvent(href) {
@@ -41,7 +41,7 @@
         placeholder: "",
         minimumInputLength: 3,
         ajax: {
-            url: "http://localhost:8080/pa165/events/autocomplet",
+            url: "http://localhost:8080/pa036/events/autocomplet",
             dataType: 'json',
             quietMillis: 250,
             method: 'POST',
@@ -70,7 +70,7 @@
         event_id = $("#inv_event_id").val();
         if (email) {
             $.ajax({
-                url: "http://localhost:8080/pa165/events/invite",
+                url: "http://localhost:8080/pa036/events/invite",
                 dataType: 'json',
                 headers: {
                     // 'Accept': 'application/json',
