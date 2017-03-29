@@ -3,15 +3,15 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>sem</artifactId>
         <groupId>cz.muni.pa036</groupId>
+        <artifactId>logging</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sem-persistence</artifactId>
+    <artifactId>logging-persistence</artifactId>
     <packaging>jar</packaging>
-    <name>Persistence Layer</name>
+    <name>Persistence Layer for Logging Project</name>
 
     <build>
         <plugins>

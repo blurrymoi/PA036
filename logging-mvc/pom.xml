@@ -3,25 +3,25 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>sem</artifactId>
         <groupId>cz.muni.pa036</groupId>
+        <artifactId>logging</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sem-mvc</artifactId>
+    <artifactId>logging-mvc</artifactId>
     <packaging>war</packaging>
-    <name>MVC</name>
+    <name>MVC Layer for Logging Project</name>
 
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>sem-service</artifactId>
+            <artifactId>logging-service</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>sem-persistence</artifactId>
+            <artifactId>logging-persistence</artifactId>
             <version>${project.version}</version>
         </dependency>
 
