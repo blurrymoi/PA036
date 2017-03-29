@@ -33,7 +33,7 @@
         <appender-ref ref="FILE" />
     </logger>
 
-    <logger name="cz.muni.pa036.sem" level="DEBUG" additivity="false">
+    <logger name="cz.muni.pa036.logging" level="DEBUG" additivity="false">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
     </logger>

@@ -9,6 +9,6 @@
     <import resource="classpath:/dao-context.xml"/>
 
     <!-- Scan the JavaConfig -->
-    <context:component-scan base-package="cz.muni.pa036.sem.service" />
+    <context:component-scan base-package="cz.muni.pa036.logging.service" />
 
 </beans>
