@@ -9,7 +9,7 @@ This repository contain team project from subject _PA036 Database System Project
 * Baranová, Zuzana(422364)
 * Kamil Triščík(410030)
 
-Project use business layer from PA165 Java project SEM. 
+Project uses business layer from PA165 Java project SEM. 
 
 
 # SEM
@@ -35,9 +35,9 @@ More information about our project you can find in [project Wiki](https://bitbuc
 #How to use application
 ####How to run application ####
 1. `git clone https://github.com/kamil-triscik/PA036.git`
-2. `cd sem`
+2. `cd logging`
 3. `mvn clean install`
-3. `cd sem-mvc`
+3. `cd logging-mvc`
 4. `mvn tomcat7:run` - in case of default port **8080** it`s not available, in _pom.xml_ on line 107 set another available port
 5. application is available on `http://localhost:8080/pa036`
 
