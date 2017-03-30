@@ -13,3 +13,4 @@ buildNumber.properties
 .idea/
 derby.log
 /logging-persistence/src/main/resources/database.properties
+/logging-persistence/src/test/resources/testdatabase.properties
