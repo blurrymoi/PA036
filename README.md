@@ -1,7 +1,7 @@
 #Query logging in application framework
 ![logo](doc/Circular-logging-database-DB2.gif)
 
-This repository contain team project from subject _PA036 Database System Project_
+This repository contains team project from subject _PA036 Database System Project_
 
 #PA036 Project team
 * Kundrát, Vladimír(409764)
