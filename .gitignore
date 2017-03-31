@@ -12,5 +12,5 @@ buildNumber.properties
 *.log
 .idea/
 derby.log
-/sem-persistence/src/main/resources/database.properties
-/sem-persistence/src/test/resources/testdatabase.properties
+/logging-persistence/src/main/resources/database.properties
+/logging-persistence/src/test/resources/testdatabase.properties
