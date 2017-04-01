@@ -23,7 +23,10 @@
         </encoder>
     </appender>
 
-    <logger name="org.hibernate.type" level="TRACE" additivity="false">
+    <!--commented out for debug purposes, as I want to test out DAOLogger-->
+
+    
+    <!--<logger name="org.hibernate.type" level="TRACE" additivity="false">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
     </logger>
@@ -31,7 +34,7 @@
     <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
-    </logger>
+    </logger>-->
 
     <logger name="cz.muni.pa036.logging" level="DEBUG" additivity="false">
         <appender-ref ref="STDOUT" />

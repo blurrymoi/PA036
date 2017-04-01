@@ -1,5 +1,7 @@
 package cz.muni.pa036.logging.dao;
 
+import cz.muni.pa036.logging.utils.DAOLogger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import cz.muni.pa036.logging.entity.*;
@@ -7,7 +9,9 @@ import cz.muni.pa036.logging.entity.*;
 import java.util.ArrayList;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
@@ -17,11 +21,14 @@ import javax.persistence.Query;
 @Repository
 public class ResultDAOImpl implements ResultDAO {
 
+    private final DAOLogger LOGGER = new DAOLogger(LoggerFactory.getLogger(this.getClass()), "RESULT");
+
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
     public void create(Result result) {
+        LOGGER.logCreate(result);
         if (result == null) {
             throw new IllegalArgumentException("Result is null");
         }
@@ -30,6 +37,7 @@ public class ResultDAOImpl implements ResultDAO {
 
     @Override
     public Result findById(Long id) {
+        LOGGER.logFindBy("ID", id);
         if (id == null) {
             throw new IllegalArgumentException("Result ID is null");
         }
@@ -38,6 +46,7 @@ public class ResultDAOImpl implements ResultDAO {
 
     @Override
     public List<Result> findBySportsman(Sportsman sportsman) {
+        LOGGER.logFindBy("sportsman", sportsman, true);
         if (sportsman == null) {
             throw new IllegalArgumentException("Sportsman to find results for is null");
         }
@@ -53,6 +62,7 @@ public class ResultDAOImpl implements ResultDAO {
 
     @Override
     public List<Result> findByEvent(Event event) {
+        LOGGER.logFindBy("event", event, true);
         if (event == null) {
             throw new IllegalArgumentException("Event to find results for is null");
         }
@@ -68,6 +78,11 @@ public class ResultDAOImpl implements ResultDAO {
 
     @Override
     public Result findBySportsmanAndEvent(Sportsman sportsman, Event event) {
+        Map<Object, Object> findBy = new HashMap<>();
+        findBy.put("sportsman", sportsman);
+        findBy.put("event", event);
+
+        LOGGER.logFindBy(findBy);
         if (event == null) {
             throw new IllegalArgumentException("Event to find results for is null");
         }
@@ -92,6 +107,7 @@ public class ResultDAOImpl implements ResultDAO {
 
     @Override
     public List<Result> findBySport(Sport sport) {
+        LOGGER.logFindBy("sport", sport, true);
         if (sport == null) {
             throw new IllegalArgumentException("Sport to find results for is null");
         }
@@ -106,6 +122,7 @@ public class ResultDAOImpl implements ResultDAO {
 
     @Override
     public List<Result> findByPerformance(Double performance) {
+        LOGGER.logFindBy("performance", performance, true);
         if (performance == null) {
             throw new IllegalArgumentException("Performance you want to find in results is null");
         }
@@ -121,6 +138,7 @@ public class ResultDAOImpl implements ResultDAO {
 
     @Override
     public List<Result> findByPosition(Integer position) {
+        LOGGER.logFindBy("position", position, true);
         if (position == null) {
             throw new IllegalArgumentException("Position you want to find in results is null");
         }
@@ -135,6 +153,7 @@ public class ResultDAOImpl implements ResultDAO {
 
     @Override
     public List<Result> findByNote(String note) {
+        LOGGER.logFindBy("note", note, true);
         if (note == null) {
             throw new IllegalArgumentException("Note you want to find in results is null");
         }
@@ -149,6 +168,7 @@ public class ResultDAOImpl implements ResultDAO {
 
     @Override
     public List<Result> findAll() {
+        LOGGER.logFindAll();
         try {
             Query query = entityManager.createQuery("SELECT r FROM Result r");
             return query.getResultList();
@@ -159,6 +179,7 @@ public class ResultDAOImpl implements ResultDAO {
 
     @Override
     public void update(Result result) {
+        LOGGER.logUpdate(result);
         if (result == null) {
             throw new IllegalArgumentException("Result you want to update is null");
         }
@@ -167,6 +188,7 @@ public class ResultDAOImpl implements ResultDAO {
 
     @Override
     public void delete(Result result) {
+        LOGGER.logDelete(result);
         if (result == null) {
             throw new IllegalArgumentException("Result you want to delete is null");
         }
