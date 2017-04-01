@@ -1,5 +1,6 @@
 package cz.muni.pa036.logging.config;
 
+import cz.muni.pa036.logging.configuration.DBConfig;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +21,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import javax.sql.DataSource;
+import java.io.IOException;
+import java.util.Properties;
 
 /**
  * @author Kamil Triscik
@@ -29,11 +32,7 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 @EnableJpaRepositories
 @ComponentScan(basePackages = "cz.muni.pa036.logging")
-@PropertySource({ "classpath:/testdatabase.properties" })
-public class TestDatabeseConfig {
-
-    @Autowired
-    private Environment env;
+public class TestDatabaseConfig {
 
     @Bean
     public JpaTransactionManager transactionManager() {
@@ -85,11 +84,20 @@ public class TestDatabeseConfig {
     public DataSource database() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
-        dataSource.setDriverClassName(env.getProperty("jdbc.driver"));
-        dataSource.setUrl(env.getProperty("jdbc.url"));
-        dataSource.setUsername(env.getProperty("jdbc.user"));
-        dataSource.setPassword(env.getProperty("jdbc.pass"));
+        Properties properties = new Properties();
+        try {
+            properties.load(DBConfig.class.getClassLoader().getResourceAsStream("testdatabase.properties"));
 
-        return dataSource;
+            //set your DB properties and
+            dataSource.setDriverClassName(properties.getProperty("jdbc.driver"));
+            dataSource.setUrl(properties.getProperty("jdbc.url"));
+            dataSource.setUsername(properties.getProperty("jdbc.user"));
+            dataSource.setPassword(properties.getProperty("jdbc.pass"));
+
+            return dataSource;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;//tak vyhodi chybu, no nespusti, kaslem na to
     }
 }
