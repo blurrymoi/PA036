@@ -23,6 +23,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import javax.sql.DataSource;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Properties;
 
 /**
  * @author Matej Majdis
@@ -31,11 +34,7 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 @EnableJpaRepositories
 @ComponentScan(basePackages = "cz.muni.pa036.logging")
-@PropertySource({ "classpath:/database.properties" })
 public class DBConfig {
-
-	@Autowired
-	private Environment env;
 
 	@Bean
 	public JpaTransactionManager transactionManager() {
@@ -76,13 +75,21 @@ public class DBConfig {
 	public DataSource database() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
-		//set your DB properties and
-		dataSource.setDriverClassName(env.getProperty("jdbc.driver"));
-		dataSource.setUrl(env.getProperty("jdbc.url"));
-		dataSource.setUsername(env.getProperty("jdbc.user"));
-		dataSource.setPassword(env.getProperty("jdbc.pass"));
+		Properties properties = new Properties();
+		try {
+			properties.load(DBConfig.class.getClassLoader().getResourceAsStream("database.properties"));
 
-		return dataSource;
+			//set your DB properties and
+			dataSource.setDriverClassName(properties.getProperty("jdbc.driver"));
+			dataSource.setUrl(properties.getProperty("jdbc.url"));
+			dataSource.setUsername(properties.getProperty("jdbc.user"));
+			dataSource.setPassword(properties.getProperty("jdbc.pass"));
+
+			return dataSource;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;//tak vyhodi chybu, no nespusti, kaslem na to
 	}
 }
 
