@@ -3,8 +3,8 @@ package cz.muni.pa036.logging.logService;
 import cz.muni.pa036.logging.log.Log;
 import cz.muni.pa036.logging.log.LogFile;
 import cz.muni.pa036.logging.log.LogFileDiff;
-import cz.muni.pa036.logging.log.LogLevel;
 
+import ch.qos.logback.classic.Level;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -126,7 +126,7 @@ public class LogLoader {
 
         String time = null;
         StringBuilder content = null;
-        String logLevel = null;
+        Level logLevel = null;
         try (BufferedReader reader = new BufferedReader(new FileReader(logFile))) {
             while ((line = reader.readLine()) != null) {
                 line = line.replaceAll("( )+", " ");
@@ -135,14 +135,14 @@ public class LogLoader {
                     if (content != null) {
                         logs.add(new Log(
                                 dateFormat.parse(time),
-                                LogLevel.getLevel(logLevel),
+                                logLevel,
                                 content.toString()
                         ));
                     }
                     content = new StringBuilder();
                     String[] lineParts = line.split(" ");
                     time = lineParts[0];
-                    logLevel = lineParts[2];
+                    logLevel = Level.toLevel(lineParts[2]);
                     content.append(line.substring(line.indexOf(lineParts[3])));
                 } else {
                     content.append(line).append("\n");
@@ -151,7 +151,7 @@ public class LogLoader {
             if (content != null) {
                 logs.add(new Log(
                         dateFormat.parse(time),
-                        LogLevel.getLevel(logLevel),
+                        logLevel,
                         content.toString()
                 ));
             }

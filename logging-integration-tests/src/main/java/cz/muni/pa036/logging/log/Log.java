@@ -1,5 +1,7 @@
 package cz.muni.pa036.logging.log;
 
+import ch.qos.logback.classic.Level;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -20,12 +22,12 @@ public class Log implements Comparable {
     private Date time;
 
     /*Log level*/
-    private LogLevel logLevel;
+    private Level logLevel;
 
     /*Log content*/
     private String content;
 
-    public Log(Date time, LogLevel logLevel, String content) {
+    public Log(Date time, Level logLevel, String content) {
         this.time = time;
         this.logLevel = logLevel;
         this.content = content;
@@ -35,7 +37,7 @@ public class Log implements Comparable {
         return time;
     }
 
-    public LogLevel getLogLevel() {
+    public Level getLogLevel() {
         return logLevel;
     }
 

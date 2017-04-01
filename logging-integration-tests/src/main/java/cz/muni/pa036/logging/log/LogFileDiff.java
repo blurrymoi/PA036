@@ -1,5 +1,7 @@
 package cz.muni.pa036.logging.log;
 
+import ch.qos.logback.classic.Level;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +27,7 @@ public class LogFileDiff {
         return logs;
     }
 
-    public List<Log> getLogs(LogLevel logLevel) {
+    public List<Log> getLogs(Level logLevel) {
         return this.getLogs().stream().filter(log -> log.getLogLevel() == logLevel).collect(Collectors.toList());
     }
 
