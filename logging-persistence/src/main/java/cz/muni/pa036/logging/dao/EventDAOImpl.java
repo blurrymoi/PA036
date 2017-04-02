@@ -12,6 +12,8 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import cz.muni.pa036.logging.utils.DAOLogger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -20,11 +22,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class EventDAOImpl implements EventDAO {
 
+    private final DAOLogger LOGGER = new DAOLogger(LoggerFactory.getLogger(this.getClass()), "EVENT");
+
     @PersistenceContext
     private EntityManager em;
 
     @Override
     public void create(Event event) {
+        LOGGER.logCreate(event);
         if (event == null) {
             throw new IllegalArgumentException("Event is null");
         }
@@ -33,6 +38,7 @@ public class EventDAOImpl implements EventDAO {
 
     @Override
     public Event findById(Long id) {
+        LOGGER.logFindBy("ID", id);
         if (id == null) {
             throw new IllegalArgumentException("Event ID is null");
         }
@@ -41,6 +47,7 @@ public class EventDAOImpl implements EventDAO {
 
     @Override
     public List<Event> findByName(String name) {
+        LOGGER.logFindBy("name", name, true);
         if (name == null) {
             throw new IllegalArgumentException("Event name is null");
         }
@@ -55,6 +62,7 @@ public class EventDAOImpl implements EventDAO {
 
     @Override
     public List<Event> findByDate(Calendar date) {
+        LOGGER.logFindBy("date", date, true);
         if (date == null) {
             throw new IllegalArgumentException("Event date is null");
         }
@@ -78,6 +86,7 @@ public class EventDAOImpl implements EventDAO {
 
     @Override
     public List<Event> findBySport(Sport sport) {
+        LOGGER.logFindBy("sport", sport, true);
         if (sport == null) {
             throw new IllegalArgumentException("Event sport is null");
         }
@@ -92,6 +101,7 @@ public class EventDAOImpl implements EventDAO {
 
     @Override
     public List<Event> findByCity(String city) {
+        LOGGER.logFindBy("city", city, true);
         if (city == null) {
             throw new IllegalArgumentException("Event city is null");
         }
@@ -106,6 +116,7 @@ public class EventDAOImpl implements EventDAO {
 
     @Override
     public List<Event> findByAdmin(Sportsman admin) {
+        LOGGER.logFindBy("admin", admin, true);
         if (admin == null) {
             throw new IllegalArgumentException("Event admin is null");
         }
@@ -120,6 +131,7 @@ public class EventDAOImpl implements EventDAO {
 
     @Override
     public List<Event> findByParticipant(Sportsman participant) {
+        LOGGER.logFindBy("participant", participant, true);
         if (participant == null) {
             throw new IllegalArgumentException("Event participant is null");
         }
@@ -134,6 +146,7 @@ public class EventDAOImpl implements EventDAO {
 
     @Override
     public List<Event> findAll() {
+        LOGGER.logFindAll();
         try {
             Query query = em.createQuery("SELECT e FROM Event e");
             return query.getResultList();
@@ -144,6 +157,7 @@ public class EventDAOImpl implements EventDAO {
 
     @Override
     public void update(Event event) {
+        LOGGER.logUpdate(event);
         if (event == null) {
             throw new IllegalArgumentException("Event is null");
         }
@@ -152,6 +166,7 @@ public class EventDAOImpl implements EventDAO {
 
     @Override
     public void delete(Event event) {
+        LOGGER.logDelete(event);
         if (event == null) {
             throw new IllegalArgumentException("Event is null");
         }
