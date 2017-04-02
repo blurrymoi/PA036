@@ -44,7 +44,7 @@ public class LogFile extends LogFileDiff {
      *
      * @return log file diff.
      */
-    public LogFileDiff reloadLogFile() {
+    public LogFileDiff reloadLogFile() throws Exception {
         LogFile logFile = LogLoader.loadLogFile(this.getFilePath());
 
         this.logFileDiff = new LogFileDiff();
