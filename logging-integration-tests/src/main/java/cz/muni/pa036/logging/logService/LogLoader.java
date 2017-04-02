@@ -2,7 +2,6 @@ package cz.muni.pa036.logging.logService;
 
 import cz.muni.pa036.logging.log.Log;
 import cz.muni.pa036.logging.log.LogFile;
-import cz.muni.pa036.logging.log.LogFileDiff;
 
 import ch.qos.logback.classic.Level;
 import java.io.BufferedReader;
@@ -33,7 +32,7 @@ public class LogLoader {
      * @param logFileName absolute path to log file.
      * @return LogFile object.
      */
-    public static LogFile loadLogFile(String logFileName) {
+    public static LogFile loadLogFile(String logFileName) throws Exception {
         if (logFileName == null || logFileName.isEmpty()) {
             throw new IllegalArgumentException("Illegal \"logFileName\"(" + logFileName + ") value!");
         }
@@ -41,6 +40,9 @@ public class LogLoader {
             throw new IllegalArgumentException("Log file name should end with \"*.log\"");
         }
         File logFile = new File(logFileName);
+        if (!logFile.exists()) {
+            throw new IllegalArgumentException("File does not exists!");
+        }
         if (!logFile.isFile()) {
             throw new IllegalArgumentException("Expected file not directory!");
         }
@@ -53,7 +55,7 @@ public class LogLoader {
      * @param logFile logFile object.
      * @return LogFile object.
      */
-    public static LogFile loadLogFile(File logFile) {
+    public static LogFile loadLogFile(File logFile) throws Exception {
         if (logFile == null) {
             throw new IllegalArgumentException("Log file argument is null!");
         }
@@ -74,15 +76,18 @@ public class LogLoader {
      * @param directory absolute path to directory, where method should look for log files.
      * @return collection of LogFile objects.
      */
-    public static List<LogFile> loadLogFiles(String directory) {
+    public static List<LogFile> loadLogFiles(String directory) throws Exception {
         if (directory == null || directory.isEmpty()) {
             throw new IllegalArgumentException("Illegal \"directory\"(" + directory + ") value!");
         }
-        File logFile = new File(directory);
-        if (!logFile.isDirectory()) {
+        File logDirectory = new File(directory);
+        if (!logDirectory.exists()) {
+            throw new IllegalArgumentException("Directory does not exists!");
+        }
+        if (!logDirectory.isDirectory()) {
             throw new IllegalArgumentException("Invalid path to directory!");
         }
-        return LogLoader.loadLogFiles(logFile);
+        return LogLoader.loadLogFiles(logDirectory);
     }
 
     /**
@@ -91,7 +96,7 @@ public class LogLoader {
      * @param directory directory File object.
      * @return collection of LogFile objects.
      */
-    public static List<LogFile> loadLogFiles(File directory) {
+    public static List<LogFile> loadLogFiles(File directory) throws Exception {
         if (directory == null) {
             throw new IllegalArgumentException("Directory argument is null!");
         }
@@ -115,7 +120,7 @@ public class LogLoader {
      * @param logFile file of logs we want to load
      * @return collection of logs.
      */
-    private static List<Log> loadLogsFromFile(File logFile) {
+    private static List<Log> loadLogsFromFile(File logFile) throws Exception {
         List<Log> logs = new ArrayList<>();
 
         SimpleDateFormat dateFormat = new SimpleDateFormat(Log.TIME_FORMAT);
@@ -156,7 +161,7 @@ public class LogLoader {
                 ));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new Exception("Problem during loading logs", e);
         }
 
         return logs;
