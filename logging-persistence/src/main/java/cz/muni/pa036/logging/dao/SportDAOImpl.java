@@ -1,8 +1,7 @@
 package cz.muni.pa036.logging.dao;
 
 import cz.muni.pa036.logging.entity.Sport;
-import cz.muni.pa036.logging.utils.DAOLogger;
-import org.slf4j.LoggerFactory;
+import cz.muni.pa036.logging.helper.LoggerHelper;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -18,7 +17,7 @@ import java.util.List;
 @Repository
 public class SportDAOImpl implements SportDAO {
 
-    private final DAOLogger LOGGER = new DAOLogger(LoggerFactory.getLogger(this.getClass()), "SPORT");
+    private final LoggerHelper LOGGER = new LoggerHelper(this.getClass());
 
     @PersistenceContext
     private EntityManager em;

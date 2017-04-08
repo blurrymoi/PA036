@@ -12,8 +12,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import cz.muni.pa036.logging.utils.DAOLogger;
-import org.slf4j.LoggerFactory;
+import cz.muni.pa036.logging.helper.LoggerHelper;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -22,7 +21,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class EventDAOImpl implements EventDAO {
 
-    private final DAOLogger LOGGER = new DAOLogger(LoggerFactory.getLogger(this.getClass()), "EVENT");
+    private final LoggerHelper LOGGER = new LoggerHelper(this.getClass());
 
     @PersistenceContext
     private EntityManager em;

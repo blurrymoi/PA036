@@ -6,6 +6,7 @@ import cz.muni.pa036.logging.dao.SportsmanDAO;
 import cz.muni.pa036.logging.entity.Event;
 import cz.muni.pa036.logging.entity.Invitation;
 import cz.muni.pa036.logging.entity.Result;
+import cz.muni.pa036.logging.helper.LoggerHelper;
 import cz.muni.pa036.logging.utils.PerformanceUnits;
 import cz.muni.pa036.logging.dao.EventDAO;
 import cz.muni.pa036.logging.entity.Sportsman;
@@ -22,6 +23,8 @@ import java.util.Set;
  */
 @Service
 public class InvitationServiceImpl implements InvitationService {
+
+	private final LoggerHelper LOGGER = new LoggerHelper(this.getClass());
 
 	@Autowired
 	private InvitationDAO invitationDAO;

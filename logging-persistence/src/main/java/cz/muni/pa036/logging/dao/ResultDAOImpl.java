@@ -1,6 +1,6 @@
 package cz.muni.pa036.logging.dao;
 
-import cz.muni.pa036.logging.utils.DAOLogger;
+import cz.muni.pa036.logging.helper.LoggerHelper;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
@@ -21,7 +21,7 @@ import javax.persistence.Query;
 @Repository
 public class ResultDAOImpl implements ResultDAO {
 
-    private final DAOLogger LOGGER = new DAOLogger(LoggerFactory.getLogger(this.getClass()), "RESULT");
+    private final LoggerHelper LOGGER = new LoggerHelper(this.getClass());
 
     @PersistenceContext
     private EntityManager entityManager;

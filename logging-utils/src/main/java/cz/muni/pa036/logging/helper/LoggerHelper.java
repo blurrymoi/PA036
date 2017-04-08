@@ -1,45 +1,39 @@
-package cz.muni.pa036.logging.utils;
+package cz.muni.pa036.logging.helper;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class DAOLogger {
+public class LoggerHelper {
 
+    private final Class LOGGER_FOR;
     private final Logger LOGGER;
-    private final String CLASS_NAME;
 
-    public DAOLogger(Logger LOGGER, String className) {
-        this.LOGGER = LOGGER;
-        CLASS_NAME = className;
+    public LoggerHelper(Class loggerFor) {
+        this.LOGGER = LoggerFactory.getLogger(loggerFor);
+        LOGGER_FOR = loggerFor;
     }
 
     public void logCreate(Object created) {
-        LOGGER.debug("Trying to create " + CLASS_NAME +
-                " [" + created + "]");
+        LOGGER.debug(getClassName() + " > Trying to create [" + created + "]");
     }
 
     public void logUpdate(Object updated) {
-        LOGGER.debug("Trying to update " + CLASS_NAME +
-                " [" + updated + "]");
+        LOGGER.debug(getClassName() + " > Trying to update [" + updated + "]");
     }
 
     public void logDelete(Object deleted) {
-        LOGGER.debug("Trying to delete " + CLASS_NAME +
-                " [" + deleted + "]");
+        LOGGER.debug(getClassName() + " > Trying to delete [" + deleted + "]");
     }
 
     public void logFindAll() {
-        LOGGER.debug("Trying to find all " + CLASS_NAME +
-                "{multiple rows allowed}");
+        LOGGER.debug(getClassName() + " > Trying to find all {multiple rows allowed}");
     }
 
     public void logFindBy(Map<Object, Object> findBy, boolean multipleAllowed) {
-        StringBuilder builder = new StringBuilder("Trying to find " + CLASS_NAME);
-        if (multipleAllowed) {
-            builder.append(" {multiple rows allowed}");
-        }
+        StringBuilder builder = new StringBuilder(getClassName() + " > Trying to find by");
         builder.append(" params=[");
         int mapLength = findBy.keySet().size();
         int currentIndex = 1;
@@ -53,6 +47,9 @@ public class DAOLogger {
             currentIndex++;
         }
         builder.append("]");
+        if (multipleAllowed) {
+            builder.append(" {multiple rows allowed}");
+        }
         LOGGER.debug(builder.toString());
     }
 
@@ -70,5 +67,9 @@ public class DAOLogger {
         Map<Object, Object> findBy = new HashMap<>();
         findBy.put(by, byValue);
         this.logFindBy(findBy, false);
+    }
+
+    private String getClassName() {
+        return LOGGER_FOR.getSimpleName().toUpperCase();
     }
 }

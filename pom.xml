@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <modules>
+        <module>logging-utils</module>
         <module>logging-persistence</module>
         <module>logging-service</module>
         <module>logging-mvc</module>
