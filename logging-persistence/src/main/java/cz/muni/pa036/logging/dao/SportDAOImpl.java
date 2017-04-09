@@ -17,14 +17,14 @@ import java.util.List;
 @Repository
 public class SportDAOImpl implements SportDAO {
 
-    private final CRUDLogger LOGGER = new CRUDLogger(this.getClass());
+    private final CRUDLogger CRUD_LOGGER = new CRUDLogger(this.getClass());
 
     @PersistenceContext
     private EntityManager em;
 
     @Override
     public void create(Sport sport) {
-        LOGGER.logCreate(sport);
+        CRUD_LOGGER.logCreate(sport);
         if (sport == null) {
             throw new IllegalArgumentException("Sport is null");
         }
@@ -33,7 +33,7 @@ public class SportDAOImpl implements SportDAO {
 
     @Override
     public List<Sport> findAll() {
-        LOGGER.logFindAll();
+        CRUD_LOGGER.logFindAll();
         try {
             Query query = em.createQuery("SELECT s FROM Sport s");
             return query.getResultList();
@@ -44,7 +44,7 @@ public class SportDAOImpl implements SportDAO {
 
     @Override
     public Sport findById(Long id) {
-        LOGGER.logFindBy("ID", id);
+        CRUD_LOGGER.logFindBy("ID", id);
         if (id == null) {
             throw new IllegalArgumentException("Sport ID is null");
         }
@@ -53,7 +53,7 @@ public class SportDAOImpl implements SportDAO {
 
     @Override
     public Sport findByName(String name) {
-        LOGGER.logFindBy("name", name);
+        CRUD_LOGGER.logFindBy("name", name);
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Sport name to find results for is null!");
         }
@@ -67,7 +67,7 @@ public class SportDAOImpl implements SportDAO {
 
     @Override
     public void update(Sport sport) {
-        LOGGER.logUpdate(sport);
+        CRUD_LOGGER.logUpdate(sport);
         if (sport == null) {
             throw new IllegalArgumentException("Sport is null");
         }
@@ -76,7 +76,7 @@ public class SportDAOImpl implements SportDAO {
 
     @Override
     public void delete(Sport sport) {
-        LOGGER.logDelete(sport);
+        CRUD_LOGGER.logDelete(sport);
         if (sport == null) {
             throw new IllegalArgumentException("Sport is null");
         }

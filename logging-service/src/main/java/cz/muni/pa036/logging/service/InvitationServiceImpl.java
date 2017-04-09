@@ -26,7 +26,7 @@ import java.util.Set;
 @Service
 public class InvitationServiceImpl implements InvitationService {
 
-	private final CRUDLogger LOGGER = new CRUDLogger(this.getClass());
+	private final CRUDLogger CRUD_LOGGER = new CRUDLogger(this.getClass());
 
 	@Autowired
 	private InvitationDAO invitationDAO;
@@ -49,13 +49,13 @@ public class InvitationServiceImpl implements InvitationService {
 	@Override
 	public Invitation invite(long eventId, long sportsmanId) {
 
-		LOGGER.logFindBy("ID", eventId);
+		CRUD_LOGGER.logFindBy("ID", eventId);
 		Event event = eventDAO.findById(eventId);
 		if (event == null) {
 			throw new IllegalArgumentException("Event not found");
 		}
 
-        LOGGER.logFindBy("ID", sportsmanId);
+        CRUD_LOGGER.logFindBy("ID", sportsmanId);
 		Sportsman sportsman = sportsmanDAO.findById(sportsmanId);
 		if (sportsman == null) {
 			throw new IllegalArgumentException("Sportsman not found");
@@ -86,7 +86,7 @@ public class InvitationServiceImpl implements InvitationService {
         findBy.put("event", event);
         findBy.put("invitee", invitee);
 
-        LOGGER.logFindBy(findBy);
+        CRUD_LOGGER.logFindBy(findBy);
 		//check and process existing invitations
 		Invitation existingInvitation = invitationDAO.findByEventAndInvitee(event, invitee);
 		if (existingInvitation != null && !isFinished(existingInvitation)) {
@@ -103,7 +103,7 @@ public class InvitationServiceImpl implements InvitationService {
 		newInvitation.setEvent(event);
 		newInvitation.setInvitee(invitee);
 
-        LOGGER.logCreate(newInvitation);
+        CRUD_LOGGER.logCreate(newInvitation);
 		invitationDAO.create(newInvitation);
 
 		emailService.sendInvitationMessage(newInvitation);
@@ -130,7 +130,7 @@ public class InvitationServiceImpl implements InvitationService {
 		result.setPerformance((double) -1);
 		result.setNote("");
 
-        LOGGER.logCreate(result);
+        CRUD_LOGGER.logCreate(result);
 		resultDAO.create(result);
 
 		Event event = invitation.getEvent();
@@ -138,7 +138,7 @@ public class InvitationServiceImpl implements InvitationService {
 		participants.add(invitation.getInvitee());
 		event.setParticipants(participants);
 
-        LOGGER.logUpdate(event);
+        CRUD_LOGGER.logUpdate(event);
 		eventDAO.update(event);
 
 		return changeInvitationState(invitation, InvitationState.ACCEPTED);
@@ -166,7 +166,7 @@ public class InvitationServiceImpl implements InvitationService {
 	@Override
 	public Invitation findById(Long id) {
 		try {
-            LOGGER.logFindBy("ID", id);
+            CRUD_LOGGER.logFindBy("ID", id);
 			return invitationDAO.findById(id);
 		} catch (Exception e) {
 			throw new DataRetrievalFailureException("Failed to find invitation by id " + id + ", exception: ", e);
@@ -180,7 +180,7 @@ public class InvitationServiceImpl implements InvitationService {
             findBy.put("event", event);
             findBy.put("invitee", invitee);
 
-            LOGGER.logFindBy(findBy);
+            CRUD_LOGGER.logFindBy(findBy);
 			return invitationDAO.findByEventAndInvitee(event, invitee);
 		} catch (Exception e) {
 			throw new DataRetrievalFailureException("Failed to find invitation", e);
@@ -190,7 +190,7 @@ public class InvitationServiceImpl implements InvitationService {
 	@Override
 	public List<Invitation> findByEvent(Event event) {
 		try {
-            LOGGER.logFindBy("event", event);
+            CRUD_LOGGER.logFindBy("event", event);
 			return invitationDAO.findByEvent(event);
 		} catch (Exception e) {
 			throw new DataRetrievalFailureException("Failed to find invitations, exception: ", e);
@@ -200,7 +200,7 @@ public class InvitationServiceImpl implements InvitationService {
 	@Override
 	public List<Invitation> findByInvitee(Sportsman invitee) {
 		try {
-            LOGGER.logFindBy("invitee", invitee);
+            CRUD_LOGGER.logFindBy("invitee", invitee);
 			return invitationDAO.findByInvitee(invitee);
 		} catch (Exception e) {
 			throw new DataRetrievalFailureException("Failed to find invitations, exception: ", e);
@@ -210,7 +210,7 @@ public class InvitationServiceImpl implements InvitationService {
 	@Override
 	public List<Invitation> findAll() {
 		try {
-            LOGGER.logFindAll();
+            CRUD_LOGGER.logFindAll();
 			return invitationDAO.findAll();
 		} catch (Exception e) {
 			throw new DataRetrievalFailureException("Failed to find all invitations, exception: ", e);
@@ -225,7 +225,7 @@ public class InvitationServiceImpl implements InvitationService {
 	private Invitation changeInvitationState(Invitation invitation, InvitationState state) {
 		invitation.setState(state);
 
-		LOGGER.logUpdate(invitation);
+		CRUD_LOGGER.logUpdate(invitation);
 		invitationDAO.update(invitation);
 
 		return invitation;

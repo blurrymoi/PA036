@@ -20,14 +20,14 @@ import java.util.Map;
 @Repository
 public class InvitationDAOImpl implements InvitationDAO {
 
-    private final CRUDLogger LOGGER = new CRUDLogger(this.getClass());
+    private final CRUDLogger CRUD_LOGGER = new CRUDLogger(this.getClass());
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
     public void create(Invitation invitation) {
-        LOGGER.logCreate(invitation);
+        CRUD_LOGGER.logCreate(invitation);
         if (invitation == null) {
             throw new IllegalArgumentException("Invitation is null");
         }
@@ -36,7 +36,7 @@ public class InvitationDAOImpl implements InvitationDAO {
 
     @Override
     public Invitation findById(Long id) {
-        LOGGER.logFindBy("ID", id);
+        CRUD_LOGGER.logFindBy("ID", id);
         if (id == null) {
             throw new IllegalArgumentException("id is null");
         }
@@ -45,7 +45,7 @@ public class InvitationDAOImpl implements InvitationDAO {
 
     @Override
     public List<Invitation> findByEvent(Event event) {
-        LOGGER.logFindBy("event", event, true);
+        CRUD_LOGGER.logFindBy("event", event, true);
         if (event == null) {
             throw new IllegalArgumentException("event is null");
         }
@@ -59,7 +59,7 @@ public class InvitationDAOImpl implements InvitationDAO {
 
     @Override
     public List<Invitation> findByInvitee(Sportsman invitee) {
-        LOGGER.logFindBy("invitee", invitee, true);
+        CRUD_LOGGER.logFindBy("invitee", invitee, true);
         if (invitee == null) {
             throw new IllegalArgumentException("invitee is null");
         }
@@ -77,7 +77,7 @@ public class InvitationDAOImpl implements InvitationDAO {
         findBy.put("event", event);
         findBy.put("invitee", invitee);
 
-        LOGGER.logFindBy(findBy);
+        CRUD_LOGGER.logFindBy(findBy);
         if (event == null) {
             throw new IllegalArgumentException("event is null");
         }
@@ -108,7 +108,7 @@ public class InvitationDAOImpl implements InvitationDAO {
 
     @Override
     public void update(Invitation invitation) {
-        LOGGER.logUpdate(invitation);
+        CRUD_LOGGER.logUpdate(invitation);
         if (invitation == null) {
             throw new IllegalArgumentException("Invitation is null");
         }
@@ -117,7 +117,7 @@ public class InvitationDAOImpl implements InvitationDAO {
 
     @Override
     public void delete(Invitation invitation) {
-        LOGGER.logDelete(invitation);
+        CRUD_LOGGER.logDelete(invitation);
         if (invitation == null) {
             throw new IllegalArgumentException("Invitation is null");
         }
@@ -126,7 +126,7 @@ public class InvitationDAOImpl implements InvitationDAO {
 
     @Override
     public List<Invitation> findAll() {
-        LOGGER.logFindAll();
+        CRUD_LOGGER.logFindAll();
         Query query = entityManager.createQuery("SELECT i FROM Invitation i");
         return query.getResultList();
     }

@@ -16,14 +16,14 @@ import java.util.List;
 @Repository
 public class SportsmanDAOImpl implements SportsmanDAO {
 
-    private final CRUDLogger LOGGER = new CRUDLogger(this.getClass());
+    private final CRUDLogger CRUD_LOGGER = new CRUDLogger(this.getClass());
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
     public void create(Sportsman sportsman) {
-        LOGGER.logCreate(sportsman);
+        CRUD_LOGGER.logCreate(sportsman);
         if (sportsman == null) {
             throw new IllegalArgumentException("Sportsman is null");
         }
@@ -32,7 +32,7 @@ public class SportsmanDAOImpl implements SportsmanDAO {
 
     @Override
     public Sportsman findById(Long id) {
-        LOGGER.logFindBy("ID", id);
+        CRUD_LOGGER.logFindBy("ID", id);
         if (id == null) {
             throw new IllegalArgumentException("id is null");
         }
@@ -41,7 +41,7 @@ public class SportsmanDAOImpl implements SportsmanDAO {
 
     @Override
     public List<Sportsman> findByName(String name) {
-        LOGGER.logFindBy("name", name, true);
+        CRUD_LOGGER.logFindBy("name", name, true);
         if (name == null) {
             throw new IllegalArgumentException("name is null");
         }
@@ -59,7 +59,7 @@ public class SportsmanDAOImpl implements SportsmanDAO {
 
     @Override
     public List<Sportsman> findBySurname(String surname) {
-        LOGGER.logFindBy("surname", surname, true);
+        CRUD_LOGGER.logFindBy("surname", surname, true);
         if (surname == null) {
             throw new IllegalArgumentException("surname is null");
         }
@@ -78,7 +78,7 @@ public class SportsmanDAOImpl implements SportsmanDAO {
     @Override
     //TODO : optimize
     public Sportsman findByEmail(String email) {
-        LOGGER.logFindBy("email", email);
+        CRUD_LOGGER.logFindBy("email", email);
         if (email == null) {
             throw new IllegalArgumentException("email is null");
         }
@@ -99,7 +99,7 @@ public class SportsmanDAOImpl implements SportsmanDAO {
 
     @Override
     public void update(Sportsman sportsman) {
-        LOGGER.logUpdate(sportsman);
+        CRUD_LOGGER.logUpdate(sportsman);
         if (sportsman == null) {
             throw new IllegalArgumentException("Sportsman is null");
         }
@@ -108,7 +108,7 @@ public class SportsmanDAOImpl implements SportsmanDAO {
 
     @Override
     public void delete(Sportsman sportsman) {
-        LOGGER.logDelete(sportsman);
+        CRUD_LOGGER.logDelete(sportsman);
         if (sportsman == null) {
             throw new IllegalArgumentException("Sportsman is null");
         }
@@ -117,14 +117,14 @@ public class SportsmanDAOImpl implements SportsmanDAO {
 
     @Override
     public List<Sportsman> findAll() {
-        LOGGER.logFindAll();
+        CRUD_LOGGER.logFindAll();
         Query query = entityManager.createQuery("SELECT s FROM Sportsman s");
         return query.getResultList();
     }
 
     @Override
     public List<Sportsman> findBySubstring(String substring, Long event_id) {
-        LOGGER.logFindBy("substring", substring, true);
+        CRUD_LOGGER.logFindBy("substring", substring, true);
         if (substring == null) {
             throw new IllegalArgumentException("substring is null");
         }
