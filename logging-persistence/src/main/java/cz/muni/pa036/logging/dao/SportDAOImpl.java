@@ -1,7 +1,7 @@
 package cz.muni.pa036.logging.dao;
 
 import cz.muni.pa036.logging.entity.Sport;
-import cz.muni.pa036.logging.helper.LoggerHelper;
+import cz.muni.pa036.logging.helper.CRUDLogger;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -17,7 +17,7 @@ import java.util.List;
 @Repository
 public class SportDAOImpl implements SportDAO {
 
-    private final LoggerHelper LOGGER = new LoggerHelper(this.getClass());
+    private final CRUDLogger LOGGER = new CRUDLogger(this.getClass());
 
     @PersistenceContext
     private EntityManager em;

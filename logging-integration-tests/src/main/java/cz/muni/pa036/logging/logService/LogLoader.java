@@ -41,10 +41,10 @@ public class LogLoader {
         }
         File logFile = new File(logFileName);
         if (!logFile.exists()) {
-            throw new IllegalArgumentException("File does not exists!");
+            throw new IllegalArgumentException("File does not exist!");
         }
         if (!logFile.isFile()) {
-            throw new IllegalArgumentException("Expected file not directory!");
+            throw new IllegalArgumentException("Expected a file, not a directory!");
         }
         return LogLoader.loadLogFile(logFile);
     }
@@ -60,7 +60,7 @@ public class LogLoader {
             throw new IllegalArgumentException("Log file argument is null!");
         }
         if (!logFile.isFile()) {
-            throw new IllegalArgumentException("Expected file, not directory!");
+            throw new IllegalArgumentException("Expected a file, not a directory!");
         }
 
         LogFile newLogFile = new LogFile(logFile.getAbsolutePath());
@@ -82,7 +82,7 @@ public class LogLoader {
         }
         File logDirectory = new File(directory);
         if (!logDirectory.exists()) {
-            throw new IllegalArgumentException("Directory does not exists!");
+            throw new IllegalArgumentException("Directory does not exist!");
         }
         if (!logDirectory.isDirectory()) {
             throw new IllegalArgumentException("Invalid path to directory!");
@@ -101,7 +101,7 @@ public class LogLoader {
             throw new IllegalArgumentException("Directory argument is null!");
         }
         if (!directory.isDirectory()) {
-            throw new IllegalArgumentException("Expected directory, not file!");
+            throw new IllegalArgumentException("Expected a directory, not a file!");
         }
 
         File[] dirLogFiles = directory.listFiles((dir, filename) -> filename.endsWith(".log"));

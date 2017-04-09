@@ -6,14 +6,18 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoggerHelper {
+public class CRUDLogger {
 
     private final Class LOGGER_FOR;
     private final Logger LOGGER;
 
-    public LoggerHelper(Class loggerFor) {
+    public CRUDLogger(Class loggerFor) {
         this.LOGGER = LoggerFactory.getLogger(loggerFor);
         LOGGER_FOR = loggerFor;
+    }
+
+    public void logUser(String user) {
+        LOGGER.debug(getClassName() + " > ACTION INITIALISED BY [" + user + "]");
     }
 
     public void logCreate(Object created) {
@@ -67,6 +71,10 @@ public class LoggerHelper {
         Map<Object, Object> findBy = new HashMap<>();
         findBy.put(by, byValue);
         this.logFindBy(findBy, false);
+    }
+
+    public void logCustom(String toLog) {
+        LOGGER.debug(getClassName() + toLog);
     }
 
     private String getClassName() {

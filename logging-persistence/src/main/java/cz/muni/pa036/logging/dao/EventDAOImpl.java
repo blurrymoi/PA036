@@ -12,7 +12,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import cz.muni.pa036.logging.helper.LoggerHelper;
+import cz.muni.pa036.logging.helper.CRUDLogger;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class EventDAOImpl implements EventDAO {
 
-    private final LoggerHelper LOGGER = new LoggerHelper(this.getClass());
+    private final CRUDLogger LOGGER = new CRUDLogger(this.getClass());
 
     @PersistenceContext
     private EntityManager em;
