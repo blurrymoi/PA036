@@ -22,6 +22,11 @@ public class CRUDLogger {
         LOGGER.debug(" > ACTION [" + URL + "] INITIALISED BY [" + user + "]");
     }
 
+    public void logOops(ActionLogger actionLogger, Exception ex) {
+        LOGGER.debug(" !! Error occurred while trying to " + actionLogger
+                + "\nException was " + parseException(ex) + " !!");
+    }
+
     public void logCreate(Object created) {
         LOGGER.debug(" > Trying to create [" + created + "]");
     }
@@ -40,19 +45,8 @@ public class CRUDLogger {
 
     public void logFindBy(Map<Object, Object> findBy, boolean multipleAllowed) {
         StringBuilder builder = new StringBuilder(" > Trying to find by");
-        builder.append(" params=[");
-        int mapLength = findBy.keySet().size();
-        int currentIndex = 1;
-        for (Object by: findBy.keySet()) {
-            Object byValue = findBy.get(by);
-
-            builder.append(by + ":\"" + byValue + "\"");
-            if (currentIndex < mapLength) {
-                builder.append(", ");
-            }
-            currentIndex++;
-        }
-        builder.append("]");
+        builder.append(" params=")
+                .append(CRUDUtils.prettyPrintMap(findBy));
         if (multipleAllowed) {
             builder.append(" {multiple rows allowed}");
         }
@@ -77,5 +71,15 @@ public class CRUDLogger {
 
     public void logCustom(String toLog) {
         LOGGER.debug(toLog);
+    }
+
+    private String parseException(Exception ex) {
+        String lameExplanation = "UNKNOWN";
+
+        String message = ex.getMessage() == null ? lameExplanation : ex.getMessage();
+        Throwable cause = ex.getCause();
+        String realCause = cause == null || cause.getMessage() == null ? lameExplanation : cause.getMessage();
+
+        return "[message = \"" + message + "\", cause = \"" + realCause + "\"]";
     }
 }
