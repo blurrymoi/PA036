@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import cz.muni.pa036.logging.helper.CRUDLogger;
 
 import java.util.Calendar;
 import java.util.List;
@@ -22,6 +23,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/test")
 public class ExampleController {
+
+	private final CRUDLogger CRUD_LOGGER = new CRUDLogger(this.getClass());
 
 	@Autowired
 	private ExampleService exampleService;
@@ -59,11 +62,13 @@ public class ExampleController {
 		Long eventIdLong = Long.valueOf(eventId);
 		Long sportsmanIdLong = Long.valueOf(sportsmanId);
 
+		CRUD_LOGGER.logFindById(eventIdLong);
 		Event event = eventService.findById(eventIdLong);
 		if (event == null) {
 			return "Event not found";
 		}
 
+		CRUD_LOGGER.logFindById(sportsmanIdLong);
 		Sportsman sportsman = sportsmanService.findById(sportsmanIdLong);
 		if (sportsman == null) {
 			return "Sportsman not found";
@@ -100,11 +105,12 @@ public class ExampleController {
 
 		Long invitationIdLong = Long.valueOf(invitationId);
 
+		CRUD_LOGGER.logFindById(invitationIdLong);
 		Invitation invitation = invitationService.findById(invitationIdLong);
 		if (invitation == null) {
 			return "Invitation not found";
 		}
-
+		CRUD_LOGGER.logAccept(invitation);
 		Invitation invitationResponse = invitationService.accept(invitation);
 
 		//response

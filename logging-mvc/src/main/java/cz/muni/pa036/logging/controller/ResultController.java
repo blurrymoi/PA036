@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import cz.muni.pa036.logging.helper.CRUDLogger;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -27,6 +28,8 @@ import java.util.Map;
 @Controller
 @RequestMapping("/results")
 public class ResultController extends BaseController {
+
+	private final CRUDLogger CRUD_LOGGER = new CRUDLogger(this.getClass());
 
 	@Autowired
 	private EventFacade eventFacade;
@@ -63,6 +66,7 @@ public class ResultController extends BaseController {
 
 	@RequestMapping
 	public String renderList(Model model) {
+		CRUD_LOGGER.logFindAll();
 		List<ResultDTO> allResults = resultFacade.findAll();
 		Map<EventDTO, List<ResultDTO>> events = new HashMap<>();
 		for (ResultDTO result : allResults) {
@@ -80,11 +84,13 @@ public class ResultController extends BaseController {
 
 	@RequestMapping("/{id}")
 	public Object renderDetail(@PathVariable("id") Long id, Model model) {
+		CRUD_LOGGER.logFindById(id);
 		ResultDTO resultDTO = resultFacade.findById(id);
 		if (resultDTO == null) {
 			return redirect("/results");
 		}
 		model.addAttribute("result", resultDTO);
+		CRUD_LOGGER.logFindByEvent();
 		List<ResultDTO> results = resultFacade.findByEvent(resultDTO.getEvent());
 		results.remove(resultDTO);
 		model.addAttribute("results", results);
@@ -93,6 +99,7 @@ public class ResultController extends BaseController {
 
 	@RequestMapping("/{id}/update")
 	public Object renderUpdate(@PathVariable("id") Long id, Model model) {
+		CRUD_LOGGER.logFindById(id);
 		ResultDTO resultDTO = resultFacade.findById(id);
 		if (resultDTO == null) {
 			return redirect("/results");
@@ -113,6 +120,7 @@ public class ResultController extends BaseController {
 
 	@RequestMapping("/{id}/delete")
 	public Object renderDelete(@PathVariable("id") Long id) {
+		CRUD_LOGGER.logFindById(id);
 		ResultDTO resultDTO = resultFacade.findById(id);
 		if (resultDTO != null) {
 			resultFacade.delete(resultDTO.getId());
@@ -122,10 +130,12 @@ public class ResultController extends BaseController {
 
 	@RequestMapping("/{id}/participants")
 	public Object renderParticipants(@PathVariable("id") Long id, Model model) {
+		CRUD_LOGGER.logFindById(id);
 		EventDTO eventDTO = eventFacade.findById(id);
 		if (eventDTO == null) {
 			return redirect("/event/"+id);
 		}
+		CRUD_LOGGER.logFindByEvent(eventDTO);
 		List<ResultDTO> results = resultFacade.findByEvent(eventDTO);
 
 		if(results.isEmpty()){
@@ -138,6 +148,7 @@ public class ResultController extends BaseController {
 
 	@RequestMapping("/{eventId}/reset/{id}")
 	public Object renderReset(@PathVariable("eventId") Long eventId, @PathVariable("id") Long id) {
+		CRUD_LOGGER.logFindById(id);
 		ResultDTO resultDTO = resultFacade.findById(id);
 		if (resultDTO != null) {
 			resultDTO.setPerformance(new Double(-1));
@@ -149,6 +160,7 @@ public class ResultController extends BaseController {
 
 	@RequestMapping("/{eventId}/insert/{id}")
 	public Object renderInsert(@PathVariable("eventId") Long eventId, @PathVariable("id") Long id, Model model) {
+		CRUD_LOGGER.logFindById(id);
 		ResultDTO resultDTO = resultFacade.findById(id);
 		if (resultDTO == null) {
 			return redirect("/results/"+ eventId + "/participants/");

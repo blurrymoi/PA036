@@ -23,6 +23,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import cz.muni.pa036.logging.helper.CRUDLogger;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -40,6 +41,8 @@ import java.util.stream.Collectors;
 public class EventController extends BaseController {
 
     Logger logger = org.slf4j.LoggerFactory.getLogger(EventController.class);
+
+    private final CRUDLogger CRUD_LOGGER = new CRUDLogger(this.getClass());
 
     @Autowired
     private EventFacade eventFacade;
@@ -78,6 +81,7 @@ public class EventController extends BaseController {
 
     @RequestMapping
     public String renderList(@RequestParam(value = "search", required = false) String search, Model model) {
+        CRUD_LOGGER.logFindAll();
         List<EventDTO> allEvents = eventFacade.findAll();
 
         if (search != null && !search.isEmpty()) {
@@ -104,14 +108,17 @@ public class EventController extends BaseController {
 
     @RequestMapping("/{id}")
     public Object renderDetail(@PathVariable("id") Long id, Model model, Authentication authentication) {
+        CRUD_LOGGER.logFindById(id);
         EventDTO eventDTO = eventFacade.findById(id);
         if (eventDTO == null) {
             return redirect("/events");
         }
+        CRUD_LOGGER.logFindBy("email", email);
         SportsmanDTO sportsman = sportsmanFacade.getByEmail(authentication.getName());
         model.addAttribute("event", eventDTO);
 
         List<ResultDTO> results = new ArrayList<>();
+        CRUD_LOGGER.logFindByEvent(eventDTO);
         List<ResultDTO> allResults = resultFacade.findByEvent(eventDTO);
         for (ResultDTO result : allResults) {
             if (result.getPerformance() >= 0 && result.getPosition() >= 0) {
@@ -133,6 +140,7 @@ public class EventController extends BaseController {
 
     @RequestMapping("/create")
     public String renderCreate(Authentication authentication, Model model) {
+        CRUD_LOGGER.logFindBy("email", authentication.getName());
         EventCreateDTO eventCreateDTO = new EventCreateDTO();
         SportsmanDTO sportsmanDTO = sportsmanFacade.getByEmail(authentication.getName());
         eventCreateDTO.setAdmin(sportsmanDTO);
@@ -146,12 +154,14 @@ public class EventController extends BaseController {
             model.addAttribute("error", true);
             return "event.create";
         }
+        CRUD_LOGGER.logCreate(eventCreateDTO);
         EventDTO eventDTO = eventFacade.create(eventCreateDTO);
         return redirect("/events/" + eventDTO.getId() + "?create");
     }
 
     @RequestMapping("/{id}/update")
     public Object renderUpdate(@PathVariable("id") Long id, Model model) {
+        CRUD_LOGGER.logFindById(id);
         EventDTO eventDTO = eventFacade.findById(id);
         if (eventDTO == null) {
             return redirect("/events");
@@ -166,12 +176,14 @@ public class EventController extends BaseController {
             model.addAttribute("error", true);
             return "event.update";
         }
+        CRUD_LOGGER.logUpdate(eventUpdateDTO);
         eventFacade.update(eventUpdateDTO);
         return redirect("/events/" + eventUpdateDTO.getId() + "?update");
     }
 
     @RequestMapping("/{id}/delete")
     public Object renderDelete(@PathVariable("id") Long id) {
+        CRUD_LOGGER.logFindById(id);
         EventDTO eventDTO = eventFacade.findById(id);
         if (eventDTO != null) {
             eventFacade.delete(eventDTO.getId());
@@ -182,7 +194,9 @@ public class EventController extends BaseController {
     @RequestMapping( value = "/{id}/unenroll", method = RequestMethod.GET)
     public Object unenroll(@PathVariable long id, Authentication authentication, Model model) {
         logger.info("renderEvents");
+        CRUD_LOGGER.logFindBy("email", email);
         SportsmanDTO participant = sportsmanFacade.getByEmail(authentication.getName());
+        CRUD_LOGGER.logFindById(id);
         EventDTO event = eventFacade.findById(id);
         logger.info("Unenrolling sportman(" + participant.getName() + " " + participant.getSurname() + ") from event " + event.getName());
         resultFacade.delete(
@@ -197,7 +211,9 @@ public class EventController extends BaseController {
     @RequestMapping( value = "/{id}/enroll", method = RequestMethod.GET)
     public Object enroll(@PathVariable long id, Authentication authentication, Model model) {
         logger.info("renderEvents");
+        CRUD_LOGGER.logFindBy("email", email);
         SportsmanDTO participant = sportsmanFacade.getByEmail(authentication.getName());
+        CRUD_LOGGER.logFindById(id);
         EventDTO event = eventFacade.findById(id);
         logger.info("Enrolling sportman(" + participant.getName() + " " + participant.getSurname() + ") from event " + event.getName());
         ResultCreateDTO  result = new ResultCreateDTO();
