@@ -1,5 +1,7 @@
 package cz.muni.pa036.logging.helper;
 
+import cz.muni.pa036.logging.utils.CRUDUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 

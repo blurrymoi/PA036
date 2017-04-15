@@ -1,5 +1,6 @@
 package cz.muni.pa036.logging.helper;
 
+import cz.muni.pa036.logging.utils.CRUDUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
