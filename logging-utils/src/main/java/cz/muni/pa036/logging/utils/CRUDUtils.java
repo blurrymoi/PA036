@@ -1,4 +1,4 @@
-package cz.muni.pa036.logging.helper;
+package cz.muni.pa036.logging.utils;
 
 import java.util.Map;
 

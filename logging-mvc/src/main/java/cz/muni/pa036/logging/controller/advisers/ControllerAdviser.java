@@ -1,5 +1,9 @@
 package cz.muni.pa036.logging.controller.advisers;
 
+import cz.muni.pa036.logging.exceptions.CreateException;
+import cz.muni.pa036.logging.exceptions.DeleteException;
+import cz.muni.pa036.logging.exceptions.FindByException;
+import cz.muni.pa036.logging.exceptions.UpdateException;
 import cz.muni.pa036.logging.helper.ActionLogger;
 import cz.muni.pa036.logging.helper.CRUDLogger;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -10,28 +14,42 @@ public class ControllerAdviser {
 
     private final CRUDLogger CRUD_LOGGER = new CRUDLogger(this.getClass());
 
-    // CreateException si vytvorime a budeme ju vyhadzovat na servise ak sa nieco poserie
     @ExceptionHandler(CreateException.class)
     public void logCreationException(CreateException createException) {
-        ActionLogger actionLogger = new ActionLogger.ActionLoggerBuilder().CREATE().build();
+        ActionLogger actionLogger = new ActionLogger.ActionLoggerBuilder()
+                .CREATE()
+                .causeObject(createException.getCauseObject())
+                .build();
         CRUD_LOGGER.logOops(actionLogger, createException);
     }
 
-    // UpdateException si vytvorime
     @ExceptionHandler(UpdateException.class)
     public void logUpdateException(UpdateException updateException) {
-        ActionLogger actionLogger = new ActionLogger.ActionLoggerBuilder().UPDATE().build();
+        ActionLogger actionLogger = new ActionLogger.ActionLoggerBuilder()
+                .UPDATE()
+                .causeObject(updateException.getCauseObject())
+                .build();
         CRUD_LOGGER.logOops(actionLogger, updateException);
     }
 
-    // DeleteException si vytvorime
+    @ExceptionHandler(FindByException.class)
+    public void logFindByException(FindByException findByException) {
+        ActionLogger actionLogger = new ActionLogger.ActionLoggerBuilder()
+                .DELETE()
+                .byValues(findByException.getByValues())
+                .build();
+        CRUD_LOGGER.logOops(actionLogger, findByException);
+    }
+
     @ExceptionHandler(DeleteException.class)
     public void logDeleteException(DeleteException deleteException) {
-        ActionLogger actionLogger = new ActionLogger.ActionLoggerBuilder().DELETE().build();
+        ActionLogger actionLogger = new ActionLogger.ActionLoggerBuilder().DELETE()
+                .causeObject(deleteException.getCauseObject())
+                .build();
         CRUD_LOGGER.logOops(actionLogger, deleteException);
     }
 
-    // general pre ostatne
+    // general logging for other exceptions (e.g. thrown and not caught ones)
     @ExceptionHandler(Throwable.class)
     public void logException(Throwable throwable) {
         ActionLogger actionLogger = new ActionLogger.ActionLoggerBuilder().CUSTOM("[UNKNOWN ACTION]").build();
