@@ -54,7 +54,7 @@ public class SportsmanController extends BaseController {
         try {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             email = auth.getName();
-            CRUD_LOGGER.logFindBy("email", email)
+            CRUD_LOGGER.logFindBy("email", email);
             sportsman = sportsmanFacade.getByEmail(email);
             results = resultFacade.findBySportsman(sportsman);
 
