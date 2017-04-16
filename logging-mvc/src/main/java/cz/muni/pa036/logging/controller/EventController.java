@@ -140,8 +140,8 @@ public class EventController extends BaseController {
 
     @RequestMapping("/create")
     public String renderCreate(Authentication authentication, Model model) {
-        CRUD_LOGGER.logFindBy("email", authentication.getName());
         EventCreateDTO eventCreateDTO = new EventCreateDTO();
+        CRUD_LOGGER.logFindBy("email", authentication.getName());
         SportsmanDTO sportsmanDTO = sportsmanFacade.getByEmail(authentication.getName());
         eventCreateDTO.setAdmin(sportsmanDTO);
         model.addAttribute("event", eventCreateDTO);
