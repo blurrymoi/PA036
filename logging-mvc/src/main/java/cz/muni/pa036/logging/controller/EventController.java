@@ -113,7 +113,7 @@ public class EventController extends BaseController {
         if (eventDTO == null) {
             return redirect("/events");
         }
-        CRUD_LOGGER.logFindBy("authentication", authentication);
+        CRUD_LOGGER.logFindBy("email", authentication.getName());
         SportsmanDTO sportsman = sportsmanFacade.getByEmail(authentication.getName());
         model.addAttribute("event", eventDTO);
 
