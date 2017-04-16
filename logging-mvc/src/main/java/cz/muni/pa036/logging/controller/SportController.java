@@ -51,6 +51,7 @@ public class SportController extends BaseController {
 			return redirect("/sports");
 		}
 		model.addAttribute("sport", sportDTO);
+		CRUD_LOGGER.logFindBy("ID", sportDTO);
 		model.addAttribute("events", eventFacade.findBySport(sportDTO.getId()));
 		return "sport.detail";
 	}
@@ -99,6 +100,7 @@ public class SportController extends BaseController {
 		CRUD_LOGGER.logFindBy("ID", id);
 		SportDTO sportDTO = sportFacade.getSportById(id);
 		if (sportDTO != null) {
+			CRUD_LOGGER.logDelete(sportDTO);
 			sportFacade.delete(sportDTO.getId());
 		}
 		return redirect("/sports?delete");

@@ -66,7 +66,9 @@ public class SportsmanController extends BaseController {
         model.addAttribute("surname", sportsman.getSurname());
         model.addAttribute("email", sportsman.getEmail());
         model.addAttribute("birthdate", sportsman.getBirthDate());
+        CRUD_LOGGER.logFindBy("invitee", sportsman);
         model.addAttribute("invitations", invitationFacade.findByInvitee(sportsman));
+        CRUD_LOGGER.logFindBy("participant", sportsman);
         model.addAttribute("events", eventFacade.findByParticipant(sportsman.getId()));
         model.addAttribute("results", results);
         return "user.detail";

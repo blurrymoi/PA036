@@ -50,11 +50,13 @@ public class ResultController extends BaseController {
 
 	@ModelAttribute("events")
 	public List<EventDTO> getEvents() {
+		CRUD_LOGGER.logFindAll();
 		return eventFacade.findAll();
 	}
 
 	@ModelAttribute("sportsmans")
 	public List<SportsmanDTO> getSportsmans() {
+		CRUD_LOGGER.logFindAll();
 		return sportsmanFacade.getAll();
 	}
 
@@ -114,6 +116,7 @@ public class ResultController extends BaseController {
 			model.addAttribute("error", true);
 			return "result.update";
 		}
+		CRUD_LOGGER.logUpdate(resultUpdateDTO);
 		resultFacade.update(resultUpdateDTO);
 		return redirect("/results/" + resultUpdateDTO.getId() + "?update");
 	}
@@ -177,6 +180,7 @@ public class ResultController extends BaseController {
 			model.addAttribute("error", true);
 			return "result.insert";
 		}
+		CRUD_LOGGER.logUpdate(resultUpdateDTO);
 		resultFacade.update(resultUpdateDTO);
 		return redirect("/results/" + eventId + "/participants/");
 	}

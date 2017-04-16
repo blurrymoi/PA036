@@ -186,6 +186,7 @@ public class EventController extends BaseController {
         CRUD_LOGGER.logFindBy("ID", id);
         EventDTO eventDTO = eventFacade.findById(id);
         if (eventDTO != null) {
+            CRUD_LOGGER.logDelete(eventDTO);
             eventFacade.delete(eventDTO.getId());
         }
         return redirect("/events?delete");
