@@ -90,7 +90,7 @@ public class ResultController extends BaseController {
 			return redirect("/results");
 		}
 		model.addAttribute("result", resultDTO);
-		CRUD_LOGGER.logFindBy("Event", eventFacade);
+		CRUD_LOGGER.logFindBy("event", eventFacade);
 		List<ResultDTO> results = resultFacade.findByEvent(resultDTO.getEvent());
 		results.remove(resultDTO);
 		model.addAttribute("results", results);

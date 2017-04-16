@@ -140,7 +140,7 @@ public class EventController extends BaseController {
 
     @RequestMapping("/create")
     public String renderCreate(Authentication authentication, Model model) {
-        CRUD_LOGGER.logFindBy("authentication", authentication);
+        CRUD_LOGGER.logFindBy("email", authentication.getName());
         EventCreateDTO eventCreateDTO = new EventCreateDTO();
         SportsmanDTO sportsmanDTO = sportsmanFacade.getByEmail(authentication.getName());
         eventCreateDTO.setAdmin(sportsmanDTO);
@@ -194,7 +194,7 @@ public class EventController extends BaseController {
     @RequestMapping( value = "/{id}/unenroll", method = RequestMethod.GET)
     public Object unenroll(@PathVariable long id, Authentication authentication, Model model) {
         logger.info("renderEvents");
-        CRUD_LOGGER.logFindBy("authentication", authentication);
+        CRUD_LOGGER.logFindBy("email", authentication.getName());
         SportsmanDTO participant = sportsmanFacade.getByEmail(authentication.getName());
         CRUD_LOGGER.logFindBy("ID", id);
         EventDTO event = eventFacade.findById(id);
@@ -211,7 +211,7 @@ public class EventController extends BaseController {
     @RequestMapping( value = "/{id}/enroll", method = RequestMethod.GET)
     public Object enroll(@PathVariable long id, Authentication authentication, Model model) {
         logger.info("renderEvents");
-        CRUD_LOGGER.logFindBy("authentication", authentication);
+        CRUD_LOGGER.logFindBy("email", authentication.getName());
         SportsmanDTO participant = sportsmanFacade.getByEmail(authentication.getName());
         CRUD_LOGGER.logFindBy("ID", id);
         EventDTO event = eventFacade.findById(id);
