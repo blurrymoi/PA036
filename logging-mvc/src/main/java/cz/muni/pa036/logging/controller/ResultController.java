@@ -84,13 +84,13 @@ public class ResultController extends BaseController {
 
 	@RequestMapping("/{id}")
 	public Object renderDetail(@PathVariable("id") Long id, Model model) {
-		CRUD_LOGGER.logFindById(id);
+		CRUD_LOGGER.logFindBy("ID", id);
 		ResultDTO resultDTO = resultFacade.findById(id);
 		if (resultDTO == null) {
 			return redirect("/results");
 		}
 		model.addAttribute("result", resultDTO);
-		CRUD_LOGGER.logFindByEvent();
+		CRUD_LOGGER.logFindBy("Event", eventFacade);
 		List<ResultDTO> results = resultFacade.findByEvent(resultDTO.getEvent());
 		results.remove(resultDTO);
 		model.addAttribute("results", results);
@@ -99,7 +99,7 @@ public class ResultController extends BaseController {
 
 	@RequestMapping("/{id}/update")
 	public Object renderUpdate(@PathVariable("id") Long id, Model model) {
-		CRUD_LOGGER.logFindById(id);
+		CRUD_LOGGER.logFindBy("ID", id);
 		ResultDTO resultDTO = resultFacade.findById(id);
 		if (resultDTO == null) {
 			return redirect("/results");
@@ -120,7 +120,7 @@ public class ResultController extends BaseController {
 
 	@RequestMapping("/{id}/delete")
 	public Object renderDelete(@PathVariable("id") Long id) {
-		CRUD_LOGGER.logFindById(id);
+		CRUD_LOGGER.logFindBy("ID", id);
 		ResultDTO resultDTO = resultFacade.findById(id);
 		if (resultDTO != null) {
 			resultFacade.delete(resultDTO.getId());
@@ -130,12 +130,12 @@ public class ResultController extends BaseController {
 
 	@RequestMapping("/{id}/participants")
 	public Object renderParticipants(@PathVariable("id") Long id, Model model) {
-		CRUD_LOGGER.logFindById(id);
+		CRUD_LOGGER.logFindBy("ID", id);
 		EventDTO eventDTO = eventFacade.findById(id);
 		if (eventDTO == null) {
 			return redirect("/event/"+id);
 		}
-		CRUD_LOGGER.logFindByEvent(eventDTO);
+		CRUD_LOGGER.logFindBy("event", eventDTO);
 		List<ResultDTO> results = resultFacade.findByEvent(eventDTO);
 
 		if(results.isEmpty()){
@@ -148,7 +148,7 @@ public class ResultController extends BaseController {
 
 	@RequestMapping("/{eventId}/reset/{id}")
 	public Object renderReset(@PathVariable("eventId") Long eventId, @PathVariable("id") Long id) {
-		CRUD_LOGGER.logFindById(id);
+		CRUD_LOGGER.logFindBy("ID", id);
 		ResultDTO resultDTO = resultFacade.findById(id);
 		if (resultDTO != null) {
 			resultDTO.setPerformance(new Double(-1));
@@ -160,7 +160,7 @@ public class ResultController extends BaseController {
 
 	@RequestMapping("/{eventId}/insert/{id}")
 	public Object renderInsert(@PathVariable("eventId") Long eventId, @PathVariable("id") Long id, Model model) {
-		CRUD_LOGGER.logFindById(id);
+		CRUD_LOGGER.logFindBy("ID", id);
 		ResultDTO resultDTO = resultFacade.findById(id);
 		if (resultDTO == null) {
 			return redirect("/results/"+ eventId + "/participants/");

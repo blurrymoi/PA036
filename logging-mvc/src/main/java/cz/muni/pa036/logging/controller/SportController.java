@@ -38,14 +38,14 @@ public class SportController extends BaseController {
 
 	@RequestMapping
 	public String renderList(Model model) {
-		CRUD_LOGGER.logGetAllSports();
+		CRUD_LOGGER.logFindAll();
 		model.addAttribute("sports", sportFacade.getAllSports());
 		return "sport.list";
 	}
 
 	@RequestMapping("/{id}")
 	public Object renderDetail(@PathVariable("id") Long id, Model model) {
-		CRUD_LOGGER.logGetSportById(id);
+		CRUD_LOGGER.logFindBy("ID", id);
 		SportDTO sportDTO = sportFacade.getSportById(id);
 		if (sportDTO == null) {
 			return redirect("/sports");
@@ -74,7 +74,7 @@ public class SportController extends BaseController {
 
 	@RequestMapping("/{id}/update")
 	public Object renderUpdate(@PathVariable("id") Long id, Model model) {
-		CRUD_LOGGER.logGetSportById(id);
+		CRUD_LOGGER.logFindBy("ID", id);
 		SportDTO sportDTO = sportFacade.getSportById(id);
 		if (sportDTO == null) {
 			return redirect("/sports");
@@ -96,7 +96,7 @@ public class SportController extends BaseController {
 
 	@RequestMapping("/{id}/delete")
 	public Object renderDelete(@PathVariable("id") Long id) {
-		CRUD_LOGGER.logGetSportById(id);
+		CRUD_LOGGER.logFindBy("ID", id);
 		SportDTO sportDTO = sportFacade.getSportById(id);
 		if (sportDTO != null) {
 			sportFacade.delete(sportDTO.getId());

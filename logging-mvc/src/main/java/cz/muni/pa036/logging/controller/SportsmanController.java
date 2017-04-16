@@ -77,7 +77,7 @@ public class SportsmanController extends BaseController {
     public Object accept(Authentication authentication, @PathVariable Long id) {
         InvitationDTO  invitation;
         try{
-            CRUD_LOGGER.logFindById(id);
+            CRUD_LOGGER.logFindBy("ID", id);
             invitation = invitationFacade.findById(id);
             if(!authentication.getName().equals(invitation.getInvitee().getEmail())) {
                 return "error.403";
@@ -94,7 +94,7 @@ public class SportsmanController extends BaseController {
     @RequestMapping("/decline/{id}")
     public Object decline(@PathVariable Long id) {
         try{
-            CRUD_LOGGER.logFindById(id);
+            CRUD_LOGGER.logFindBy("ID", id);
             InvitationDTO  invitation = invitationFacade.findById(id);
             invitationFacade.decline(beanMappingService.mapTo(invitation, InvitationUpdateDTO.class));
         }

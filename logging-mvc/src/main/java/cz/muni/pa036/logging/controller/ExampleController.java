@@ -62,13 +62,13 @@ public class ExampleController {
 		Long eventIdLong = Long.valueOf(eventId);
 		Long sportsmanIdLong = Long.valueOf(sportsmanId);
 
-		CRUD_LOGGER.logFindById(eventIdLong);
+		CRUD_LOGGER.logFindBy("ID", eventIdLong);
 		Event event = eventService.findById(eventIdLong);
 		if (event == null) {
 			return "Event not found";
 		}
 
-		CRUD_LOGGER.logFindById(sportsmanIdLong);
+		CRUD_LOGGER.logFindBy("ID", sportsmanIdLong);
 		Sportsman sportsman = sportsmanService.findById(sportsmanIdLong);
 		if (sportsman == null) {
 			return "Sportsman not found";
@@ -105,12 +105,11 @@ public class ExampleController {
 
 		Long invitationIdLong = Long.valueOf(invitationId);
 
-		CRUD_LOGGER.logFindById(invitationIdLong);
+		CRUD_LOGGER.logFindBy("ID", invitationIdLong);
 		Invitation invitation = invitationService.findById(invitationIdLong);
 		if (invitation == null) {
 			return "Invitation not found";
 		}
-		CRUD_LOGGER.logAccept(invitation);
 		Invitation invitationResponse = invitationService.accept(invitation);
 
 		//response
