@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import cz.muni.pa036.logging.helper.CRUDLogger;
 
 import javax.validation.Valid;
 
@@ -23,6 +24,8 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/sports")
 public class SportController extends BaseController {
+
+	private final CRUDLogger CRUD_LOGGER = new CRUDLogger(this.getClass());
 
 	@Autowired
 	private EventFacade eventFacade;
@@ -35,17 +38,20 @@ public class SportController extends BaseController {
 
 	@RequestMapping
 	public String renderList(Model model) {
+		CRUD_LOGGER.logFindAll();
 		model.addAttribute("sports", sportFacade.getAllSports());
 		return "sport.list";
 	}
 
 	@RequestMapping("/{id}")
 	public Object renderDetail(@PathVariable("id") Long id, Model model) {
+		CRUD_LOGGER.logFindBy("ID", id);
 		SportDTO sportDTO = sportFacade.getSportById(id);
 		if (sportDTO == null) {
 			return redirect("/sports");
 		}
 		model.addAttribute("sport", sportDTO);
+		CRUD_LOGGER.logFindBy("ID", sportDTO);
 		model.addAttribute("events", eventFacade.findBySport(sportDTO.getId()));
 		return "sport.detail";
 	}
@@ -62,12 +68,14 @@ public class SportController extends BaseController {
 			model.addAttribute("error", true);
 			return "sport.create";
 		}
+		CRUD_LOGGER.logCreate(sportCreateDTO);
 		SportDTO sportDTO = sportFacade.create(sportCreateDTO);
 		return redirect("/sports/" + sportDTO.getId() + "?create");
 	}
 
 	@RequestMapping("/{id}/update")
 	public Object renderUpdate(@PathVariable("id") Long id, Model model) {
+		CRUD_LOGGER.logFindBy("ID", id);
 		SportDTO sportDTO = sportFacade.getSportById(id);
 		if (sportDTO == null) {
 			return redirect("/sports");
@@ -82,14 +90,17 @@ public class SportController extends BaseController {
 			model.addAttribute("error", true);
 			return "sport.update";
 		}
+		CRUD_LOGGER.logUpdate(sportUpdateDTO);
 		sportFacade.update(sportUpdateDTO);
 		return redirect("/sports/" + sportUpdateDTO.getId() + "?update");
 	}
 
 	@RequestMapping("/{id}/delete")
 	public Object renderDelete(@PathVariable("id") Long id) {
+		CRUD_LOGGER.logFindBy("ID", id);
 		SportDTO sportDTO = sportFacade.getSportById(id);
 		if (sportDTO != null) {
+			CRUD_LOGGER.logDelete(sportDTO);
 			sportFacade.delete(sportDTO.getId());
 		}
 		return redirect("/sports?delete");

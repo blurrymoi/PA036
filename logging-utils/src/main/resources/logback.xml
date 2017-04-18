@@ -8,7 +8,7 @@
     </contextListener>
 
     <!-- This custom context listener provides variables -->
-    <contextListener class="cz.muni.pa036.logging.helper.LoggerConfiguration"/>
+    <contextListener class="cz.muni.pa036.logging.utils.LoggerConfiguration"/>
 
     <!-- To enable JMX Management -->
     <jmxConfigurator/>

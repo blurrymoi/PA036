@@ -162,7 +162,7 @@ public class Sportsman {
 
 	@Override
 	public String toString() {
-		String normalDate = DATE_FORMAT.format(this.birthDate.getTime());
+		String normalDate = this.birthDate == null ? "NULL" : DATE_FORMAT.format(this.birthDate.getTime());
 
 		return "Sportsman:" +
 				"{" + ", " +
