@@ -35,7 +35,7 @@ public class EventServiceImpl implements EventService {
     private NotificationService notificationService;
 
     @Override
-    public void create(Event event) throws CreateException {
+    public void create(Event event) {
         CRUD_LOGGER.logCreate(event);
         try {
             eventDAO.create(event);
@@ -45,7 +45,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event findById(Long id) throws FindByException {
+    public Event findById(Long id) {
         CRUD_LOGGER.logFindBy("ID", id);
         try {
             return eventDAO.findById(id);
@@ -55,7 +55,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> findByName(String name) throws FindByException {
+    public List<Event> findByName(String name) {
         CRUD_LOGGER.logFindBy("name", name);
         try {
             return eventDAO.findByName(name);
@@ -65,7 +65,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> findByDate(Calendar date) throws FindByException {
+    public List<Event> findByDate(Calendar date) {
         CRUD_LOGGER.logFindBy("date", date);
         try {
             return eventDAO.findByDate(date);
@@ -75,7 +75,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> findBySport(Sport sport) throws FindByException {
+    public List<Event> findBySport(Sport sport) {
         CRUD_LOGGER.logFindBy("sport", sport);
         try {
             return eventDAO.findBySport(sport);
@@ -85,7 +85,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> findByCity(String city) throws FindByException {
+    public List<Event> findByCity(String city) {
         CRUD_LOGGER.logFindBy("city", city);
         try {
             return eventDAO.findByCity(city);
@@ -95,7 +95,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> findByAdmin(Sportsman admin) throws FindByException {
+    public List<Event> findByAdmin(Sportsman admin) {
         CRUD_LOGGER.logFindBy("admin", admin);
         try {
             return eventDAO.findByAdmin(admin);
@@ -105,7 +105,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> findByParticipant(Sportsman participant) throws FindByException {
+    public List<Event> findByParticipant(Sportsman participant) {
         CRUD_LOGGER.logFindBy("participant", participant);
         try {
             return eventDAO.findByParticipant(participant);
@@ -115,7 +115,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> findAll() throws FindByException {
+    public List<Event> findAll() {
         CRUD_LOGGER.logFindAll();
         try {
             return eventDAO.findAll();
@@ -125,7 +125,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void update(Event event) throws UpdateException {
+    public void update(Event event) {
         Set<Sportsman> participants = new HashSet<>();
         participants.addAll(event.getParticipants());
         CRUD_LOGGER.logUpdate(event);
@@ -138,7 +138,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void delete(Event event) throws FindByException, DeleteException {
+    public void delete(Event event) {
         if (event == null) {
             throw  new IllegalArgumentException("Trying to delete null object");
         }

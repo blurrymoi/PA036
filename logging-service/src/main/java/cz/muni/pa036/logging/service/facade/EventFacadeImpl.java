@@ -43,7 +43,7 @@ public class EventFacadeImpl implements EventFacade {
     private SportsmanService sportsmanService;
 
     @Override
-    public EventDTO create(EventCreateDTO eventCreateDTO) throws CreateException {
+    public EventDTO create(EventCreateDTO eventCreateDTO) {
         Event event = new Event();
         event.setName(eventCreateDTO.getName());
         event.setDescription(eventCreateDTO.getDescription());
@@ -60,38 +60,38 @@ public class EventFacadeImpl implements EventFacade {
     }
 
     @Override
-    public EventDTO findById(Long eventId) throws FindByException {
+    public EventDTO findById(Long eventId) {
         Event result = eventService.findById(eventId);
         return beanMappingService.mapTo(result, EventDTO.class);
     }
 
     @Override
-    public List<EventDTO> findByName(String name) throws FindByException {
+    public List<EventDTO> findByName(String name) {
         List<Event> result = eventService.findByName(name);
         return beanMappingService.mapTo(result, EventDTO.class);
     }
 
     @Override
-    public List<EventDTO> findByDate(Calendar date) throws FindByException {
+    public List<EventDTO> findByDate(Calendar date) {
         List<Event> result = eventService.findByDate(date);
         return beanMappingService.mapTo(result, EventDTO.class);
     }
 
     @Override
-    public List<EventDTO> findBySport(Long sportId) throws FindByException {
+    public List<EventDTO> findBySport(Long sportId) {
         Sport sport = sportService.findById(sportId);
         List<Event> result = eventService.findBySport(sport);
         return beanMappingService.mapTo(result, EventDTO.class);
     }
 
     @Override
-    public List<EventDTO> findByCity(String city) throws FindByException {
+    public List<EventDTO> findByCity(String city) {
         List<Event> result = eventService.findByCity(city);
         return beanMappingService.mapTo(result, EventDTO.class);
     }
 
     @Override
-    public List<EventDTO> findByAdmin(Long adminId) throws FindByException {
+    public List<EventDTO> findByAdmin(Long adminId) {
         Sportsman sportsman = sportsmanService.findById(adminId);
         List<Event> result = eventService.findByAdmin(sportsman);
         return beanMappingService.mapTo(result, EventDTO.class);
@@ -99,20 +99,20 @@ public class EventFacadeImpl implements EventFacade {
 
     // TODO: 15-Dec-16 bad preco je tam Id
     @Override
-    public List<EventDTO> findByParticipant(Long participantId) throws FindByException {
+    public List<EventDTO> findByParticipant(Long participantId) {
         Sportsman sportsman = sportsmanService.findById(participantId);
         List<Event> result = eventService.findByParticipant(sportsman);
         return beanMappingService.mapTo(result, EventDTO.class);
     }
 
     @Override
-    public List<EventDTO> findAll() throws FindByException {
+    public List<EventDTO> findAll() {
         List<Event> result = eventService.findAll();
         return beanMappingService.mapTo(result, EventDTO.class);
     }
 
     @Override
-    public void update(EventUpdateDTO eventUpdateDTO) throws FindByException, UpdateException {
+    public void update(EventUpdateDTO eventUpdateDTO) {
         Event event = eventService.findById(eventUpdateDTO.getId());
         event.setName(eventUpdateDTO.getName());
         event.setDescription(eventUpdateDTO.getDescription());
@@ -128,7 +128,7 @@ public class EventFacadeImpl implements EventFacade {
     }
 
     @Override
-    public void delete(Long eventId) throws FindByException, DeleteException {
+    public void delete(Long eventId) {
         Event event = eventService.findById(eventId);
         eventService.delete(event);
     }
