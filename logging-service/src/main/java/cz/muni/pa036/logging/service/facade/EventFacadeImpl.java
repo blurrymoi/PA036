@@ -8,6 +8,10 @@ import cz.muni.pa036.logging.dto.SportsmanDTO;
 import cz.muni.pa036.logging.entity.Event;
 import cz.muni.pa036.logging.entity.Sport;
 import cz.muni.pa036.logging.entity.Sportsman;
+import cz.muni.pa036.logging.exceptions.CreateException;
+import cz.muni.pa036.logging.exceptions.DeleteException;
+import cz.muni.pa036.logging.exceptions.FindByException;
+import cz.muni.pa036.logging.exceptions.UpdateException;
 import cz.muni.pa036.logging.facade.EventFacade;
 import cz.muni.pa036.logging.service.BeanMappingService;
 import cz.muni.pa036.logging.service.EventService;
@@ -39,7 +43,7 @@ public class EventFacadeImpl implements EventFacade {
     private SportsmanService sportsmanService;
 
     @Override
-    public EventDTO create(EventCreateDTO eventCreateDTO) {
+    public EventDTO create(EventCreateDTO eventCreateDTO) throws CreateException {
         Event event = new Event();
         event.setName(eventCreateDTO.getName());
         event.setDescription(eventCreateDTO.getDescription());
@@ -56,38 +60,38 @@ public class EventFacadeImpl implements EventFacade {
     }
 
     @Override
-    public EventDTO findById(Long eventId) {
+    public EventDTO findById(Long eventId) throws FindByException {
         Event result = eventService.findById(eventId);
         return beanMappingService.mapTo(result, EventDTO.class);
     }
 
     @Override
-    public List<EventDTO> findByName(String name) {
+    public List<EventDTO> findByName(String name) throws FindByException {
         List<Event> result = eventService.findByName(name);
         return beanMappingService.mapTo(result, EventDTO.class);
     }
 
     @Override
-    public List<EventDTO> findByDate(Calendar date) {
+    public List<EventDTO> findByDate(Calendar date) throws FindByException {
         List<Event> result = eventService.findByDate(date);
         return beanMappingService.mapTo(result, EventDTO.class);
     }
 
     @Override
-    public List<EventDTO> findBySport(Long sportId) {
+    public List<EventDTO> findBySport(Long sportId) throws FindByException {
         Sport sport = sportService.findById(sportId);
         List<Event> result = eventService.findBySport(sport);
         return beanMappingService.mapTo(result, EventDTO.class);
     }
 
     @Override
-    public List<EventDTO> findByCity(String city) {
+    public List<EventDTO> findByCity(String city) throws FindByException {
         List<Event> result = eventService.findByCity(city);
         return beanMappingService.mapTo(result, EventDTO.class);
     }
 
     @Override
-    public List<EventDTO> findByAdmin(Long adminId) {
+    public List<EventDTO> findByAdmin(Long adminId) throws FindByException {
         Sportsman sportsman = sportsmanService.findById(adminId);
         List<Event> result = eventService.findByAdmin(sportsman);
         return beanMappingService.mapTo(result, EventDTO.class);
@@ -95,20 +99,20 @@ public class EventFacadeImpl implements EventFacade {
 
     // TODO: 15-Dec-16 bad preco je tam Id
     @Override
-    public List<EventDTO> findByParticipant(Long participantId) {
+    public List<EventDTO> findByParticipant(Long participantId) throws FindByException {
         Sportsman sportsman = sportsmanService.findById(participantId);
         List<Event> result = eventService.findByParticipant(sportsman);
         return beanMappingService.mapTo(result, EventDTO.class);
     }
 
     @Override
-    public List<EventDTO> findAll() {
+    public List<EventDTO> findAll() throws FindByException {
         List<Event> result = eventService.findAll();
         return beanMappingService.mapTo(result, EventDTO.class);
     }
 
     @Override
-    public void update(EventUpdateDTO eventUpdateDTO) {
+    public void update(EventUpdateDTO eventUpdateDTO) throws FindByException, UpdateException {
         Event event = eventService.findById(eventUpdateDTO.getId());
         event.setName(eventUpdateDTO.getName());
         event.setDescription(eventUpdateDTO.getDescription());
@@ -124,7 +128,7 @@ public class EventFacadeImpl implements EventFacade {
     }
 
     @Override
-    public void delete(Long eventId) {
+    public void delete(Long eventId) throws FindByException, DeleteException {
         Event event = eventService.findById(eventId);
         eventService.delete(event);
     }
