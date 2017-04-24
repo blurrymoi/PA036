@@ -108,7 +108,7 @@ public class InvitationServiceImpl implements InvitationService {
             CRUD_LOGGER.logFindBy(findBy);
             existingInvitation = invitationDAO.findByEventAndInvitee(event, invitee);
         } catch (Exception ex) {
-            throw new FindByException("Failed to find Invitation by Event and Invitee", ex, "event & invitee", findBy);
+            throw new FindByException("Failed to find Invitation by Event and Invitee", ex, findBy);
         }
 
         //check and process existing invitations
@@ -216,7 +216,7 @@ public class InvitationServiceImpl implements InvitationService {
             CRUD_LOGGER.logFindBy(findBy);
             return invitationDAO.findByEventAndInvitee(event, invitee);
         } catch (Exception ex) {
-            throw new FindByException("Failed to find Invitation by Event & Invitee", ex, "event & invitee", findBy);
+            throw new FindByException("Failed to find Invitation by Event & Invitee", ex, findBy);
         }
     }
 

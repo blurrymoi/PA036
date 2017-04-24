@@ -122,7 +122,7 @@ public class ResultServiceImpl implements ResultService{
             CRUD_LOGGER.logFindBy(findBy);
             return resultDAO.findBySportsmanAndEvent(sportsman, event);
         } catch (Exception ex) {
-            throw new FindByException("Failed to find Result by Sportsman and Event", ex, "sportsman & event", findBy);
+            throw new FindByException("Failed to find Result by Sportsman and Event", ex, findBy);
         }
     }
 
