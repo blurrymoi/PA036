@@ -36,8 +36,8 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public void create(Event event) {
-        CRUD_LOGGER.logCreate(event);
         try {
+            CRUD_LOGGER.logCreate(event);
             eventDAO.create(event);
         } catch (Exception ex) {
             throw new CreateException("Failed to create Event", ex, event);
@@ -46,8 +46,8 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event findById(Long id) {
-        CRUD_LOGGER.logFindBy("ID", id);
         try {
+            CRUD_LOGGER.logFindBy("ID", id);
             return eventDAO.findById(id);
         } catch (Exception ex) {
             throw new FindByException("Failed to find Event by ID", ex, "ID", id);
@@ -56,8 +56,8 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> findByName(String name) {
-        CRUD_LOGGER.logFindBy("name", name);
         try {
+            CRUD_LOGGER.logFindBy("name", name);
             return eventDAO.findByName(name);
         } catch (Exception ex) {
             throw new FindByException("Failed to find Event by name", ex, "name", name);
@@ -66,8 +66,8 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> findByDate(Calendar date) {
-        CRUD_LOGGER.logFindBy("date", date);
         try {
+            CRUD_LOGGER.logFindBy("date", date);
             return eventDAO.findByDate(date);
         } catch (Exception ex) {
             throw new FindByException("Failed to find Event by date", ex, "date", date);
@@ -76,8 +76,8 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> findBySport(Sport sport) {
-        CRUD_LOGGER.logFindBy("sport", sport);
         try {
+            CRUD_LOGGER.logFindBy("sport", sport);
             return eventDAO.findBySport(sport);
         } catch (Exception ex) {
             throw new FindByException("Failed to find Event by sport", ex, "sport", sport);
@@ -86,8 +86,8 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> findByCity(String city) {
-        CRUD_LOGGER.logFindBy("city", city);
         try {
+            CRUD_LOGGER.logFindBy("city", city);
             return eventDAO.findByCity(city);
         } catch (Exception ex) {
             throw new FindByException("Failed to find Event by city", ex, "city", city);
@@ -96,8 +96,8 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> findByAdmin(Sportsman admin) {
-        CRUD_LOGGER.logFindBy("admin", admin);
         try {
+            CRUD_LOGGER.logFindBy("admin", admin);
             return eventDAO.findByAdmin(admin);
         } catch (Exception ex) {
             throw new FindByException("Failed to find Event by admin", ex, "admin", admin);
@@ -106,8 +106,8 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> findByParticipant(Sportsman participant) {
-        CRUD_LOGGER.logFindBy("participant", participant);
         try {
+            CRUD_LOGGER.logFindBy("participant", participant);
             return eventDAO.findByParticipant(participant);
         } catch (Exception ex) {
             throw new FindByException("Failed to find Event by participant", ex, "participant", participant);
@@ -116,8 +116,8 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> findAll() {
-        CRUD_LOGGER.logFindAll();
         try {
+            CRUD_LOGGER.logFindAll();
             return eventDAO.findAll();
         } catch (Exception ex) {
             throw new FindByException("Failed to find all Events", ex, null);
@@ -128,8 +128,8 @@ public class EventServiceImpl implements EventService {
     public void update(Event event) {
         Set<Sportsman> participants = new HashSet<>();
         participants.addAll(event.getParticipants());
-        CRUD_LOGGER.logUpdate(event);
         try {
+            CRUD_LOGGER.logUpdate(event);
             eventDAO.update(event);
         } catch (Exception ex) {
             throw new UpdateException("Failed to update Event", ex, event);
@@ -152,16 +152,16 @@ public class EventServiceImpl implements EventService {
             notificationService.notifyEventCanceled(participants, event);
 
             //next delete results due to foreign constraints
-            CRUD_LOGGER.logFindBy("event", event);
             List<Result> byEvent;
             try {
+                CRUD_LOGGER.logFindBy("event", event);
                 byEvent = resultDAO.findByEvent(event);
             } catch (Exception ex) {
                 throw new FindByException("Failed to find Result by event", ex, "event", event);
             }
             for (Result result : byEvent) {
-                CRUD_LOGGER.logDelete(result);
                 try {
+                    CRUD_LOGGER.logDelete(result);
                     resultDAO.delete(result);
                 } catch (Exception ex) {
                     throw new DeleteException("failed to delete Result", ex, result);
@@ -169,23 +169,23 @@ public class EventServiceImpl implements EventService {
             }
         }
         //next delete all invitations for this event due to foreign key
-        CRUD_LOGGER.logFindBy("event", event);
         List<Invitation> byEvent;
         try {
+            CRUD_LOGGER.logFindBy("event", event);
             byEvent = invitationDAO.findByEvent(event);
         } catch (Exception ex) {
             throw new FindByException("Failed to find Invitation by event", ex, "event", event);
         }
         for(Invitation invitation : byEvent) {
-            CRUD_LOGGER.logDelete(invitation);
             try {
+                CRUD_LOGGER.logDelete(invitation);
                 invitationDAO.delete(invitation);
             } catch (Exception ex) {
                 throw new DeleteException("failed to delete Invitation", ex, invitation);
             }
         }
-        CRUD_LOGGER.logDelete(event);
         try {
+            CRUD_LOGGER.logDelete(event);
             eventDAO.delete(event);
         } catch (Exception ex) {
             throw new DeleteException("failed to delete Event", ex, event);
