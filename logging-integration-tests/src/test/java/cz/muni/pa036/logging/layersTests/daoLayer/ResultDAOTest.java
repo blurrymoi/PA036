@@ -1,8 +1,16 @@
 package cz.muni.pa036.logging.layersTests.daoLayer;
 
+import ch.qos.logback.classic.Level;
+import cz.muni.pa036.logging.dao.ResultDAO;
+import cz.muni.pa036.logging.entity.Sportsman;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import static org.testng.Assert.fail;
+
+import javax.xml.transform.Result;
 
 /**
  * @author Kamil Triscik.
@@ -10,15 +18,18 @@ import org.testng.annotations.Test;
 @Transactional
 public class ResultDAOTest extends DAOLayerTests {
 
-    @Test
-    public void findByIdTest() {
-        Assert.fail("Not implemented");
-    }
+    private final String tableName = "result";
+
+    private final String className = "ResultDAOImpl";
+
+    @Autowired
+    ResultDAO resultDAO;
 
     @Test
-    public void findByNullIdTest() {
-        Assert.fail("Not implemented");
-    }
+    public void findByIdTest() throws Exception { Assert.fail("Not implemented"); }
+
+    @Test
+    public void findByNullIdTest() { Assert.fail("Not implemented");}
 
     @Test
     public void findAllTest() {
@@ -26,9 +37,7 @@ public class ResultDAOTest extends DAOLayerTests {
     }
 
     @Test
-    public void findBySportsmanTest() {
-        Assert.fail("Not implemented");
-    }
+    public void findBySportsmanTest() {Assert.fail("Not implemented"); }
 
     @Test
     public void findByNullSportsmanTest() {
