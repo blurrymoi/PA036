@@ -7,6 +7,8 @@ import ch.qos.logback.classic.Level;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +27,26 @@ public class LogLoader {
      * Pattern for detection new log, which always start with time, relative time, log level
      */
     private static final String LOG_START_PATTERN = "\\d\\d:\\d\\d:\\d\\d.\\d\\d\\d \\d+ *(.*)(ALL|DEBUG|ERROR|FATAL|INFO|OFF|TRACE|WARN)(.*)";
+
+    /**
+     * Method load logs from log file.
+     *
+     * @param logFileName absolute path to log file.
+     * @return LogFile object.
+     */
+    public static LogFile loadLogFile(String logFileName, boolean create) throws Exception {
+        if (logFileName == null || logFileName.isEmpty()) {
+            throw new IllegalArgumentException("Illegal \"logFileName\"(" + logFileName + ") value!");
+        }
+        if (!logFileName.endsWith(".log")) {
+            throw new IllegalArgumentException("Log file name should end with \"*.log\"");
+        }
+        File logFile = new File(logFileName);
+        if (!logFile.exists()) {
+            Files.createFile(Paths.get(logFileName));
+        }
+        return LogLoader.loadLogFile(logFile);
+    }
 
     /**
      * Method load logs from log file.

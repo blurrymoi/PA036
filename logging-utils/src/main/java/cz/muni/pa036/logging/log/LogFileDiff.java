@@ -2,6 +2,7 @@ package cz.muni.pa036.logging.log;
 
 import ch.qos.logback.classic.Level;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +34,11 @@ public class LogFileDiff {
 
     public void setLogs(List<Log> logs) {
         this.logs = logs;
+    }
+
+    protected void clean() throws IOException {
+        this.fileSize = 0L;
+        this.logs.clear();
     }
 
     @Override
