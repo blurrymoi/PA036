@@ -1,7 +1,6 @@
 package cz.muni.pa036.logging.layersTests.serviceLayer;
 
 import cz.muni.pa036.logging.entity.Event;
-import cz.muni.pa036.logging.entity.Invitation;
 import cz.muni.pa036.logging.entity.Sportsman;
 import cz.muni.pa036.logging.service.EventService;
 import cz.muni.pa036.logging.service.InvitationService;
@@ -104,72 +103,66 @@ public class InvitationServiceTest extends ServiceLayerTest {
 
     @Test
     public void findByEventAndInviteeTest() throws Exception{
-        final String eventparam = "event";
-        Event eventvalue = eventService.findAll().get(0);
-        final String inviteeparam = "invitee";
-        Sportsman inviteevalue = sportsmanService.findAll().get(0);
+        final String eventParam = "event";
+        Event eventValue = eventService.findAll().get(0);
+        final String inviteeParam = "invitee";
+        Sportsman inviteeValue = sportsmanService.findAll().get(0);
         logFile.cleanLogFile();
-        invitationService.findByEvent(eventvalue);
-        invitationService.findByInvitee(inviteevalue);
+        invitationService.findByEventAndInvitee(eventValue, inviteeValue);
         logFile.reloadLogFile();
-        super.testFindByParamsMethod(layerName, className, eventparam, eventvalue.toString());
-        super.testFindByParamsMethod(layerName, className, inviteeparam, inviteevalue.toString());
+        super.testFindByParamsMethod(layerName, className, eventParam, eventValue.toString());
+        super.testFindByParamsMethod(layerName, className, inviteeParam, inviteeValue.toString());
     }
 
     @Test
     public void findByNullEventAndInviteeTest() throws Exception{
-        final String eventparam = "event";
-        final String eventvalue = null;
-        final String inviteeparam = "invitee";
-        Sportsman inviteevalue = sportsmanService.findAll().get(0);
+        final String eventParam = "event";
+        final String eventValue = null;
+        final String inviteeParam = "invitee";
+        Sportsman inviteeValue = sportsmanService.findAll().get(0);
         try {
-            invitationService.findByEvent(null);
+            invitationService.findByEventAndInvitee(null, inviteeValue);
             fail(nullException);
         } catch (IllegalArgumentException e) {}
         logFile.reloadLogFile();
         logFile.cleanLogFile();
-        invitationService.findByInvitee(inviteevalue);
-        super.testFindByParamsMethod(layerName, className, eventparam, eventvalue);
-        super.testFindByParamsMethod(layerName, className, inviteeparam, inviteevalue.toString());
+        super.testFindByParamsMethod(layerName, className, eventParam, eventValue);
+        super.testFindByParamsMethod(layerName, className, inviteeParam, inviteeValue.toString());
     }
 
     @Test
     public void findByEventAndNullInviteeTest() throws Exception{
-        final String eventparam = "event";
-        Event eventvalue = eventService.findAll().get(0);
-        final String inviteeparam = "invitee";
-        final String inviteevalue = null;
+        final String eventParam = "event";
+        Event eventValue = eventService.findAll().get(0);
+        final String inviteeParam = "invitee";
+        final String inviteeValue = null;
         try {
-            eventService.findBySport(null);
+            invitationService.findByEventAndInvitee(eventValue, null);
             fail(nullException);
         } catch (IllegalArgumentException e) {}
         logFile.reloadLogFile();
         logFile.cleanLogFile();
-        invitationService.findByEvent(eventvalue);
-        super.testFindByParamsMethod(layerName, className, eventparam, eventvalue.toString());
-        super.testFindByParamsMethod(layerName, className, inviteeparam, inviteevalue);
+        super.testFindByParamsMethod(layerName, className, eventParam, eventValue.toString());
+        super.testFindByParamsMethod(layerName, className, inviteeParam, inviteeValue);
     }
 
     @Test
     public void findByNullEventAndNullInviteeTest() throws Exception{
-        final String eventparam = "event";
-        final String eventvalue = null;
-        final String inviteeparam = "invitee";
-        final String inviteevalue = null;
+        final String eventParam = "event";
+        final String eventValue = null;
+        final String inviteeParam = "invitee";
+        final String inviteeValue = null;
         try {
-            invitationService.findByEvent(null);
-            eventService.findBySport(null);
+            invitationService.findByEventAndInvitee(null, null);
             fail(nullException);
         } catch (IllegalArgumentException e) {}
         logFile.reloadLogFile();
-        super.testFindByParamsMethod(layerName, className, eventparam, eventvalue);
-        super.testFindByParamsMethod(layerName, className, inviteeparam, inviteevalue);
+        super.testFindByParamsMethod(layerName, className, eventParam, eventValue);
+        super.testFindByParamsMethod(layerName, className, inviteeParam, inviteeValue);
     }
 
     @Test
-    public void inviteTest() {
-        Assert.fail("Not implemented");
-    }
+    public void inviteTest() { Assert.fail("Not implemented"); }
 
     @Test
     public void inviteNullValuesTest() {

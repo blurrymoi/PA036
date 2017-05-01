@@ -1,6 +1,5 @@
 package cz.muni.pa036.logging.layersTests.serviceLayer;
 
-import cz.muni.pa036.logging.entity.Event;
 import cz.muni.pa036.logging.entity.Sportsman;
 import cz.muni.pa036.logging.service.SportsmanService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.testng.annotations.Test;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.Set;
 
 import static org.testng.Assert.fail;
 

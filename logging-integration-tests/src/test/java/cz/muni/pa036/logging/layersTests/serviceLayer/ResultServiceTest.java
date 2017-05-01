@@ -5,16 +5,13 @@ import cz.muni.pa036.logging.entity.Result;
 import cz.muni.pa036.logging.entity.Sport;
 import cz.muni.pa036.logging.entity.Sportsman;
 import cz.muni.pa036.logging.service.EventService;
-import cz.muni.pa036.logging.service.InvitationService;
 import cz.muni.pa036.logging.service.ResultService;
 import cz.muni.pa036.logging.service.SportsmanService;
 import cz.muni.pa036.logging.utils.PerformanceUnits;
-import org.apache.derby.iapi.services.diag.Performance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.util.Calendar;
 import java.util.List;
 
 import static org.testng.Assert.fail;
@@ -109,33 +106,31 @@ public class ResultServiceTest extends ServiceLayerTest {
 
     @Test
     public void findBySportsmanAndEventTest() throws Exception{
-        final String sportsmanparam = "sportsman";
-        final Sportsman sportsmanvalue = sportsmanService.findAll().get(0);
-        final String eventparam = "event";
-        Event eventvalue = eventService.findAll().get(0);
+        final String sportsmanParam = "sportsman";
+        final Sportsman sportsmanValue = sportsmanService.findAll().get(0);
+        final String eventParam = "event";
+        Event eventValue = eventService.findAll().get(0);
         logFile.cleanLogFile();
-        resultService.findBySportsman(sportsmanvalue);
-        resultService.findByEvent(eventvalue);
+        resultService.findBySportsmanAndEvent(sportsmanValue, eventValue);
         logFile.reloadLogFile();
-        super.testFindByParamsMethod(layerName, className, sportsmanparam, sportsmanvalue.toString());
-        super.testFindByParamsMethod(layerName, className, eventparam, eventvalue.toString());
+        super.testFindByParamsMethod(layerName, className, sportsmanParam, sportsmanValue.toString());
+        super.testFindByParamsMethod(layerName, className, eventParam, eventValue.toString());
     }
 
     @Test
     public void findByNullSportsmanAndEventTest() throws Exception{
-        final String sportsmanparam = "sportsman";
-        final String sportsmanvalue = null;
-        final String eventparam = "event";
-        Event eventvalue = eventService.findAll().get(0);
+        final String sportsmanParam = "sportsman";
+        final String sportsmanValue = null;
+        final String eventParam = "event";
+        Event eventValue = eventService.findAll().get(0);
         try {
-            resultService.findBySportsman(null);
+            resultService.findBySportsmanAndEvent(null, eventValue);
             fail(nullException);
         } catch (IllegalArgumentException e) {}
         logFile.reloadLogFile();
         logFile.cleanLogFile();
-        resultService.findByEvent(eventvalue);
-        super.testFindByParamsMethod(layerName, className, sportsmanparam, sportsmanvalue);
-        super.testFindByParamsMethod(layerName, className, eventparam, eventvalue.toString());
+        super.testFindByParamsMethod(layerName, className, sportsmanParam, sportsmanValue);
+        super.testFindByParamsMethod(layerName, className, eventParam, eventValue.toString());
     }
 
     @Test
@@ -145,18 +140,17 @@ public class ResultServiceTest extends ServiceLayerTest {
 
     @Test
     public void findByNullSportsmanAndNullEventTest() throws Exception{
-        final String sportsmanparam = "sportsman";
-        final String sportsmanvalue = null;
-        final String eventparam = "event";
-        final String eventvalue = null;
+        final String sportsmanParam = "sportsman";
+        final String sportsmanValue = null;
+        final String eventParam = "event";
+        final String eventValue = null;
         try {
-            resultService.findBySportsman(null);
-            resultService.findByEvent(null);
+            resultService.findBySportsmanAndEvent(null,null);
             fail(nullException);
         } catch (IllegalArgumentException e) {}
         logFile.reloadLogFile();
-        super.testFindByParamsMethod(layerName, className, sportsmanparam, sportsmanvalue);
-        super.testFindByParamsMethod(layerName, className, eventparam, eventvalue);
+        super.testFindByParamsMethod(layerName, className, sportsmanParam, sportsmanValue);
+        super.testFindByParamsMethod(layerName, className, eventParam, eventValue);
     }
 
     @Test

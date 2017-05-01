@@ -1,11 +1,9 @@
 package cz.muni.pa036.logging.layersTests.serviceLayer;
 
-import cz.muni.pa036.logging.entity.Result;
 import cz.muni.pa036.logging.entity.Sport;
 import cz.muni.pa036.logging.service.SportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.List;
