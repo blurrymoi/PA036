@@ -8,6 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public abstract class DAOLayerTests extends BasicLayerTest {
     protected Boolean isTraceLevelEnabled;
 
     @Override
-    @BeforeTest
+    @BeforeClass
     public void initTest() throws Exception {
         //todo finish path to log file
         logFile = LogLoader.loadLogFile(LoggerConfiguration.getLogFile() + "-test.log", true);
