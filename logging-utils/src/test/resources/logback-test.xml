@@ -50,13 +50,13 @@
         <appender-ref ref="FILE" />
     </logger>
 
-    <logger name="org.springframework" level="WARN" additivity="false">
+    <logger name="org.springframework" level="${SPRING_LEVEL}" additivity="false">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
     </logger>
 
-    <!--Those are not needed, but to be really sure-->
-    <logger name="org.springframework.test" level="WARN" additivity="false">
+    <!--Those are not needed, but keep them here as example-->
+    <!--<logger name="org.springframework.test" level="WARN" additivity="false">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
     </logger>
@@ -84,38 +84,35 @@
     <logger name="org.springframework.aop" level="WARN" additivity="false">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
-    </logger>
+    </logger>-->
 
-    <logger name="org.hibernate" level="ERROR" additivity="false">
+    <logger name="org.hibernate" level="${HIBERNATE_LEVEL}" additivity="false">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
     </logger>
 
-    <logger name="org.hibernate.type" level="TRACE" additivity="false">
+    <logger name="org.hibernate.type" level="${HIBERNATE_TYPE_LEVEL}" additivity="false">
         <appender-ref ref="STDOUT" />
-        <appender-ref ref="FILE" />
         <appender-ref ref="PA036_FILE" />
     </logger>
 
     <logger name="org.hibernate.type.BasicTypeRegistry" level="WARN" additivity="false">
         <appender-ref ref="STDOUT" />
-        <appender-ref ref="FILE" />
         <appender-ref ref="PA036_FILE" />
     </logger>
 
-    <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
-        <appender-ref ref="STDOUT" />
-        <appender-ref ref="FILE" />
-        <appender-ref ref="PA036_FILE" />
-    </logger>
-
-    <logger name="cz.muni.pa036.logging" level="DEBUG" additivity="false">
+    <logger name="org.hibernate.SQL" level="${HIBERNATE_SQL_LEVEL}" additivity="false">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="PA036_FILE" />
     </logger>
 
-    <!--everything only WARN or ERROR, unless specified otherwise-->
-    <root level="WARN">
+    <logger name="cz.muni.pa036.logging" level="${PA036_LEVEL}" additivity="false">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="PA036_FILE" />
+    </logger>
+
+    <!--log only WARN or ERROR, unless specified otherwise-->
+    <root level="${ROOT_LEVEL}">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
     </root>
