@@ -8,7 +8,7 @@ import javax.sql.DataSource;
  * @author Kamil Triscik.
  */
 public class DBSApiImpl implements DBSApi {
-    final String query = "SELECT set_config('<option>', '<value>', <enabled>);";
+    final String query = "ALTER SYSTEM SET <option> = <value>;";
 
     private JdbcTemplate jdbc;
 
@@ -20,20 +20,25 @@ public class DBSApiImpl implements DBSApi {
     }
 
     @Override
-    public void turnOnLogging(boolean enabled) throws Exception {
+    public void reload() throws Exception {
+        jdbc.execute("SELECT pg_reload_conf();");
+    }
 
+    @Override
+    public void runQuery(String query) throws Exception {
+        jdbc.execute(query);
+    }
+
+    @Override
+    public void turnOnLogging(boolean enabled) throws Exception {
+        final String option = "log_statement";
+        jdbc.execute(getQuery(option, "'all'", String.valueOf(enabled)));
     }
 
     @Override
     public void setLogDestination(LogDestination destination, boolean enabled) throws Exception {
         final String option = "log_destination";
         jdbc.execute(getQuery(option, destination.toString().toLowerCase(), String.valueOf(enabled)));
-    }
-
-    @Override
-    public void setLoggingCollector(boolean isEnabled, boolean enabled) throws Exception {
-        final String option = "logging_collector";
-        jdbc.execute(getQuery(option, String.valueOf(enabled), String.valueOf(enabled)));
     }
 
     @Override
@@ -99,7 +104,7 @@ public class DBSApiImpl implements DBSApi {
     private String getQuery(String option, String value, String enabled) {
         return query
                 .replace("<option>", option)
-                .replace("<value>", value)
-                .replace("<enabled>", enabled);
+                .replace("<value>", value);
+//                .replace("<enabled>", enabled);
     }
 }
