@@ -8,37 +8,23 @@ import ch.qos.logback.core.Context;
 import ch.qos.logback.core.spi.ContextAwareBase;
 import ch.qos.logback.core.spi.LifeCycle;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 
-@PropertySource("classpath:loggingConfig.properties")
+import java.io.IOException;
+import java.util.Properties;
+
 public class LoggerConfiguration extends ContextAwareBase implements LoggerContextListener, LifeCycle {
 
     private static final String DEFAULT_LOG_DIR = System.getProperty("user.home");
     private static final String DEFAULT_LOG_FILE = "PA036";
 
-    @Value("${LOG_DIR}")
     private static String logDir;
-
-    @Value("${LOG_FILE}")
     private static String logFile;
 
-    @Value("${ROOT_LEVEL}")
     private static String rootLevel;
-
-    @Value("${PA036_LEVEL}")
     private static String pa036Level;
-
-    @Value("${SPRING_LEVEL}")
     private static String springLevel;
-
-    @Value("${HIBERNATE_LEVEL}")
     private static String hibernateLevel;
-
-    @Value("${HIBERNATE_TYPE_LEVEL}")
     private static String hibernateTypeLevel;
-
-    @Value("${HIBERNATE_SQL_LEVEL}")
     private static String hibernateSQLLevel;
 
     private boolean started = false;
@@ -47,8 +33,25 @@ public class LoggerConfiguration extends ContextAwareBase implements LoggerConte
     public void start() {
         if (started) return;
 
-        String actualLogDir = (logDir.length() > 0) ? resolveSystemProperty(logDir) : DEFAULT_LOG_DIR;
-        String actualLogFile = (logFile.length() > 0) ? cutTheDot(resolveSystemProperty(logFile)) : DEFAULT_LOG_FILE;
+        Properties properties = new Properties();
+        try {
+            properties.load(LoggerConfiguration.class.getClassLoader().getResourceAsStream("loggingConfig.properties"));
+
+            logDir = properties.getProperty("LOG_DIR");
+            logFile = properties.getProperty("LOG_FILE");
+
+            rootLevel = properties.getProperty("ROOT_LEVEL");
+            pa036Level = properties.getProperty("PA036_LEVEL");
+            springLevel = properties.getProperty("SPRING_LEVEL");
+            hibernateLevel = properties.getProperty("HIBERNATE_LEVEL");
+            hibernateTypeLevel = properties.getProperty("HIBERNATE_TYPE_LEVEL");
+            hibernateSQLLevel = properties.getProperty("HIBERNATE_SQL_LEVEL");
+        } catch (IOException e) {
+            // shit happens, we have default values for everything so no big deal
+        }
+
+        String actualLogDir = (logDir.length() > 0) ? resolveProperties(logDir) : DEFAULT_LOG_DIR;
+        String actualLogFile = (logFile.length() > 0) ? cutTheDot(resolveProperties(logFile)) : DEFAULT_LOG_FILE;
 
         Context context = getContext();
 
