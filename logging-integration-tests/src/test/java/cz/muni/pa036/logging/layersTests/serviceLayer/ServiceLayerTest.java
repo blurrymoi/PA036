@@ -19,7 +19,7 @@ public class ServiceLayerTest extends BasicLayerTest {
     @BeforeClass
     public void initTest() throws Exception {
         //todo finish path to log file
-        logFile = LogLoader.loadLogFile(LoggerConfiguration.getLogFile() + "-test.log", true);
+        logFile = LogLoader.loadLogFile(LoggerConfiguration.getLogFile().replace(".log", "-test.log"), true);
         logFile.cleanLogFile();
 
         isDebugLevelEnabled = true;//todo load from config

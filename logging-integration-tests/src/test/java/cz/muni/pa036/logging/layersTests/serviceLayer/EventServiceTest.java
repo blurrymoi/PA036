@@ -3,6 +3,10 @@ package cz.muni.pa036.logging.layersTests.serviceLayer;
 import cz.muni.pa036.logging.entity.Event;
 import cz.muni.pa036.logging.entity.Sport;
 import cz.muni.pa036.logging.entity.Sportsman;
+import cz.muni.pa036.logging.exceptions.CreateException;
+import cz.muni.pa036.logging.exceptions.DeleteException;
+import cz.muni.pa036.logging.exceptions.FindByException;
+import cz.muni.pa036.logging.exceptions.UpdateException;
 import cz.muni.pa036.logging.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +38,7 @@ public class EventServiceTest extends ServiceLayerTest {
         logFile.cleanLogFile();
         try {
             eventService.create(event);
-        } catch (Exception e) {}
+        } catch (CreateException e) {}
         logFile.reloadLogFile();
         super.testCUDObject(layerName, className, "create", event.toString());
     }
@@ -44,7 +48,7 @@ public class EventServiceTest extends ServiceLayerTest {
         try {
             eventService.create(null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (CreateException e) {}
         logFile.reloadLogFile();
         super.testCUDObject(layerName, className, "create", "null");
     }
@@ -65,7 +69,7 @@ public class EventServiceTest extends ServiceLayerTest {
         try {
             eventService.findById(null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (FindByException e) {}
         logFile.reloadLogFile();
         super.testFindByParamsMethod(layerName, className, param, value);
     }
@@ -86,7 +90,7 @@ public class EventServiceTest extends ServiceLayerTest {
         try {
             eventService.findByName(null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (FindByException e) {}
         logFile.reloadLogFile();
         super.testFindByParamsMethod(layerName, className, param, value);
     }
@@ -107,7 +111,7 @@ public class EventServiceTest extends ServiceLayerTest {
         try {
             eventService.findByDate(null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (FindByException e) {}
         logFile.reloadLogFile();
         super.testFindByParamsMethod(layerName, className, param, value);
     }
@@ -129,7 +133,7 @@ public class EventServiceTest extends ServiceLayerTest {
         try {
             eventService.findBySport(null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (FindByException e) {}
         logFile.reloadLogFile();
         super.testFindByParamsMethod(layerName, className, param, value);
     }
@@ -150,7 +154,7 @@ public class EventServiceTest extends ServiceLayerTest {
         try {
             eventService.findByCity(null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (FindByException e) {}
         logFile.reloadLogFile();
         super.testFindByParamsMethod(layerName, className, param, value);
     }
@@ -172,7 +176,7 @@ public class EventServiceTest extends ServiceLayerTest {
         try {
             eventService.findByAdmin(null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (FindByException e) {}
         logFile.reloadLogFile();
         super.testFindByParamsMethod(layerName, className, param, value);
     }
@@ -194,7 +198,7 @@ public class EventServiceTest extends ServiceLayerTest {
         try {
             eventService.findByParticipant(null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {
+        } catch (FindByException e) {
         }
         logFile.reloadLogFile();
         super.testFindByParamsMethod(layerName, className, param, value);
@@ -214,7 +218,7 @@ public class EventServiceTest extends ServiceLayerTest {
         logFile.cleanLogFile();
         try {
             eventService.update(event);
-        } catch (Exception e) {}
+        } catch (UpdateException e) {}
         logFile.reloadLogFile();
         super.testCUDObject(layerName, className, "update", event.toString());
     }
@@ -224,7 +228,7 @@ public class EventServiceTest extends ServiceLayerTest {
         try {
             eventService.update(null);
             fail(nullException);
-        } catch (Exception e) {}
+        } catch (UpdateException e) {}
         logFile.reloadLogFile();
         super.testCUDObject(layerName, className, "update", "null");
     }
@@ -236,7 +240,7 @@ public class EventServiceTest extends ServiceLayerTest {
         try {
             eventService.delete(event);
             fail(nullException);
-        } catch (Exception e) {}
+        } catch (DeleteException e) {}
         logFile.reloadLogFile();
         super.testCUDObject(layerName, className, "delete", event.toString());
     }
@@ -246,7 +250,7 @@ public class EventServiceTest extends ServiceLayerTest {
         try {
             eventService.delete(null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (DeleteException e) {}
         logFile.reloadLogFile();
         super.testCUDObject(layerName, className, "delete", "null");
     }

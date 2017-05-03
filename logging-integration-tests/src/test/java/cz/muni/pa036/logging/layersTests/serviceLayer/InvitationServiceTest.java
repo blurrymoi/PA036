@@ -1,7 +1,10 @@
 package cz.muni.pa036.logging.layersTests.serviceLayer;
 
 import cz.muni.pa036.logging.entity.Event;
+import cz.muni.pa036.logging.entity.Invitation;
 import cz.muni.pa036.logging.entity.Sportsman;
+import cz.muni.pa036.logging.exceptions.FindByException;
+import cz.muni.pa036.logging.log.LogFileDiff;
 import cz.muni.pa036.logging.service.EventService;
 import cz.muni.pa036.logging.service.InvitationService;
 import cz.muni.pa036.logging.service.SportsmanService;
@@ -9,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.testng.Assert.fail;
 
@@ -45,7 +51,7 @@ public class InvitationServiceTest extends ServiceLayerTest {
         try {
             invitationService.findById(null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (FindByException e) {}
         logFile.reloadLogFile();
         super.testFindByParamsMethod(layerName, className, param, value);
     }
@@ -74,7 +80,7 @@ public class InvitationServiceTest extends ServiceLayerTest {
         try {
             invitationService.findByEvent(null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (FindByException e) {}
         logFile.reloadLogFile();
         super.testFindByParamsMethod(layerName, className, param, value);
     }
@@ -94,9 +100,9 @@ public class InvitationServiceTest extends ServiceLayerTest {
         final String param = "invitee";
         final String value = null;
         try {
-            eventService.findBySport(null);
+            invitationService.findByInvitee(null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (FindByException e) {}
         logFile.reloadLogFile();
         super.testFindByParamsMethod(layerName, className, param, value);
     }
@@ -110,8 +116,11 @@ public class InvitationServiceTest extends ServiceLayerTest {
         logFile.cleanLogFile();
         invitationService.findByEventAndInvitee(eventValue, inviteeValue);
         logFile.reloadLogFile();
-        super.testFindByParamsMethod(layerName, className, eventParam, eventValue.toString());
-        super.testFindByParamsMethod(layerName, className, inviteeParam, inviteeValue.toString());
+        Map<String, String> values = new HashMap<String, String>(2) {{
+            put(eventParam, eventValue.toString());
+            put(inviteeParam, inviteeValue.toString());
+        }};
+        super.testFindByParamsMethod(layerName, className, values);
     }
 
     @Test
@@ -121,13 +130,16 @@ public class InvitationServiceTest extends ServiceLayerTest {
         final String inviteeParam = "invitee";
         Sportsman inviteeValue = sportsmanService.findAll().get(0);
         try {
+            logFile.cleanLogFile();
             invitationService.findByEventAndInvitee(null, inviteeValue);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (FindByException e) {}
         logFile.reloadLogFile();
-        logFile.cleanLogFile();
-        super.testFindByParamsMethod(layerName, className, eventParam, eventValue);
-        super.testFindByParamsMethod(layerName, className, inviteeParam, inviteeValue.toString());
+        Map<String, String> values = new HashMap<String, String>(2) {{
+            put(eventParam, eventValue);
+            put(inviteeParam, inviteeValue.toString());
+        }};
+        super.testFindByParamsMethod(layerName, className, values);
     }
 
     @Test
@@ -137,13 +149,16 @@ public class InvitationServiceTest extends ServiceLayerTest {
         final String inviteeParam = "invitee";
         final String inviteeValue = null;
         try {
+            logFile.cleanLogFile();
             invitationService.findByEventAndInvitee(eventValue, null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (FindByException e) {}
         logFile.reloadLogFile();
-        logFile.cleanLogFile();
-        super.testFindByParamsMethod(layerName, className, eventParam, eventValue.toString());
-        super.testFindByParamsMethod(layerName, className, inviteeParam, inviteeValue);
+        Map<String, String> values = new HashMap<String, String>(2) {{
+            put(eventParam, eventValue.toString());
+            put(inviteeParam, inviteeValue);
+        }};
+        super.testFindByParamsMethod(layerName, className, values);
     }
 
     @Test
@@ -155,38 +170,60 @@ public class InvitationServiceTest extends ServiceLayerTest {
         try {
             invitationService.findByEventAndInvitee(null, null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (FindByException e) {}
         logFile.reloadLogFile();
-        super.testFindByParamsMethod(layerName, className, eventParam, eventValue);
-        super.testFindByParamsMethod(layerName, className, inviteeParam, inviteeValue);
+        Map<String, String> values = new HashMap<String, String>(2) {{
+            put(eventParam, eventValue);
+            put(inviteeParam, inviteeValue);
+        }};
+        super.testFindByParamsMethod(layerName, className, values);
     }
 
     @Test
-    public void inviteTest() { Assert.fail("Not implemented"); }
-
-    @Test
-    public void inviteNullValuesTest() {
-        Assert.fail("Not implemented");
+    public void inviteTest() throws Exception {
+        Sportsman invitee = sportsmanService.findAll().get(1);
+        Event event = eventService.findAll().get(0);
+        try {
+            logFile.cleanLogFile();
+            invitationService.invite(event, invitee);
+        } catch (Exception e) {
+            System.out.println();
+        }
+        LogFileDiff f = logFile.reloadLogFile();
+        System.out.println();
     }
 
     @Test
-    public void acceptTest() {
-        Assert.fail("Not implemented");
+    public void inviteNullEventTest() throws Exception {
+        Sportsman invitee = sportsmanService.findAll().get(0);
+        try {
+            logFile.cleanLogFile();
+            invitationService.invite(null, invitee);
+            fail(nullException);
+        } catch (IllegalArgumentException e) {}
+        Assert.assertNull(logFile.reloadLogFile());
     }
 
     @Test
-    public void acceptNullTest() {
-        Assert.fail("Not implemented");
+    public void inviteNullEventNullInviteeTest() throws Exception {
+        try {
+            logFile.cleanLogFile();
+            invitationService.invite(null, null);
+            fail(nullException);
+        } catch (IllegalArgumentException e) {}
+        Assert.assertNull(logFile.reloadLogFile());
     }
 
     @Test
-    public void declineTest() {
-        Assert.fail("Not implemented");
-    }
-
-    @Test
-    public void declineNullTest() {
-        Assert.fail("Not implemented");
+    public void acceptAlreadyAcceptedTest() throws Exception {
+        Invitation invitation = invitationService.findAll().get(0);
+        logFile.cleanLogFile();
+        try {
+            invitationService.accept(invitation);
+            fail("Accept already accepted. IllegalStateException should by thrown.");
+        } catch (IllegalStateException e) {}
+        logFile.reloadLogFile();
+        Assert.assertNotNull(logFile.getLogFileDiff(), super.missingLogs);
     }
 
 }

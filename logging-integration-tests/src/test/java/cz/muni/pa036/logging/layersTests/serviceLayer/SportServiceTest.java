@@ -1,6 +1,10 @@
 package cz.muni.pa036.logging.layersTests.serviceLayer;
 
 import cz.muni.pa036.logging.entity.Sport;
+import cz.muni.pa036.logging.exceptions.CreateException;
+import cz.muni.pa036.logging.exceptions.DeleteException;
+import cz.muni.pa036.logging.exceptions.FindByException;
+import cz.muni.pa036.logging.exceptions.UpdateException;
 import cz.muni.pa036.logging.service.SportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +41,7 @@ public class SportServiceTest extends ServiceLayerTest {
         try {
             sportService.findById(null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (FindByException e) {}
         logFile.reloadLogFile();
         super.testFindByParamsMethod(layerName, className, param, value);
     }
@@ -65,7 +69,7 @@ public class SportServiceTest extends ServiceLayerTest {
         try {
             sportService.findByName("");
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (FindByException e) {}
         logFile.reloadLogFile();
         super.testFindByParamsMethod(layerName, className, param, value);
     }
@@ -77,7 +81,7 @@ public class SportServiceTest extends ServiceLayerTest {
         try {
             sportService.findByName(null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (FindByException e) {}
         logFile.reloadLogFile();
         super.testFindByParamsMethod(layerName, className, param, value);
     }
@@ -88,7 +92,7 @@ public class SportServiceTest extends ServiceLayerTest {
         logFile.cleanLogFile();
         try {
             sportService.create(sport);
-        } catch (Exception e) {}
+        } catch (CreateException e) {}
         logFile.reloadLogFile();
         super.testCUDObject(layerName, className, "create", sport.toString());
     }
@@ -98,7 +102,7 @@ public class SportServiceTest extends ServiceLayerTest {
         try {
             sportService.create(null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (CreateException e) {}
         logFile.reloadLogFile();
         super.testCUDObject(layerName, className, "create", "null");
     }
@@ -110,7 +114,7 @@ public class SportServiceTest extends ServiceLayerTest {
         try {
             sportService.delete(sport);
             fail(nullException);
-        } catch (Exception e) {}
+        } catch (DeleteException e) {}
         logFile.reloadLogFile();
         super.testCUDObject(layerName, className, "delete", sport.toString());
     }
@@ -120,7 +124,7 @@ public class SportServiceTest extends ServiceLayerTest {
         try {
             sportService.delete(null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (DeleteException e) {}
         logFile.reloadLogFile();
         super.testCUDObject(layerName, className, "delete", "null");
     }
@@ -131,7 +135,7 @@ public class SportServiceTest extends ServiceLayerTest {
         logFile.cleanLogFile();
         try {
             sportService.update(sport);
-        } catch (Exception e) {}
+        } catch (UpdateException e) {}
         logFile.reloadLogFile();
         super.testCUDObject(layerName, className, "update", sport.toString());
     }
@@ -141,7 +145,7 @@ public class SportServiceTest extends ServiceLayerTest {
         try {
             sportService.update(null);
             fail(nullException);
-        } catch (Exception e) {}
+        } catch (UpdateException e) {}
         logFile.reloadLogFile();
         super.testCUDObject(layerName, className, "update", "null");
     }

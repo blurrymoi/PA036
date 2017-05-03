@@ -1,6 +1,12 @@
 package cz.muni.pa036.logging.layersTests.serviceLayer;
 
+import cz.muni.pa036.logging.entity.Event;
 import cz.muni.pa036.logging.entity.Sportsman;
+import cz.muni.pa036.logging.exceptions.CreateException;
+import cz.muni.pa036.logging.exceptions.DeleteException;
+import cz.muni.pa036.logging.exceptions.FindByException;
+import cz.muni.pa036.logging.exceptions.UpdateException;
+import cz.muni.pa036.logging.service.EventService;
 import cz.muni.pa036.logging.service.SportsmanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +45,7 @@ public class SportsmanServiceTest extends ServiceLayerTest {
         try {
             sportsmanService.findById(null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (FindByException e) {}
         logFile.reloadLogFile();
         super.testFindByParamsMethod(layerName, className, param, value);
     }
@@ -66,8 +72,7 @@ public class SportsmanServiceTest extends ServiceLayerTest {
         final String value = "";
         try {
             sportsmanService.findByName("");
-            fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (FindByException e) {}
         logFile.reloadLogFile();
         super.testFindByParamsMethod(layerName, className, param, value);
     }
@@ -79,7 +84,7 @@ public class SportsmanServiceTest extends ServiceLayerTest {
         try {
             sportsmanService.findByName(null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (FindByException e) {}
         logFile.reloadLogFile();
         super.testFindByParamsMethod(layerName, className, param, value);
     }
@@ -99,8 +104,7 @@ public class SportsmanServiceTest extends ServiceLayerTest {
         final String value = "";
         try {
             sportsmanService.findBySurname("");
-            fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (FindByException e) {}
         logFile.reloadLogFile();
         super.testFindByParamsMethod(layerName, className, param, value);
     }
@@ -112,7 +116,7 @@ public class SportsmanServiceTest extends ServiceLayerTest {
         try {
             sportsmanService.findBySurname(null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (FindByException e) {}
         logFile.reloadLogFile();
         super.testFindByParamsMethod(layerName, className, param, value);
     }
@@ -132,8 +136,7 @@ public class SportsmanServiceTest extends ServiceLayerTest {
         final String value = "";
         try {
             sportsmanService.findByEmail("");
-            fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (FindByException e) {}
         logFile.reloadLogFile();
         super.testFindByParamsMethod(layerName, className, param, value);
     }
@@ -145,22 +148,39 @@ public class SportsmanServiceTest extends ServiceLayerTest {
         try {
             sportsmanService.findByEmail(null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (FindByException e) {}
         logFile.reloadLogFile();
         super.testFindByParamsMethod(layerName, className, param, value);
     }
 
     @Test
-    public void findBySubstringTest() { Assert.fail("Not implemented"); }
-
-    @Test
-    public void findByEmptySubstringTest() {
-        Assert.fail("Not implemented");
+    public void findBySubstringTest() throws Exception {
+        final String param = "substring";
+        final String value = "random";
+        sportsmanService.findBySubstring(value, 1L);
+        logFile.reloadLogFile();
+        super.testFindByParamsMethod(layerName, className, param, value);
     }
 
     @Test
-    public void findByNullSubstringTest() {
-        Assert.fail("Not implemented");
+    public void findByEmptySubstringTest() throws Exception {
+        final String param = "substring";
+        final String value = "";
+        sportsmanService.findBySubstring(value, 1L);
+        logFile.reloadLogFile();
+        super.testFindByParamsMethod(layerName, className, param, value);
+    }
+
+    @Test
+    public void findByNullSubstringTest() throws Exception {
+        final String param = "substring";
+        final String value = null;
+        try {
+            sportsmanService.findBySubstring(value, 1L);
+            fail(nullException);
+        } catch (FindByException e) {}
+        logFile.reloadLogFile();
+        super.testFindByParamsMethod(layerName, className, param, value);
     }
 
     @Test
@@ -169,7 +189,7 @@ public class SportsmanServiceTest extends ServiceLayerTest {
         logFile.cleanLogFile();
         try {
             sportsmanService.create(sportsman);
-        } catch (Exception e) {}
+        } catch (CreateException e) {}
         logFile.reloadLogFile();
         super.testCUDObject(layerName, className, "create", sportsman.toString());
     }
@@ -191,7 +211,7 @@ public class SportsmanServiceTest extends ServiceLayerTest {
         try {
             sportsmanService.delete(sportsman);
             fail(nullException);
-        } catch (Exception e) {}
+        } catch (DeleteException e) {}
         logFile.reloadLogFile();
         super.testCUDObject(layerName, className, "delete", sportsman.toString());
     }
@@ -201,7 +221,7 @@ public class SportsmanServiceTest extends ServiceLayerTest {
         try {
             sportsmanService.delete(null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (DeleteException e) {}
         logFile.reloadLogFile();
         super.testCUDObject(layerName, className, "delete", "null");
     }
@@ -212,7 +232,7 @@ public class SportsmanServiceTest extends ServiceLayerTest {
         logFile.cleanLogFile();
         try {
             sportsmanService.update(sportsman);
-        } catch (Exception e) {}
+        } catch (UpdateException e) {}
         logFile.reloadLogFile();
         super.testCUDObject(layerName, className, "update", sportsman.toString());
     }
@@ -222,7 +242,7 @@ public class SportsmanServiceTest extends ServiceLayerTest {
         try {
             sportsmanService.update(null);
             fail(nullException);
-        } catch (Exception e) {}
+        } catch (UpdateException e) {}
         logFile.reloadLogFile();
         super.testCUDObject(layerName, className, "update", "null");
     }
