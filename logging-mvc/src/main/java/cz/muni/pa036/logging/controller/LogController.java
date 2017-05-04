@@ -3,7 +3,8 @@ package cz.muni.pa036.logging.controller;
 import cz.muni.pa036.logging.dbsApi.DBLogLevel;
 import cz.muni.pa036.logging.dbsApi.LogDestination;
 import cz.muni.pa036.logging.service.DBSystemLogAPI;
-import cz.muni.pa036.logging.util.LoggerModel;
+import cz.muni.pa036.logging.service.LoggerService;
+import cz.muni.pa036.logging.utils.LoggerModel;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,24 +28,27 @@ public class LogController extends BaseController {
     @Autowired
     private DBSystemLogAPI dbSystemLogAPI;
 
+    @Autowired
+    private LoggerService loggerService;
+
     @ModelAttribute("logDestinations")
     public LogDestination[] getLogDestinations() {
         return LogDestination.values();
     }
 
     @RequestMapping
-    public String renderList(Model model) {
+    public String renderList(Model model) throws Exception {
         logger.info("Logging management page loaded");
-        model.addAttribute("logger", new LoggerModel());
+        model.addAttribute("logger", loggerService.getLoggerModel());
         model.addAttribute("dests", LogDestination.values());
         model.addAttribute("lovels", DBLogLevel.values());
         return "logging.page";
     }
 
     @RequestMapping(value = "/apply", method = RequestMethod.POST)
-    public Object apply(@ModelAttribute("logger") LoggerModel loggerModel, Model model) {
+    public Object apply(@ModelAttribute("logger") LoggerModel loggerModel, Model model) throws Exception {
         logger.debug("apply button clicked:" + loggerModel.toString());
-        loggerModel.setMinDuration(3);
+        loggerService.updateLoggingOptions(loggerModel);
         model.addAttribute("logger", loggerModel);
         return "logging.page";
     }

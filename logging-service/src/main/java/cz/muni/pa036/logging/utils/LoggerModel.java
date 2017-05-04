@@ -1,4 +1,4 @@
-package cz.muni.pa036.logging.util;
+package cz.muni.pa036.logging.utils;
 
 import cz.muni.pa036.logging.dbsApi.DBLogLevel;
 import cz.muni.pa036.logging.dbsApi.LogDestination;
