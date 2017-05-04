@@ -26,11 +26,6 @@ public class DBSystemLogAPIImpl implements DBSystemLogAPI {
     }
 
     @Override
-    public void setLoggingCollector(boolean isEnabled, boolean enabled) throws Exception {
-        dbsApi.setLoggingCollector(isEnabled, enabled);
-    }
-
-    @Override
     public void setLoggingDirectory(String directory, boolean enabled) throws Exception {
         dbsApi.setLoggingDirectory(directory, enabled);
     }

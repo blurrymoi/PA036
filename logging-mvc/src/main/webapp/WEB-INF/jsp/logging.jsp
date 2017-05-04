@@ -28,22 +28,15 @@
                 <spring:message code="logging.destination"/>
             </form:label>
             <div class="col-sm-5">
-                <form:select path="destination"  items="${dests}" itemLabel="type" itemValue="description" class="form-control">
+                <%--<form:select path="destination"  items="${dests}" itemLabel="type" itemValue="destination" class="form-control">--%>
                     <%--<c:forEach var="item" items="${LogDestination.values}">--%>
                         <%--<form:option value="{item.value}"><spring:eval expression="item"/></form:option>--%>
                     <%--</c:forEach>--%>
-                </form:select>
-            </div>
-        </div>
-    </spring:bind>
-
-    <spring:bind path="loggingCollector">
-        <div class="form-group form-group-lg" title="${coll}">
-            <form:label path="loggingCollector" class="col-sm-3 control-label">
-                <spring:message code="logging.collector"/>
-            </form:label>
-            <div class="col-sm-5">
-                <form:checkbox path="loggingCollector"/>
+                <%--</form:select>--%>
+                    <form:select path="destination" class="form-control">
+                        <form:option value="">-</form:option>
+                        <form:options items="${logDestinations}"/>
+                    </form:select>
             </div>
         </div>
     </spring:bind>

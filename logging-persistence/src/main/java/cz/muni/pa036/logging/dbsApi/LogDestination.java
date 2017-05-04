@@ -12,19 +12,19 @@ public enum LogDestination {
 
 
     private final String type;
-    private final String description;
+    private final String destination;
 
     private LogDestination(String fullName, String desc) {
         this.type = fullName;
-        this.description = desc;
+        this.destination = desc;
     }
 
     public String getType() {
         return type;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDestination() {
+        return destination;
     }
 
 }

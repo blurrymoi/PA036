@@ -21,11 +21,16 @@ public class LogController extends BaseController {
 
     final public static String URL = "/logging";
 
-    Logger logger = org.slf4j.LoggerFactory.getLogger(EventController.class);
+    Logger logger = org.slf4j.LoggerFactory.getLogger(LogController.class);
 
 
     @Autowired
     private DBSystemLogAPI dbSystemLogAPI;
+
+    @ModelAttribute("logDestinations")
+    public LogDestination[] getLogDestinations() {
+        return LogDestination.values();
+    }
 
     @RequestMapping
     public String renderList(Model model) {
@@ -38,9 +43,10 @@ public class LogController extends BaseController {
 
     @RequestMapping(value = "/apply", method = RequestMethod.POST)
     public Object apply(@ModelAttribute("logger") LoggerModel loggerModel, Model model) {
+        logger.debug("apply button clicked:" + loggerModel.toString());
         loggerModel.setMinDuration(3);
         model.addAttribute("logger", loggerModel);
-        return redirect(LogController.URL);
+        return "logging.page";
     }
 
 }

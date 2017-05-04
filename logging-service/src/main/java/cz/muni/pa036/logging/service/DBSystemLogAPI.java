@@ -24,21 +24,6 @@ public interface DBSystemLogAPI {
     void setLogDestination(LogDestination destination, boolean enabled) throws Exception;
 
     /**
-     * This parameter enables the logging collector,
-     * which is a background process that captures
-     * log messages sent to stderr and redirects them into log files.
-     * This approach is often more useful than logging to syslog,
-     * since some types of messages might not appear in syslog output.
-     * (One common example is dynamic-linker failure messages; another
-     * is error messages produced by scripts such as archive_command.)
-     * This parameter can only be set at server start.
-     *
-     * @param isEnabled
-     * @throws Exception
-     */
-    void setLoggingCollector(boolean isEnabled, boolean enabled) throws Exception;
-
-    /**
      * When logging_collector is enabled, this parameter determines the directory
      * n which log files will be created. It can be specified as an absolute path,
      * or relative to the cluster data directory. This parameter can only be set

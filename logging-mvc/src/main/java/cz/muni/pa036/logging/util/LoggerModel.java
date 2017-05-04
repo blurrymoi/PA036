@@ -10,8 +10,6 @@ public class LoggerModel {
 
     private LogDestination destination;
 
-    private Boolean loggingCollector;
-
     private String directory;
 
     private String fileName;
@@ -43,7 +41,6 @@ public class LoggerModel {
         setMinErrorState(DBLogLevel.ERROR);
         setMinDuration(0);
         setLogDuration(true);
-        setLoggingCollector(false);
         setPrefix("custom prefix");
     }
 
@@ -61,6 +58,10 @@ public class LoggerModel {
 
     public void setDestination(LogDestination destination) {
         this.destination = destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = LogDestination.valueOf(destination);
     }
 
     public String getDirectory() {
@@ -134,15 +135,4 @@ public class LoggerModel {
     public void setLogDuration(Boolean logDuration) {
         this.logDuration = logDuration;
     }
-
-    public Boolean getLoggingCollector() {
-        return loggingCollector;
-    }
-
-    public void setLoggingCollector(Boolean loggingCollector) {
-        this.loggingCollector = loggingCollector;
-    }
-
-
-
 }
