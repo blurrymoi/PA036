@@ -1,7 +1,10 @@
 package cz.muni.pa036.logging.layersTests.daoLayer;
 
 import ch.qos.logback.classic.Level;
+import cz.muni.pa036.logging.dao.EventDAO;
 import cz.muni.pa036.logging.dao.ResultDAO;
+import cz.muni.pa036.logging.dao.SportDAO;
+import cz.muni.pa036.logging.dao.SportsmanDAO;
 import cz.muni.pa036.logging.entity.Sport;
 import cz.muni.pa036.logging.entity.Sportsman;
 import cz.muni.pa036.logging.entity.Event;
@@ -15,8 +18,10 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.fail;
 
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Arrays;
+import java.util.Map;
 
 
 /**
@@ -30,9 +35,20 @@ public class ResultDAOTest extends DAOLayerTests {
     private final String className = "ResultDAOImpl";
 
     private String[] tables = new String[]{"sportsman", "sport"};
+    private String[] values = new String[]{"id", "event", "note", "position", "sportsma"};
+
 
     @Autowired
     ResultDAO resultDAO;
+
+    @Autowired
+    SportDAO sportDAO;
+
+    @Autowired
+    EventDAO eventDAO;
+
+    @Autowired
+    SportsmanDAO sportsmanDAO;
 
     @Test
     public void findByIdTest() throws Exception {
@@ -63,6 +79,7 @@ public class ResultDAOTest extends DAOLayerTests {
 
     @Test
     public void findAllTest() throws Exception{
+        logFile.cleanLogFile();
         List<Result> results = resultDAO.findAll();
         logFile.reloadLogFile();
         if (isDebugLevelEnabled) {
@@ -72,8 +89,13 @@ public class ResultDAOTest extends DAOLayerTests {
         }
         if (isTraceLevelEnabled) {
             Assert.assertFalse(logFile.getLogFileDiff().getLogs(Level.TRACE).isEmpty());
-            Assert.assertEquals(results.size(), logFile.getLogFileDiff().getLogs(Level.TRACE).stream().
-                    filter(log -> log.getContent().contains("extracted value ([id1_0_]")).count());
+            for (String value : values) {
+                String expected = "extracted value ([" + value;
+                int f = (int) logFile.getLogFileDiff().getLogs(Level.TRACE).stream().
+                        filter(log -> log.getContent().contains(expected)).count();
+                Assert.assertTrue(results.size() <= logFile.getLogFileDiff().getLogs(Level.TRACE).stream().
+                        filter(log -> log.getContent().contains(expected)).count(), "Bad count of logs with string \"" + expected + "\"");
+            }
         }
     }
 
@@ -136,40 +158,148 @@ public class ResultDAOTest extends DAOLayerTests {
     }
 
     @Test
-    public void findBySportsmanAndEventTest()  {
-        Assert.fail("Not implemented");
+    public void findBySportsmanAndEventTest() throws Exception  {
+        final String param = "sportsman";
+        final Sportsman value = sportsmanDAO.findAll().get(0);
+        final String param2 = "event";
+        final Event value2 = eventDAO.findAll().get(0);
+        logFile.cleanLogFile();
+        Result res = null;
+        try {
+            res = resultDAO.findBySportsmanAndEvent(value, value2);
+        } catch (IllegalArgumentException e) {
+        }
+        logFile.reloadLogFile();
+        Map<String, String> values = new HashMap<String, String>(2){{
+           put(param, value.toString());
+           put(param2, value2.toString());
+        }};
+
+        if (isDebugLevelEnabled) {
+            super.testFindByParamsMethod(layerName, className, values);
+            testSelectPresent(logFile.getLogs(Level.DEBUG), tableName);
+        }
+        if (isTraceLevelEnabled) {
+            Assert.assertFalse(logFile.getLogFileDiff().getLogs(Level.TRACE).isEmpty());
+            for (String value_ : this.values) {
+                String expected = "extracted value ([" + value_;
+                Assert.assertEquals(logFile.getLogFileDiff().getLogs(Level.TRACE).stream().
+                        filter(log -> log.getContent().contains(expected)).count(), (res == null ? 0 : 1) , "Bad count of logs with string \"" + expected + "\"");
+            }
+        }
     }
 
     @Test
-    public void findByNullSportsmanAndEventTest() {
-        Assert.fail("Not implemented");
+    public void findByNullSportsmanAndEventTest() throws Exception {
+        final String param = "sportsman";
+        final Sportsman value = null;
+        final String param2 = "event";
+        final Event value2 = eventDAO.findAll().get(0);
+        logFile.cleanLogFile();
+        Result res = null;
+        try {
+            res = resultDAO.findBySportsmanAndEvent(value, value2);
+            fail(nullException);
+        } catch (IllegalArgumentException e) {
+        }
+        logFile.reloadLogFile();
+        Map<String, String> values = new HashMap<String, String>(2){{
+            put(param, null);
+            put(param2, value2.toString());
+        }};
+
+        if (isDebugLevelEnabled) {
+            super.testFindByParamsMethod(layerName, className, values);
+        }
+        if (isTraceLevelEnabled) {
+            Assert.assertTrue(logFile.getLogFileDiff().getLogs(Level.TRACE).isEmpty());
+            for (String value_ : this.values) {
+                String expected = "extracted value ([" + value_;
+                Assert.assertEquals(logFile.getLogFileDiff().getLogs(Level.TRACE).stream().
+                        filter(log -> log.getContent().contains(expected)).count(), (res == null ? 0 : 1) , "Bad count of logs with string \"" + expected + "\"");
+            }
+        }
     }
 
     @Test
-    public void findBySportsmanAndNullSportsmanTest() {
-        Assert.fail("Not implemented");
+    public void findBySportsmanAndNullEventTest() throws Exception {
+        final String param = "sportsman";
+        final Sportsman value = sportsmanDAO.findAll().get(0);
+        final String param2 = "event";
+        final Event value2 = null;
+        logFile.cleanLogFile();
+        Result res = null;
+        try {
+            res = resultDAO.findBySportsmanAndEvent(value, value2);
+            fail(nullException);
+        } catch (IllegalArgumentException e) {
+        }
+        logFile.reloadLogFile();
+        Map<String, String> values = new HashMap<String, String>(2){{
+            put(param, value.toString());
+            put(param2, null);
+        }};
+
+        if (isDebugLevelEnabled) {
+            super.testFindByParamsMethod(layerName, className, values);
+        }
+        if (isTraceLevelEnabled) {
+            Assert.assertTrue(logFile.getLogFileDiff().getLogs(Level.TRACE).isEmpty());
+            for (String value_ : this.values) {
+                String expected = "extracted value ([" + value_;
+                Assert.assertEquals(logFile.getLogFileDiff().getLogs(Level.TRACE).stream().
+                        filter(log -> log.getContent().contains(expected)).count(), (res == null ? 0 : 1) , "Bad count of logs with string \"" + expected + "\"");
+            }
+        }
     }
 
     @Test
-    public void findByNullSportsmanAndNullEventTest() {
-        Assert.fail("Not implemented");
+    public void findByNullSportsmanAndNullEventTest() throws Exception {
+        final String param = "sportsman";
+        final Sportsman value = null;
+        final String param2 = "event";
+        final Event value2 = null;
+        logFile.cleanLogFile();
+        Result res = null;
+        try {
+            res = resultDAO.findBySportsmanAndEvent(value, value2);
+            fail(nullException);
+        } catch (IllegalArgumentException e) {
+        }
+        logFile.reloadLogFile();
+        Map<String, String> values = new HashMap<String, String>(2){{
+            put(param, null);
+            put(param2, null);
+        }};
+
+        if (isDebugLevelEnabled) {
+            super.testFindByParamsMethod(layerName, className, values);
+        }
+        if (isTraceLevelEnabled) {
+            Assert.assertTrue(logFile.getLogFileDiff().getLogs(Level.TRACE).isEmpty());
+            for (String value_ : this.values) {
+                String expected = "extracted value ([" + value_;
+                Assert.assertEquals(logFile.getLogFileDiff().getLogs(Level.TRACE).stream().
+                        filter(log -> log.getContent().contains(expected)).count(), (res == null ? 0 : 1) , "Bad count of logs with string \"" + expected + "\"");
+            }
+        }
     }
 
-//    @Test
-//    public void findBySportTest() throws Exception{
-//        final String param = "sport";
-//        final Sport value = resultDAO.findAll().get(0).getSport();
-//        logFile.cleanLogFile();
-//        List<Result> ev = resultDAO.findBySport(value);
-//        logFile.reloadLogFile();
-//        super.testFindByParamsMethod(layerName, className, param, value.toString());
-//        if (isDebugLevelEnabled) {
-//            testSelectPresent(logFile.getLogs(Level.DEBUG), tableName);
-//        }
-//        if (isTraceLevelEnabled) {
-//            super.testBindingParameter(logFile.getLogFileDiff().getLogs(Level.TRACE), "BIGNIT", String.valueOf(value.getId()));
-//        }
-//    }
+    @Test
+    public void findBySportTest() throws Exception{
+        final String param = "sport";
+        final Sport value = sportDAO.findAll().get(0);
+        logFile.cleanLogFile();
+        List<Result> ev = resultDAO.findBySport(value);
+        logFile.reloadLogFile();
+        super.testFindByParamsMethod(layerName, className, param, value.toString());
+        if (isDebugLevelEnabled) {
+            testSelectPresent(logFile.getLogs(Level.DEBUG), tableName);
+        }
+        if (isTraceLevelEnabled) {
+            super.testBindingParameter(logFile.getLogFileDiff().getLogs(Level.TRACE), "BIGNIT", String.valueOf(value.getId()));
+        }
+    }
 
     @Test
     public void findByNullSportTest() throws Exception{
@@ -186,7 +316,7 @@ public class ResultDAOTest extends DAOLayerTests {
 
     @Test
     public void findByPerformanceTest() throws Exception{
-        final String param = "performence";
+        final String param = "performance";
         final Double value = resultDAO.findAll().get(0).getPerformance();
         logFile.cleanLogFile();
         resultDAO.findByPerformance(value);
@@ -202,13 +332,12 @@ public class ResultDAOTest extends DAOLayerTests {
 
     @Test
     public void findByNullPerformanceTest() throws Exception{
-        final String param = "performence";
+        final String param = "performance";
         final String value = null;
         try {
             resultDAO.findByPerformance(null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {
-        }
+        } catch (IllegalArgumentException e) {}
         logFile.reloadLogFile();
         super.testFindByParamsMethod(layerName, className, param, value);
     }
@@ -298,7 +427,6 @@ public class ResultDAOTest extends DAOLayerTests {
         logFile.cleanLogFile();
         try {
             resultDAO.delete(result);
-            fail(nullException);
         } catch (Exception e) {}
         logFile.reloadLogFile();
         super.testCUDObject(layerName, className, "delete", result.toString());

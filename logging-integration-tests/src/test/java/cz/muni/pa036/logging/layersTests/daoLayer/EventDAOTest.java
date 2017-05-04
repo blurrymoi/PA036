@@ -291,27 +291,26 @@ public class EventDAOTest extends DAOLayerTests {
         super.testCUDObject(layerName, className, "update", "null");
     }
 
-//    @Test
-//    public void deleteEventTest() throws Exception {
-//        Event event = this.getEvent();
-//        logFile.cleanLogFile();
-//        try {
-//            eventDAO.delete(event);
-//            fail(nullException);
-//        } catch (Exception e) {}
-//        logFile.reloadLogFile();
-//        super.testCUDObject(layerName, className, "delete", event.toString());
-//    }
-//
-//    @Test
-//    public void deleteNullEventTest() throws Exception {
-//        try {
-//            eventDAO.delete(null);
-//            fail(nullException);
-//        } catch (IllegalArgumentException e) {}
-//        logFile.reloadLogFile();
-//        super.testCUDObject(layerName, className, "delete", "null");
-//    }
+    @Test
+    public void deleteEventTest() throws Exception {
+        Event event = this.getEvent();
+        logFile.cleanLogFile();
+        try {
+            eventDAO.delete(event);
+        } catch (Exception e) {}
+        logFile.reloadLogFile();
+        super.testCUDObject(layerName, className, "delete", event.toString());
+    }
+
+    @Test
+    public void deleteNullEventTest() throws Exception {
+        try {
+            eventDAO.delete(null);
+            fail(nullException);
+        } catch (IllegalArgumentException e) {}
+        logFile.reloadLogFile();
+        super.testCUDObject(layerName, className, "delete", "null");
+    }
 
     private Event getEvent() {
         List<Event> events = eventDAO.findAll();

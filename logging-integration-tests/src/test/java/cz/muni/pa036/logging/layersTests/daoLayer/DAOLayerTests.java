@@ -31,18 +31,25 @@ public abstract class DAOLayerTests extends BasicLayerTest {
     @BeforeClass
     public void initTest() throws Exception {
         //todo finish path to log file
-        logFile = LogLoader.loadLogFile(LoggerConfiguration.getLogFile() + "-test.log", true);
+        logFile = LogLoader.loadLogFile(LoggerConfiguration.getLogFile().replace(".log", "-test.log"), true);
         logFile.cleanLogFile();
 
         isDebugLevelEnabled = true; //todo load from config
         isTraceLevelEnabled = true; //todo load from config
     }
 
+    @BeforeTest
+    public void beforeTest() throws Exception {
+        if (logFile != null) {
+            logFile.cleanLogFile();
+        }
+    }
+
     protected void testSelectPresent(List<Log> logs, String tableName) {
         final String stringPattern = "hibernate[.]SQL\\s+-\\s+select[A-Za-z0-9_\\s\\S\\n]+from\\s+";
         final Pattern pattern = Pattern.compile(stringPattern + tableName);
-        Assert.assertTrue(logs.stream().
-                filter(log -> pattern.matcher(log.getContent()).find()).findFirst().isPresent());
+         Assert.assertTrue(logs.stream().
+                filter(log -> pattern.matcher(log.getContent()).find()).findFirst().isPresent(), "Expected log of pattern \"" + pattern.pattern() + "\"");
     }
 
     protected void testBindingParameter(List<Log> logs, String type, String value) {

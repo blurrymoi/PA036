@@ -24,6 +24,7 @@ public class SportDAOTest extends DAOLayerTests {
     private final String className = "SportDAOImpl";
 
     private String[] tables = new String[]{"sportsman", "sport"};
+    private String[] values = new String[]{"id", "descript", "name"};
 
     @Autowired
     SportDAO sportDAO;
@@ -62,19 +63,22 @@ public class SportDAOTest extends DAOLayerTests {
         if (isDebugLevelEnabled) {
             testFindAllMethod(layerName, className);
             testSelectPresent(logFile.getLogs(Level.DEBUG), tableName);
-            Arrays.stream(tables).forEach(table -> testSelectPresent(logFile.getLogs(Level.DEBUG), table));
         }
         if (isTraceLevelEnabled) {
             Assert.assertFalse(logFile.getLogFileDiff().getLogs(Level.TRACE).isEmpty());
-            Assert.assertEquals(sports.size(), logFile.getLogFileDiff().getLogs(Level.TRACE).stream().
-                    filter(log -> log.getContent().contains("extracted value ([id1_0_]")).count());
+            for (String value : values) {
+                String expected = "extracted value ([" + value;
+                Assert.assertEquals(sports.size(), logFile.getLogFileDiff().getLogs(Level.TRACE).stream().
+                        filter(log -> log.getContent().contains(expected)).count());
+            }
         }
     }
 
     @Test
     public void findByNameTest() throws Exception{
         final String param = "name";
-        final String value = "name";
+        final String value = sportDAO.findAll().get(0).getName();
+        logFile.cleanLogFile();
         sportDAO.findByName(value);
         logFile.reloadLogFile();
         super.testFindByParamsMethod(layerName, className, param, value);
@@ -137,7 +141,6 @@ public class SportDAOTest extends DAOLayerTests {
         logFile.cleanLogFile();
         try {
             sportDAO.delete(sport);
-            fail(nullException);
         } catch (Exception e) {}
         logFile.reloadLogFile();
         super.testCUDObject(layerName, className, "delete", sport.toString());

@@ -25,6 +25,8 @@ public class SportsmanDAOTest extends DAOLayerTests {
     private final String className = "SportsmanDAOImpl";
 
     private String[] tables = new String[]{"sportsman", "sport"};
+    private String[] values = new String[]{"id", "birth_da", "email", "is_manag", "name", "password", "surname"};
+
 
     @Autowired
     SportsmanDAO sportsmanDAO;
@@ -67,8 +69,11 @@ public class SportsmanDAOTest extends DAOLayerTests {
         }
         if (isTraceLevelEnabled) {
             Assert.assertFalse(logFile.getLogFileDiff().getLogs(Level.TRACE).isEmpty());
-            Assert.assertEquals(sports.size(), logFile.getLogFileDiff().getLogs(Level.TRACE).stream().
-                    filter(log -> log.getContent().contains("extracted value ([id1_0_]")).count());
+            for (String value : values) {
+                String expected = "extracted value ([" + value;
+                Assert.assertEquals(sports.size(), logFile.getLogFileDiff().getLogs(Level.TRACE).stream().
+                        filter(log -> log.getContent().contains(expected)).count());
+            }
         }
     }
 
@@ -93,7 +98,6 @@ public class SportsmanDAOTest extends DAOLayerTests {
         final String value = "";
         try {
             sportsmanDAO.findByName("");
-            fail(nullException);
         } catch (IllegalArgumentException e) {}
         logFile.reloadLogFile();
         super.testFindByParamsMethod(layerName, className, param, value);
@@ -132,7 +136,6 @@ public class SportsmanDAOTest extends DAOLayerTests {
         final String value = "";
         try {
             sportsmanDAO.findBySurname("");
-            fail(nullException);
         } catch (IllegalArgumentException e) {}
         logFile.reloadLogFile();
         super.testFindByParamsMethod(layerName, className, param, value);
@@ -171,7 +174,6 @@ public class SportsmanDAOTest extends DAOLayerTests {
         final String value = "";
         try {
             sportsmanDAO.findByEmail("");
-            fail(nullException);
         } catch (IllegalArgumentException e) {}
         logFile.reloadLogFile();
         super.testFindByParamsMethod(layerName, className, param, value);
@@ -190,16 +192,50 @@ public class SportsmanDAOTest extends DAOLayerTests {
     }
 
     @Test
-    public void findBySubstringTest() { Assert.fail("Not implemented"); }
-
-    @Test
-    public void findByEmptySubstringTest() {
-        Assert.fail("Not implemented");
+    public void findBySubstringTest() throws Exception {
+        final String param = "substring";
+        final String value = "substring";
+        sportsmanDAO.findBySubstring(value, 1L);
+        logFile.reloadLogFile();
+        if (isDebugLevelEnabled) {
+            super.testFindByParamsMethod(layerName, className, param, value);
+            testSelectPresent(logFile.getLogs(Level.DEBUG), tableName);
+        }
+        if (isTraceLevelEnabled) {
+            super.testBindingParameter(logFile.getLogs(Level.TRACE), "VARCHAR", value);
+        }
     }
 
     @Test
-    public void findByNullSubstringTest() {
-        Assert.fail("Not implemented");
+    public void findByEmptySubstringTest() throws Exception {
+        final String param = "substring";
+        final String value = "";
+        sportsmanDAO.findBySubstring(value, 1L);
+        logFile.reloadLogFile();
+        super.testFindByParamsMethod(layerName, className, param, value);
+        if (isDebugLevelEnabled) {
+            testSelectPresent(logFile.getLogs(Level.DEBUG), tableName);
+        }
+        if (isTraceLevelEnabled) {
+            super.testBindingParameter(logFile.getLogs(Level.TRACE), "VARCHAR", value);
+        }
+    }
+
+    @Test
+    public void findByNullSubstringTest() throws Exception {
+        final String param = "substring";
+        final String value = "substring";
+        try {
+            sportsmanDAO.findBySubstring(value, 1L);
+        } catch (IllegalArgumentException e) {}
+        logFile.reloadLogFile();
+        super.testFindByParamsMethod(layerName, className, param, value);
+        if (isDebugLevelEnabled) {
+            testSelectPresent(logFile.getLogs(Level.DEBUG), tableName);
+        }
+        if (isTraceLevelEnabled) {
+            super.testBindingParameter(logFile.getLogs(Level.TRACE), "VARCHAR", value);
+        }
     }
 
     @Test
@@ -229,7 +265,6 @@ public class SportsmanDAOTest extends DAOLayerTests {
         logFile.cleanLogFile();
         try {
             sportsmanDAO.delete(sportsman);
-            fail(nullException);
         } catch (Exception e) {}
         logFile.reloadLogFile();
         super.testCUDObject(layerName, className, "delete", sportsman.toString());

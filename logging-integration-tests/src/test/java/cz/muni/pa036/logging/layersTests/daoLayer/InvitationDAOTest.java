@@ -4,6 +4,7 @@ import ch.qos.logback.classic.Level;
 import cz.muni.pa036.logging.dao.InvitationDAO;
 import cz.muni.pa036.logging.entity.Event;
 import cz.muni.pa036.logging.entity.Invitation;
+import cz.muni.pa036.logging.entity.Result;
 import cz.muni.pa036.logging.entity.Sportsman;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +12,9 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.testng.Assert.fail;
 
@@ -68,8 +71,8 @@ public class InvitationDAOTest extends DAOLayerTests {
         }
         if (isTraceLevelEnabled) {
             Assert.assertFalse(logFile.getLogFileDiff().getLogs(Level.TRACE).isEmpty());
-            Assert.assertEquals(invitations.size(), logFile.getLogFileDiff().getLogs(Level.TRACE).stream().
-                    filter(log -> log.getContent().contains("extracted value ([id1_0_]")).count());
+            Assert.assertTrue(invitations.size() <= logFile.getLogFileDiff().getLogs(Level.TRACE).stream().
+                    filter(log -> log.getContent().contains("extracted value ([id")).count());
         }
     }
 
@@ -133,118 +136,107 @@ public class InvitationDAOTest extends DAOLayerTests {
 
     @Test
     public void findByEventAndInviteeTest() throws Exception{
-        final String eventParam = "event";
-        final Event eventValue = invitationDAO.findAll().get(0).getEvent();
-        final String inviteeParam = "invitee";
-        final Sportsman inviteeValue = invitationDAO.findAll().get(0).getInvitee();
+        final String param = "event";
+        final Event value = invitationDAO.findAll().get(0).getEvent();
+        final String param2 = "invitee";
+        final Sportsman value2 = invitationDAO.findAll().get(0).getInvitee();
         logFile.cleanLogFile();
-        invitationDAO.findByEventAndInvitee(eventValue, inviteeValue);
+        Invitation res = null;
+        try {
+            res = invitationDAO.findByEventAndInvitee(value, value2);
+        } catch (IllegalArgumentException e) {
+        }
         logFile.reloadLogFile();
-        super.testFindByParamsMethod(layerName, className, eventParam, eventValue.toString());
+        Map<String, String> values = new HashMap<String, String>(2){{
+            put(param, value.toString());
+            put(param2, value2.toString());
+        }};
+
         if (isDebugLevelEnabled) {
+            super.testFindByParamsMethod(layerName, className, values);
             testSelectPresent(logFile.getLogs(Level.DEBUG), tableName);
         }
         if (isTraceLevelEnabled) {
-            super.testBindingParameter(logFile.getLogFileDiff().getLogs(Level.TRACE), "BIGNIT", String.valueOf(eventValue.getId()));
-        }
-        super.testFindByParamsMethod(layerName, className, inviteeParam, inviteeValue.toString());
-        if (isDebugLevelEnabled) {
-            testSelectPresent(logFile.getLogs(Level.DEBUG), tableName);
-        }
-        if (isTraceLevelEnabled) {
-            super.testBindingParameter(logFile.getLogFileDiff().getLogs(Level.TRACE), "BIGNIT", String.valueOf(inviteeValue.getId()));
+            Assert.assertFalse(logFile.getLogFileDiff().getLogs(Level.TRACE).isEmpty());
         }
     }
 
     @Test
     public void findByNullEventAndInviteeTest() throws Exception{
-        final String eventParam = "event";
-        final String eventValue = null;
-        final String inviteeParam = "invitee";
-        final Sportsman inviteValue = invitationDAO.findAll().get(0).getInvitee();
+        final String param = "event";
+        final Event value = null;
+        final String param2 = "invitee";
+        final Sportsman value2 = invitationDAO.findAll().get(0).getInvitee();
+        logFile.cleanLogFile();
+        Invitation res = null;
         try {
-            invitationDAO.findByEventAndInvitee(null, inviteValue);
+            res = invitationDAO.findByEventAndInvitee(value, value2);
             fail(nullException);
         } catch (IllegalArgumentException e) {
         }
         logFile.reloadLogFile();
-        logFile.cleanLogFile();
-        super.testFindByParamsMethod(layerName, className, eventParam, eventValue);
-        super.testFindByParamsMethod(layerName, className, inviteeParam, inviteValue.toString());
+        Map<String, String> values = new HashMap<String, String>(2){{
+            put(param, null);
+            put(param2, value2.toString());
+        }};
+
         if (isDebugLevelEnabled) {
-            testSelectPresent(logFile.getLogs(Level.DEBUG), tableName);
+            super.testFindByParamsMethod(layerName, className, values);
         }
         if (isTraceLevelEnabled) {
-            super.testBindingParameter(logFile.getLogFileDiff().getLogs(Level.TRACE), "BIGNIT", String.valueOf(inviteValue.getId()));
+            Assert.assertTrue(logFile.getLogFileDiff().getLogs(Level.TRACE).isEmpty());
         }
     }
 
     @Test
     public void findByEventAndNullInviteeTest() throws Exception{
-        final String eventParam = "event";
-        final Event eventValue = invitationDAO.findAll().get(0).getEvent();
-        final String inviteeParam = "invitee";
-        final String inviteeValue = null;
+        final String param = "event";
+        final Event value = invitationDAO.findAll().get(0).getEvent();
+        final String param2 = "invitee";
+        final Sportsman value2 = null;
+        logFile.cleanLogFile();
+        Invitation res = null;
         try {
-            invitationDAO.findByEventAndInvitee(eventValue, null);
+            res = invitationDAO.findByEventAndInvitee(value, value2);
             fail(nullException);
         } catch (IllegalArgumentException e) {
         }
         logFile.reloadLogFile();
-        logFile.cleanLogFile();
-        super.testFindByParamsMethod(layerName, className, inviteeParam, inviteeValue);
-        super.testFindByParamsMethod(layerName, className, eventParam, eventValue.toString());
+        Map<String, String> values = new HashMap<String, String>(2){{
+            put(param, value.toString());
+            put(param2, null);
+        }};
+
         if (isDebugLevelEnabled) {
-            testSelectPresent(logFile.getLogs(Level.DEBUG), tableName);
+            super.testFindByParamsMethod(layerName, className, values);
         }
         if (isTraceLevelEnabled) {
-            super.testBindingParameter(logFile.getLogFileDiff().getLogs(Level.TRACE), "BIGNIT", String.valueOf(eventValue.getId()));
+            Assert.assertTrue(logFile.getLogFileDiff().getLogs(Level.TRACE).isEmpty());
         }
     }
 
     @Test
     public void findByNullEventAndNullInviteeTest() throws Exception{
-        final String eventParam = "event";
-        final String eventValue = null;
-        final String inviteeParam = "invitee";
-        final String inviteeValue = null;
+        final String param = "event";
+        final Event value = null;
+        final String param2 = "invitee";
+        final Sportsman value2 = null;
+        logFile.cleanLogFile();
         try {
-            invitationDAO.findByEventAndInvitee(null, null);
-            fail(nullException);
+            invitationDAO.findByEventAndInvitee(value, value2);
         } catch (IllegalArgumentException e) {
         }
         logFile.reloadLogFile();
-        super.testFindByParamsMethod(layerName, className, eventParam, eventValue);
-        super.testFindByParamsMethod(layerName, className, inviteeParam, inviteeValue);
-    }
+        Map<String, String> values = new HashMap<String, String>(2){{
+            put(param, null);
+            put(param2, null);
+        }};
 
-    @Test
-    public void inviteTest() {
-        Assert.fail("Not implemented");
-    }
-
-    @Test
-    public void inviteNullValuesTest() {
-        Assert.fail("Not implemented");
-    }
-
-    @Test
-    public void acceptTest() {
-        Assert.fail("Not implemented");
-    }
-
-    @Test
-    public void acceptNullTest() {
-        Assert.fail("Not implemented");
-    }
-
-    @Test
-    public void declineTest() {
-        Assert.fail("Not implemented");
-    }
-
-    @Test
-    public void declineNullTest() {
-        Assert.fail("Not implemented");
+        if (isDebugLevelEnabled) {
+            super.testFindByParamsMethod(layerName, className, values);
+        }
+        if (isTraceLevelEnabled) {
+            Assert.assertTrue(logFile.getLogFileDiff().getLogs(Level.TRACE).isEmpty());
+        }
     }
 }

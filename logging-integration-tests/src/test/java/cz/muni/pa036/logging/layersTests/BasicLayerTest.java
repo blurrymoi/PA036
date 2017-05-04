@@ -61,8 +61,9 @@ public abstract class BasicLayerTest extends AbstractTestNGSpringContextTests {
 
     private void containPattern(String expectedPattern) {
         Assert.assertNotNull(logFile.getLogFileDiff(), missingLogs);
-        Assert.assertEquals(logFile.getLogs(Level.DEBUG)
-                .stream().filter(log -> log.getContent().contains(expectedPattern)).count(), 1);
+        Assert.assertEquals(logFile.getLogFileDiff().getLogs(Level.DEBUG)
+                .stream().filter(log -> log.getContent().contains(expectedPattern)).count(), 1,
+                "Checking pattern \"" + expectedPattern + "\"");
     }
 
 }
