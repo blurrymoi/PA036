@@ -28,6 +28,18 @@ public class LoggerConfiguration extends ContextAwareBase implements LoggerConte
     private static String hibernateTypeLevel;
     private static String hibernateSQLLevel;
 
+    private static String dbsLogDestination;
+    private static String dbsLoggingDirectory;
+    private static String dbsLogFilename;
+    private static String dbsLogFilemode;
+    private static String dbsRotationAge;
+    private static String dbsRotationSize;
+    private static String dbsMinMessage;
+    private static String dbsMinErrorState;
+    private static String dbsLogDuration;
+    private static String dbsLogMinDurationStatement;
+    private static String dbsLogLinePrefix;
+
     private boolean started = false;
 
     @Override
@@ -47,8 +59,21 @@ public class LoggerConfiguration extends ContextAwareBase implements LoggerConte
             hibernateLevel = properties.getProperty("HIBERNATE_LEVEL");
             hibernateTypeLevel = properties.getProperty("HIBERNATE_TYPE_LEVEL");
             hibernateSQLLevel = properties.getProperty("HIBERNATE_SQL_LEVEL");
+
+            dbsLogDestination = properties.getProperty("DBS_LOG_DESTINATION");
+            dbsLoggingDirectory = properties.getProperty("DBS_LOGGING_DIRECTORY");
+            dbsLogFilename = properties.getProperty("DBS_LOG_FILENAME");
+            dbsLogFilemode = properties.getProperty("DBS_LOGFILE_MODE");
+            dbsRotationAge = properties.getProperty("DBS_ROTATION_AGE");
+            dbsRotationSize = properties.getProperty("DBS_ROTATION_SIZE");
+            dbsMinMessage = properties.getProperty("DBS_MIN_MESSAGE");
+            dbsMinErrorState = properties.getProperty("DBS_MIN_ERROR_STATE");
+            dbsLogDuration = properties.getProperty("DBS_LOG_DURATION");
+            dbsLogMinDurationStatement = properties.getProperty("DBS_LOG_MIN_DURATION_STATEMENT");
+            dbsLogLinePrefix = properties.getProperty("DBS_LOG_LINE_PREFIX");
+
         } catch (IOException e) {
-            // shit happens, we have default values for everything so no big deal
+            e.printStackTrace();
         }
 
         String actualLogDir = (logDir.length() > 0) ? resolveProperties(logDir) : DEFAULT_LOG_DIR;
@@ -148,5 +173,36 @@ public class LoggerConfiguration extends ContextAwareBase implements LoggerConte
 
     public static String getLogFile() {
         return logDir + File.separator + logFile;
+    }
+
+    public static void setLoggerModel(LoggerModel model) {
+
+    }
+
+    public static LoggerModel getLoggerModel() {
+        LoggerModel model = new LoggerModel();
+
+        model.setLogDir(logDir);
+        model.setLogFile(logFile);
+        model.setRootLevel(rootLevel);
+        model.setPa036Level(pa036Level);
+        model.setSpringLevel(springLevel);
+        model.setHibernateLevel(hibernateLevel);
+        model.setHibernateTypeLevel(hibernateTypeLevel);
+        model.setHibernateSQLLevel(hibernateSQLLevel);
+
+        model.setDestination(LogDestination.valueOf(dbsLogDestination));
+        model.setDirectory(dbsLoggingDirectory);
+        model.setFileName(dbsLogFilename);
+        model.setFileMode(Integer.valueOf(dbsLogFilemode));
+        model.setRotationAge(Integer.valueOf(dbsRotationAge));
+        model.setRotationSize(Integer.valueOf(dbsRotationSize));
+        model.setMinMessage(DBLogLevel.valueOf(dbsMinMessage));
+        model.setMinErrorState(DBLogLevel.valueOf(dbsMinErrorState));
+        model.setMinDuration(Integer.valueOf(dbsLogMinDurationStatement));
+        model.setLogDuration(Boolean.valueOf(dbsLogDuration));
+        model.setPrefix(dbsLogLinePrefix);
+
+        return model;
     }
 }

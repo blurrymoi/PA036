@@ -1,7 +1,7 @@
 package cz.muni.pa036.logging.controller;
 
-import cz.muni.pa036.logging.dbsApi.DBLogLevel;
-import cz.muni.pa036.logging.dbsApi.LogDestination;
+import cz.muni.pa036.logging.utils.DBLogLevel;
+import cz.muni.pa036.logging.utils.LogDestination;
 import cz.muni.pa036.logging.service.DBSystemLogAPI;
 import cz.muni.pa036.logging.service.LoggerService;
 import cz.muni.pa036.logging.utils.LoggerModel;
@@ -34,6 +34,11 @@ public class LogController extends BaseController {
     @ModelAttribute("logDestinations")
     public LogDestination[] getLogDestinations() {
         return LogDestination.values();
+    }
+
+    @ModelAttribute("logLevels")
+    public DBLogLevel[] getLogLevels() {
+        return DBLogLevel.values();
     }
 
     @RequestMapping

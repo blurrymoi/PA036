@@ -22,7 +22,127 @@
 
 
 <form:form class="form-horizontal" modelAttribute="logger" action="${applyUrl}" method="POST">
-    <spring:bind path="destination">
+    <%--<div class = "panel panel-default">--%>
+        <%--<div class = "panel-heading">--%>
+            <%--<h3 class = "panel-title">--%>
+                <%--<b>Application logging</b>--%>
+            <%--</h3>--%>
+        <%--</div>--%>
+        <%--<div class = "panel-body">--%>
+    <p>
+        <button class="btn btn-primary btn-lg btn-block" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="true" aria-controls="collapseExample">
+            Application logging
+        </button>
+    </p>
+    <div class="collapse" id="collapseExample">
+        <div class="card card-block">
+    <spring:bind path="logDir">
+    <div class="form-group form-group-lg" title="${dir}">
+        <form:label path="logDir" class="col-sm-3 control-label">
+            <spring:message code="logging.directory"/>
+        </form:label>
+        <div class="col-sm-5">
+            <form:input path="logDir" class="form-control"/>
+        </div>
+    </div>
+    </spring:bind>
+
+    <spring:bind path="logFile">
+        <div class="form-group form-group-lg" title="${dir}">
+            <form:label path="logFile" class="col-sm-3 control-label">
+                <spring:message code="logging.filename"/>
+            </form:label>
+            <div class="col-sm-5">
+                <form:input path="logFile" class="form-control"/>
+            </div>
+        </div>
+    </spring:bind>
+
+    <spring:bind path="rootLevel">
+        <div class="form-group form-group-lg" title="${dir}">
+            <form:label path="rootLevel" class="col-sm-3 control-label">
+                <spring:message code="logging.rootLevel"/>
+            </form:label>
+            <div class="col-sm-5">
+                <form:input path="rootLevel" class="form-control"/>
+            </div>
+        </div>
+    </spring:bind>
+
+    <spring:bind path="pa036Level">
+        <div class="form-group form-group-lg" title="${dir}">
+            <form:label path="pa036Level" class="col-sm-3 control-label">
+                <spring:message code="logging.pa036Level"/>
+            </form:label>
+            <div class="col-sm-5">
+                <form:input path="pa036Level" class="form-control"/>
+            </div>
+        </div>
+    </spring:bind>
+
+    <spring:bind path="springLevel">
+        <div class="form-group form-group-lg" title="${dir}">
+            <form:label path="springLevel" class="col-sm-3 control-label">
+                <spring:message code="logging.springLevel"/>
+            </form:label>
+            <div class="col-sm-5">
+                <form:input path="springLevel" class="form-control"/>
+            </div>
+        </div>
+    </spring:bind>
+
+    <spring:bind path="hibernateLevel">
+        <div class="form-group form-group-lg" title="${dir}">
+            <form:label path="hibernateLevel" class="col-sm-3 control-label">
+                <spring:message code="logging.hibernateLevel"/>
+            </form:label>
+            <div class="col-sm-5">
+                <form:input path="hibernateLevel" class="form-control"/>
+            </div>
+        </div>
+    </spring:bind>
+
+    <spring:bind path="hibernateTypeLevel">
+        <div class="form-group form-group-lg" title="${dir}">
+            <form:label path="hibernateTypeLevel" class="col-sm-3 control-label">
+                <spring:message code="logging.hibernateTypeLevel"/>
+            </form:label>
+            <div class="col-sm-5">
+                <form:input path="hibernateTypeLevel" class="form-control"/>
+            </div>
+        </div>
+    </spring:bind>
+
+    <spring:bind path="hibernateSQLLevel">
+        <div class="form-group form-group-lg" title="${dir}">
+            <form:label path="hibernateSQLLevel" class="col-sm-3 control-label">
+                <spring:message code="logging.hibernateSQLLevel"/>
+            </form:label>
+            <div class="col-sm-5">
+                <form:input path="hibernateSQLLevel" class="form-control"/>
+            </div>
+        </div>
+    </spring:bind>
+
+    </div>
+    </div>
+    <%--<div class = "panel panel-default">--%>
+        <%--<div class = "panel-heading">--%>
+            <%--<h3 class = "panel-title">--%>
+                <%--<b>DBS logging</b>--%>
+            <%--</h3>--%>
+        <%--</div>--%>
+        <%--<div class = "panel-body">--%>
+    <p>
+        <button class="btn btn-primary btn-lg btn-block" type="button" data-toggle="collapse" data-target="#collapseExample2" aria-expanded="false" asria-controls="collapseExample2">
+            DBS logging
+        </button>
+    </p>
+    <div class="collapse" id="collapseExample2">
+        <div class="card card-block">
+
+
+        <spring:bind path="destination">
         <div class="form-group form-group-lg" title="${dest}">
             <form:label path="destination" class="col-sm-3 control-label">
                 <spring:message code="logging.destination"/>
@@ -44,7 +164,7 @@
     <spring:bind path="directory">
         <div class="form-group form-group-lg" title="${dir}">
             <form:label path="directory" class="col-sm-3 control-label">
-                <spring:message code="logging.direcotry"/>
+                <spring:message code="logging.directory"/>
             </form:label>
             <div class="col-sm-5">
                 <form:input path="directory" class="form-control"/>
@@ -102,8 +222,9 @@
                 <spring:message code="logging.minmessage"/>
             </form:label>
             <div class="col-sm-5">
-                <form:select path="minMessage"  items="${lovels}" itemLabel="type" itemValue="description" class="form-control">
-
+                <form:select path="minMessage" class="form-control">
+                    <form:option value="">-</form:option>
+                    <form:options items="${logLevels}"/>
                 </form:select>
             </div>
         </div>
@@ -115,8 +236,9 @@
                 <spring:message code="logging.minerror"/>
             </form:label>
             <div class="col-sm-5">
-                <form:select path="minErrorState"  items="${lovels}" itemLabel="type" itemValue="description" class="form-control">
-
+                <form:select path="minErrorState" class="form-control">
+                    <form:option value="">-</form:option>
+                    <form:options items="${logLevels}"/>
                 </form:select>
             </div>
         </div>
@@ -157,6 +279,8 @@
             </div>
         </div>
     </spring:bind>
+        </div>
+    </div>
 
     <div class="form-group">
         <div class="col-sm-3 col-sm-offset-3">

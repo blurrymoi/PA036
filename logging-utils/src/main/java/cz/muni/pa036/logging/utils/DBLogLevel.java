@@ -1,4 +1,4 @@
-package cz.muni.pa036.logging.dbsApi;
+package cz.muni.pa036.logging.utils;
 
 /**
  * @author Kamil Triscik.

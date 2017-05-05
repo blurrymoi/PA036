@@ -1,8 +1,8 @@
 package cz.muni.pa036.logging.service;
 
-import cz.muni.pa036.logging.dbsApi.DBLogLevel;
+import cz.muni.pa036.logging.utils.DBLogLevel;
 import cz.muni.pa036.logging.dbsApi.DBSApi;
-import cz.muni.pa036.logging.dbsApi.LogDestination;
+import cz.muni.pa036.logging.utils.LogDestination;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

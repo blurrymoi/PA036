@@ -1,7 +1,7 @@
 package cz.muni.pa036.logging.service;
 
-import cz.muni.pa036.logging.dbsApi.DBLogLevel;
-import cz.muni.pa036.logging.dbsApi.LogDestination;
+import cz.muni.pa036.logging.utils.DBLogLevel;
+import cz.muni.pa036.logging.utils.LogDestination;
 
 /**
  * @author Kamil Triscik.

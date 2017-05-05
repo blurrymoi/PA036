@@ -1,5 +1,8 @@
 package cz.muni.pa036.logging.dbsApi;
 
+import cz.muni.pa036.logging.utils.DBLogLevel;
+import cz.muni.pa036.logging.utils.LogDestination;
+
 /**
  * @author Kamil Triscik.
  */

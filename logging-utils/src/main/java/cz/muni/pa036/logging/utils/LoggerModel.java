@@ -1,47 +1,36 @@
 package cz.muni.pa036.logging.utils;
 
-import cz.muni.pa036.logging.dbsApi.DBLogLevel;
-import cz.muni.pa036.logging.dbsApi.LogDestination;
 
 /**
  * @author Kamil Triscik.
  */
 public class LoggerModel {
 
+    private String logDir;
+    private String logFile;
+
+    private String rootLevel;
+    private String pa036Level;
+    private String springLevel;
+    private String hibernateLevel;
+    private String hibernateTypeLevel;
+    private String hibernateSQLLevel;
+
+
     private LogDestination destination;
-
     private String directory;
-
     private String fileName;
-
     private Integer fileMode;
-
     private Integer rotationAge;
-
     private Integer rotationSize;
-
     private DBLogLevel minMessage;
-
     private DBLogLevel minErrorState;
-
     private Integer minDuration;
-
     private Boolean logDuration;
-
     private String prefix;
 
     public LoggerModel() {
-        setDestination(LogDestination.STDERR);
-        setDirectory("/home/kamil/");
-        setFileName("pa036");
-        setFileMode(0666);
-        setRotationAge(100);
-        setRotationSize(10000);
-        setMinMessage(DBLogLevel.INFO);
-        setMinErrorState(DBLogLevel.ERROR);
-        setMinDuration(0);
-        setLogDuration(true);
-        setPrefix("custom prefix");
+
     }
 
     public String getPrefix() {
@@ -134,5 +123,69 @@ public class LoggerModel {
 
     public void setLogDuration(Boolean logDuration) {
         this.logDuration = logDuration;
+    }
+
+    public String getLogDir() {
+        return logDir;
+    }
+
+    public void setLogDir(String logDir) {
+        this.logDir = logDir;
+    }
+
+    public String getLogFile() {
+        return logFile;
+    }
+
+    public void setLogFile(String logFile) {
+        this.logFile = logFile;
+    }
+
+    public String getRootLevel() {
+        return rootLevel;
+    }
+
+    public void setRootLevel(String rootLevel) {
+        this.rootLevel = rootLevel;
+    }
+
+    public String getPa036Level() {
+        return pa036Level;
+    }
+
+    public void setPa036Level(String pa036Level) {
+        this.pa036Level = pa036Level;
+    }
+
+    public String getSpringLevel() {
+        return springLevel;
+    }
+
+    public void setSpringLevel(String springLevel) {
+        this.springLevel = springLevel;
+    }
+
+    public String getHibernateLevel() {
+        return hibernateLevel;
+    }
+
+    public void setHibernateLevel(String hibernateLevel) {
+        this.hibernateLevel = hibernateLevel;
+    }
+
+    public String getHibernateTypeLevel() {
+        return hibernateTypeLevel;
+    }
+
+    public void setHibernateTypeLevel(String hibernateTypeLevel) {
+        this.hibernateTypeLevel = hibernateTypeLevel;
+    }
+
+    public String getHibernateSQLLevel() {
+        return hibernateSQLLevel;
+    }
+
+    public void setHibernateSQLLevel(String hibernateSQLLevel) {
+        this.hibernateSQLLevel = hibernateSQLLevel;
     }
 }
