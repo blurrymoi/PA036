@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.Properties;
+import java.io.File;
 
 public class LoggerConfiguration extends ContextAwareBase implements LoggerContextListener, LifeCycle {
 
@@ -143,5 +144,9 @@ public class LoggerConfiguration extends ContextAwareBase implements LoggerConte
 
     @Override
     public void onLevelChange(Logger logger, Level level) {
+    }
+
+    public static String getLogFile() {
+        return logDir + File.separator + logFile;
     }
 }

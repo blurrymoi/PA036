@@ -2,6 +2,10 @@ package cz.muni.pa036.logging.log;
 
 import cz.muni.pa036.logging.logService.LogLoader;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +49,14 @@ public class LogFile extends LogFileDiff {
      * @return log file diff.
      */
     public LogFileDiff reloadLogFile() throws Exception {
+        Thread.sleep(1000);
         LogFile logFile = LogLoader.loadLogFile(this.getFilePath());
+
+        if (logFile.getFileSize() == 0) {
+            this.logFileDiff = null;
+            super.clean();
+            return this.logFileDiff;
+        }
 
         this.logFileDiff = new LogFileDiff();
         this.logFileDiff.setFileSize(logFile.getFileSize() - this.getFileSize());
@@ -56,6 +67,13 @@ public class LogFile extends LogFileDiff {
         this.setLogs(logFile.getLogs());
         this.setFileSize(logFile.getFileSize());
         return this.logFileDiff;
+    }
+
+    public boolean cleanLogFile() throws IOException {
+        super.clean();
+        this.logFileDiff = null;
+        Files.newBufferedWriter(Paths.get(this.getFilePath())).write("");
+        return new File(this.getFilePath()).length() == 0;
     }
 
 }

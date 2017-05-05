@@ -7,6 +7,8 @@ import ch.qos.logback.classic.Level;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +34,7 @@ public class LogLoader {
      * @param logFileName absolute path to log file.
      * @return LogFile object.
      */
-    public static LogFile loadLogFile(String logFileName) throws Exception {
+    public static LogFile loadLogFile(String logFileName, boolean create) throws Exception {
         if (logFileName == null || logFileName.isEmpty()) {
             throw new IllegalArgumentException("Illegal \"logFileName\"(" + logFileName + ") value!");
         }
@@ -41,10 +43,30 @@ public class LogLoader {
         }
         File logFile = new File(logFileName);
         if (!logFile.exists()) {
-            throw new IllegalArgumentException("File does not exist!");
+            Files.createFile(Paths.get(logFileName));
+        }
+        return LogLoader.loadLogFile(logFile);
+    }
+
+    /**
+     * Method load logs from log file.
+     *
+     * @param logFileName absolute path to log file.
+     * @return LogFile object.
+     */
+    public static LogFile loadLogFile(String logFileName) throws Exception {
+        if (logFileName == null || logFileName.isEmpty()) {
+            throw new IllegalArgumentException("Illegal \"logFileName\"(" + logFileName + ") value!");
+        }
+        if (!logFileName.endsWith(".log")) {
+            throw new IllegalArgumentException("Log file(" + logFileName + ") name should end with \"*.log\"");
+        }
+        File logFile = new File(logFileName);
+        if (!logFile.exists()) {
+            throw new IllegalArgumentException("File(" + logFileName + ") does not exist!");
         }
         if (!logFile.isFile()) {
-            throw new IllegalArgumentException("Expected a file, not a directory!");
+            throw new IllegalArgumentException("Expected a file(" + logFileName + "), not a directory!");
         }
         return LogLoader.loadLogFile(logFile);
     }
