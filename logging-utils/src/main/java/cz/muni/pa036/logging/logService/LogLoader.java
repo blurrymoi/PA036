@@ -59,14 +59,14 @@ public class LogLoader {
             throw new IllegalArgumentException("Illegal \"logFileName\"(" + logFileName + ") value!");
         }
         if (!logFileName.endsWith(".log")) {
-            throw new IllegalArgumentException("Log file name should end with \"*.log\"");
+            throw new IllegalArgumentException("Log file(" + logFileName + ") name should end with \"*.log\"");
         }
         File logFile = new File(logFileName);
         if (!logFile.exists()) {
-            throw new IllegalArgumentException("File does not exist!");
+            throw new IllegalArgumentException("File(" + logFileName + ") does not exist!");
         }
         if (!logFile.isFile()) {
-            throw new IllegalArgumentException("Expected a file, not a directory!");
+            throw new IllegalArgumentException("Expected a file(" + logFileName + "), not a directory!");
         }
         return LogLoader.loadLogFile(logFile);
     }
