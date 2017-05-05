@@ -8,7 +8,9 @@ import cz.muni.pa036.logging.helper.ActionLogger;
 import cz.muni.pa036.logging.helper.CRUDLogger;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+@EnableWebMvc
 @ControllerAdvice
 public class ControllerAdviser {
 
