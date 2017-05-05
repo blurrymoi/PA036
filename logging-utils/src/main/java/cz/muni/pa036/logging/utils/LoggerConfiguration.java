@@ -147,6 +147,6 @@ public class LoggerConfiguration extends ContextAwareBase implements LoggerConte
     }
 
     public static String getLogFile() {
-        return DEFAULT_LOG_DIR + File.separator + DEFAULT_LOG_FILE;
+        return logDir + File.separator + logFile;
     }
 }

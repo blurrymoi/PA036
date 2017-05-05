@@ -5,8 +5,10 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -64,7 +66,7 @@ public class Event implements Serializable {
     @JoinColumn(name = "admin")
     private Sportsman admin;
     
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Sportsman> participants = new HashSet<>();
 
     public Long getId() {
