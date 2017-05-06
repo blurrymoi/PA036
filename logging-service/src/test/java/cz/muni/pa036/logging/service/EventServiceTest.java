@@ -134,7 +134,7 @@ public class EventServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(eventDAO, times(1)).update(event);
     }
 
-    @Test(expectedExceptions = NullPointerException.class)
+    @Test(expectedExceptions = UpdateException.class)
     public void testUpdateNull() {
         doThrow(new IllegalArgumentException("Trying to updateEvent null object!"))
                 .when(eventDAO)

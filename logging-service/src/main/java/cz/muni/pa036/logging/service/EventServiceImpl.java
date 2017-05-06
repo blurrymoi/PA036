@@ -127,7 +127,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public void update(Event event) {
         if (event == null) {
-            throw  new IllegalArgumentException("Trying to update null object");
+            throw  new UpdateException("Trying to update null object", new Exception(), event);
         }
         Set<Sportsman> participants = new HashSet<>();
         participants.addAll(event.getParticipants());
