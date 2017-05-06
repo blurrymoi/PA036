@@ -3,12 +3,9 @@ package cz.muni.pa036.logging;
 import cz.muni.pa036.logging.dao.EventDAO;
 import cz.muni.pa036.logging.dao.InvitationDAO;
 import cz.muni.pa036.logging.dao.ResultDAO;
-import cz.muni.pa036.logging.dao.SportDAO;
-import cz.muni.pa036.logging.dao.SportsmanDAO;
 import cz.muni.pa036.logging.entity.Event;
 import cz.muni.pa036.logging.entity.Invitation;
-import cz.muni.pa036.logging.entity.Sport;
-import cz.muni.pa036.logging.entity.Sportsman;
+import cz.muni.pa036.logging.entity.Result;
 import cz.muni.pa036.logging.exceptions.CreateException;
 import cz.muni.pa036.logging.exceptions.UpdateException;
 import cz.muni.pa036.logging.exceptions.DeleteException;
@@ -36,22 +33,20 @@ public class ExceptionsTest extends AbstractTestNGSpringContextTests {
 
     @InjectMocks
     private EventService eventService = new EventServiceImpl();
+    @InjectMocks
     private InvitationService invitationService = new InvitationServiceImpl();
+    @InjectMocks
     private ResultService resultService = new ResultServiceImpl();
-    private SportService sportService = new SportServiceImpl();
-    private SportsmanService sportsmanService = new SportsmanServiceImpl();
 
     @Mock
     private EventDAO eventDAO;
     @Mock
     private InvitationDAO invitationDAO;
+    @Mock
     private ResultDAO resultDAO;
-    private SportDAO sportDAO;
-    private SportsmanDAO sportsmanDAO;
 
     private Event event;
     private Invitation invitation;
-    private Sportsman sportsman;
 
     @BeforeClass
     public void setUp() {
@@ -180,6 +175,9 @@ public class ExceptionsTest extends AbstractTestNGSpringContextTests {
     }
 
     /***** INVITATION *****/
+    /**
+     * Invitation has EventDAO abstracted away.
+     */
 
     @Test(expectedExceptions = FindByException.class)
     public void inviteInvitationExceptionTest() {
@@ -190,44 +188,104 @@ public class ExceptionsTest extends AbstractTestNGSpringContextTests {
         fail("FindByException expected in invite (eventID).");
     }
 
-    @Test(expectedExceptions = FindByException.class)
-    public void inviteInvitationExceptionIllegalEventNullTest() {
-        doThrow(new TestException()).when(invitationDAO).create(any());
-        Mockito.when(eventDAO.findById(1L)).thenReturn(null);
-
-        invitationService.invite(1L, 1L);
-        fail("FindByException expected in invite (eventID = null).");
-    }
-
-    @Test(expectedExceptions = FindByException.class)
-    public void inviteInvitationExceptionIllegalInvitationNullTest() {
-        doThrow(new TestException()).when(invitationDAO).findById(any());
-
-        invitationService.invite(1L, 1L);
-        fail("FindByException expected in invite (invitationID).");
-    }
-
-    @Test(expectedExceptions = FindByException.class)
-    public void inviteInvitationExceptionSportsmanNullTest() {
-        //fail at sportsman lookup
-        invitationService.invite(1L, 1L);
-        fail("FindByException expected in invite (invitationID).");
-    }
+    /***** RESULT *****/
 
     @Test(expectedExceptions = CreateException.class)
-    public void createInvitationExceptionTest() {
-        doThrow(new TestException()).when(invitationDAO).create(any());
+    public void createResultExceptionTest() {
+        doThrow(new TestException()).when(resultDAO).create(any());
 
-        invitationService.invite(1L, 1L);
-        fail("CreateException expected in invite.");
+        resultService.create(new Result());
+        fail("CreateException expected.");
     }
 
-    /* RESULT */
+    @Test(expectedExceptions = UpdateException.class)
+    public void updateResultExceptionTest() {
+        doThrow(new TestException()).when(resultDAO).update(any());
 
-    /* SPORT */
+        resultService.update(new Result());
+        fail("UpdateException expected.");
+    }
 
-    /* SPORTSMAN */
+    @Test(expectedExceptions = DeleteException.class)
+    public void deleteResultExceptionTest() {
+        doThrow(new TestException()).when(resultDAO).delete(any());
 
+        resultService.delete(new Result());
+        fail();
+    }
+
+
+    @Test(expectedExceptions = FindByException.class)
+    public void findByIDResultExceptionTest() {
+        doThrow(new TestException()).when(resultDAO).findById(any());
+
+        resultService.findById(null);
+        fail("FindByException expected in findById.");
+    }
+
+    @Test(expectedExceptions = FindByException.class)
+    public void findAllResultExceptionTest() {
+        doThrow(new TestException()).when(resultDAO).findAll();
+
+        resultService.findAll();
+        fail("FindByException expected in findAll.");
+    }
+
+    @Test(expectedExceptions = FindByException.class)
+    public void findBySportsmanResultExceptionTest() {
+        doThrow(new TestException()).when(resultDAO).findBySportsman(any());
+
+        resultService.findBySportsman(any());
+        fail("FindByException expected in findBySportsman.");
+    }
+
+    @Test(expectedExceptions = FindByException.class)
+    public void findByEventResultExceptionTest() {
+        doThrow(new TestException()).when(resultDAO).findByEvent(any());
+
+        resultService.findByEvent(any());
+        fail("FindByException expected in findByEvent.");
+    }
+
+    @Test(expectedExceptions = FindByException.class)
+    public void findBySportsmanEventResultExceptionTest() {
+        doThrow(new TestException()).when(resultDAO).findBySportsmanAndEvent(any(), any());
+
+        resultService.findBySportsmanAndEvent(any(), any());
+        fail("FindByException expected in findBySportsmanAndEvent.");
+    }
+
+    @Test(expectedExceptions = FindByException.class)
+    public void findBySportResultExceptionTest() {
+        doThrow(new TestException()).when(resultDAO).findBySport(any());
+
+        resultService.findBySport(any());
+        fail("FindByException expected in findBySport.");
+    }
+
+    @Test(expectedExceptions = FindByException.class)
+    public void findByPerformanceResultExceptionTest() {
+        doThrow(new TestException()).when(resultDAO).findByPerformance(any());
+
+        resultService.findByPerformance(any());
+        fail("FindByException expected in findByPerformance.");
+    }
+
+    @Test(expectedExceptions = FindByException.class)
+    public void findByPositionResultExceptionTest() {
+        doThrow(new TestException()).when(resultDAO).findByPosition(any());
+
+        resultService.findByPosition(any());
+        fail("FindByException expected in findByPosition.");
+    }
+
+    @Test(expectedExceptions = FindByException.class)
+    public void findByNoteResultExceptionTest() {
+        doThrow(new TestException()).when(resultDAO).findByNote(any());
+
+        resultService.findByNote(any());
+        fail("FindByException expected in findByNote.");
+    }
 }
 
 class TestException extends RuntimeException{}
