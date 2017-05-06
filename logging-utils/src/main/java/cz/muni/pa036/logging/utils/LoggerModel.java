@@ -1,6 +1,11 @@
 package cz.muni.pa036.logging.utils;
 
 
+import ch.qos.logback.classic.Level;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Kamil Triscik.
  */
@@ -187,5 +192,18 @@ public class LoggerModel {
 
     public void setHibernateSQLLevel(String hibernateSQLLevel) {
         this.hibernateSQLLevel = hibernateSQLLevel;
+    }
+
+    public Map<String, Level> getAllLevels() {
+        Map<String, Level> levels = new HashMap<>();
+
+        levels.put("ROOT",                  LoggerConfiguration.resolveLevel(getRootLevel()));
+        levels.put("org.springframework",   LoggerConfiguration.resolveLevel(getSpringLevel()));
+        levels.put("org.hibernate",         LoggerConfiguration.resolveLevel(getHibernateLevel()));
+        levels.put("org.hibernate.SQL",     LoggerConfiguration.resolveLevel(getHibernateSQLLevel()));
+        levels.put("org.hibernate.type",    LoggerConfiguration.resolveLevel(getHibernateTypeLevel()));
+        levels.put("cz.muni.pa036.logging", LoggerConfiguration.resolveLevel(getPa036Level()));
+
+        return levels;
     }
 }

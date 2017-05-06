@@ -87,12 +87,12 @@ public class LoggerConfiguration extends ContextAwareBase implements LoggerConte
         context.putProperty("LOG_DIR", actualLogDir);
         context.putProperty("LOG_FILE", actualLogFile);
 
-        context.putProperty("ROOT_LEVEL", resolveOfFallbackToDefault(rootLevel));
-        context.putProperty("PA036_LEVEL", resolveOfFallbackToDefault(pa036Level));
-        context.putProperty("SPRING_LEVEL", resolveOfFallbackToDefault(springLevel));
-        context.putProperty("HIBERNATE_LEVEL", resolveOfFallbackToDefault(hibernateLevel));
-        context.putProperty("HIBERNATE_TYPE_LEVEL", resolveOfFallbackToDefault(hibernateTypeLevel));
-        context.putProperty("HIBERNATE_SQL_LEVEL", resolveOfFallbackToDefault(hibernateSQLLevel));
+        context.putProperty("ROOT_LEVEL", validateOfFallbackToDefault(rootLevel));
+        context.putProperty("PA036_LEVEL", validateOfFallbackToDefault(pa036Level));
+        context.putProperty("SPRING_LEVEL", validateOfFallbackToDefault(springLevel));
+        context.putProperty("HIBERNATE_LEVEL", validateOfFallbackToDefault(hibernateLevel));
+        context.putProperty("HIBERNATE_TYPE_LEVEL", validateOfFallbackToDefault(hibernateTypeLevel));
+        context.putProperty("HIBERNATE_SQL_LEVEL", validateOfFallbackToDefault(hibernateSQLLevel));
 
         started = true;
     }
@@ -145,8 +145,12 @@ public class LoggerConfiguration extends ContextAwareBase implements LoggerConte
         return System.getProperty(value, "NO_SUCH_PROPERTY");
     }
 
-    private String resolveOfFallbackToDefault(String level) {
-        return Level.toLevel(level, Level.DEBUG).toString();
+    static String validateOfFallbackToDefault(String level) {
+        return resolveLevel(level).toString();
+    }
+
+    static Level resolveLevel(String level) {
+        return Level.toLevel(level, Level.DEBUG);
     }
 
     @Override
