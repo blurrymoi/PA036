@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.slf4j.event.Level;
+
 
 /**
  * @author Kamil Triscik.
@@ -41,12 +43,18 @@ public class LogController extends BaseController {
         return DBLogLevel.values();
     }
 
+    @ModelAttribute("logLevels2")
+    public Level[] getLogLevels2() {
+        return Level.values();
+    }
+
     @RequestMapping
     public String renderList(Model model) throws Exception {
         logger.info("Logging management page loaded");
         model.addAttribute("logger", loggerService.getLoggerModel());
         model.addAttribute("dests", LogDestination.values());
-        model.addAttribute("lovels", DBLogLevel.values());
+        model.addAttribute("dblevels", DBLogLevel.values());
+        model.addAttribute("levels", Level.values());
         return "logging.page";
     }
 

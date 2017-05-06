@@ -1,7 +1,6 @@
 package cz.muni.pa036.logging.utils;
 
-
-import ch.qos.logback.classic.Level;
+import org.slf4j.event.Level;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,12 +13,12 @@ public class LoggerModel {
     private String logDir;
     private String logFile;
 
-    private String rootLevel;
-    private String pa036Level;
-    private String springLevel;
-    private String hibernateLevel;
-    private String hibernateTypeLevel;
-    private String hibernateSQLLevel;
+    private Level rootLevel;
+    private Level pa036Level;
+    private Level springLevel;
+    private Level hibernateLevel;
+    private Level hibernateTypeLevel;
+    private Level hibernateSQLLevel;
 
 
     private LogDestination destination;
@@ -146,63 +145,90 @@ public class LoggerModel {
         this.logFile = logFile;
     }
 
-    public String getRootLevel() {
+    public Level getRootLevel() {
         return rootLevel;
     }
 
     public void setRootLevel(String rootLevel) {
+        this.rootLevel = Level.valueOf(rootLevel);
+    }
+
+    public void setRootLevel(Level rootLevel) {
         this.rootLevel = rootLevel;
     }
 
-    public String getPa036Level() {
+    public Level getPa036Level() {
         return pa036Level;
     }
 
     public void setPa036Level(String pa036Level) {
+        this.pa036Level = Level.valueOf(pa036Level);
+    }
+
+    public void setPa036Level(Level pa036Level) {
         this.pa036Level = pa036Level;
     }
 
-    public String getSpringLevel() {
+
+    public Level getSpringLevel() {
         return springLevel;
     }
 
     public void setSpringLevel(String springLevel) {
+        this.springLevel = Level.valueOf(springLevel);
+    }
+
+    public void setSpringLevel(Level springLevel) {
         this.springLevel = springLevel;
     }
 
-    public String getHibernateLevel() {
+
+    public Level getHibernateLevel() {
         return hibernateLevel;
     }
 
     public void setHibernateLevel(String hibernateLevel) {
+        this.hibernateLevel = Level.valueOf(hibernateLevel);
+    }
+
+    public void setHibernateLevel(Level hibernateLevel) {
         this.hibernateLevel = hibernateLevel;
     }
 
-    public String getHibernateTypeLevel() {
+
+    public Level getHibernateTypeLevel() {
         return hibernateTypeLevel;
     }
 
     public void setHibernateTypeLevel(String hibernateTypeLevel) {
+        this.hibernateTypeLevel = Level.valueOf(hibernateTypeLevel);
+    }
+
+    public void setHibernateTypeLevel(Level hibernateTypeLevel) {
         this.hibernateTypeLevel = hibernateTypeLevel;
     }
 
-    public String getHibernateSQLLevel() {
+    public Level getHibernateSQLLevel() {
         return hibernateSQLLevel;
     }
 
     public void setHibernateSQLLevel(String hibernateSQLLevel) {
+        this.hibernateSQLLevel = Level.valueOf(hibernateSQLLevel);
+    }
+
+    public void setHibernateSQLLevel(Level hibernateSQLLevel) {
         this.hibernateSQLLevel = hibernateSQLLevel;
     }
 
-    public Map<String, Level> getAllLevels() {
-        Map<String, Level> levels = new HashMap<>();
+    public Map<String,  ch.qos.logback.classic.Level> getAllLevels() {
+        Map<String, ch.qos.logback.classic.Level> levels = new HashMap<>();
 
-        levels.put("ROOT",                  LoggerConfiguration.resolveLevel(getRootLevel()));
-        levels.put("org.springframework",   LoggerConfiguration.resolveLevel(getSpringLevel()));
-        levels.put("org.hibernate",         LoggerConfiguration.resolveLevel(getHibernateLevel()));
-        levels.put("org.hibernate.SQL",     LoggerConfiguration.resolveLevel(getHibernateSQLLevel()));
-        levels.put("org.hibernate.type",    LoggerConfiguration.resolveLevel(getHibernateTypeLevel()));
-        levels.put("cz.muni.pa036.logging", LoggerConfiguration.resolveLevel(getPa036Level()));
+        levels.put("ROOT",                  LoggerConfiguration.resolveLevel(getRootLevel().toString()));
+        levels.put("org.springframework",   LoggerConfiguration.resolveLevel(getSpringLevel().toString()));
+        levels.put("org.hibernate",         LoggerConfiguration.resolveLevel(getHibernateLevel().toString()));
+        levels.put("org.hibernate.SQL",     LoggerConfiguration.resolveLevel(getHibernateSQLLevel().toString()));
+        levels.put("org.hibernate.type",    LoggerConfiguration.resolveLevel(getHibernateTypeLevel().toString()));
+        levels.put("cz.muni.pa036.logging", LoggerConfiguration.resolveLevel(getPa036Level().toString()));
 
         return levels;
     }
