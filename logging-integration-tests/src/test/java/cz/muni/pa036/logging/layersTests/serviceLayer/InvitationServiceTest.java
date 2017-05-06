@@ -223,7 +223,7 @@ public class InvitationServiceTest extends ServiceLayerTest {
             fail("Accept already accepted. IllegalStateException should by thrown.");
         } catch (IllegalStateException e) {}
         logFile.reloadLogFile();
-        Assert.assertNotNull(logFile.getLogFileDiff(), super.missingLogs);
+        Assert.assertNull(logFile.getLogFileDiff(), "No logs because invitation already confirmed -> nothing to do!");
     }
 
 }

@@ -153,8 +153,7 @@ public class LogFileLoaderTest {
             logRealFile = generateLogFile();
             LogFile logFile = LogLoader.loadLogFile(logRealFile);
             LogFileDiff logFileDiff = logFile.reloadLogFile();
-            Assert.assertTrue(logFileDiff.getLogs().isEmpty());
-            Assert.assertEquals(logFileDiff.getFileSize(), new Long(0));
+            Assert.assertNull(logFileDiff);
         } catch (Exception e) {
             fail("Problem with test preparation", e);
         }

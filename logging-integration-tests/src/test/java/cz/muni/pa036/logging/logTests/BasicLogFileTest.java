@@ -4,6 +4,7 @@ import cz.muni.pa036.logging.log.LogFile;
 import cz.muni.pa036.logging.log.LogFileDiff;
 import cz.muni.pa036.logging.logService.LogLoader;
 import cz.muni.pa036.logging.service.SportService;
+import cz.muni.pa036.logging.utils.LoggerConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +63,8 @@ public class BasicLogFileTest extends AbstractTestNGSpringContextTests {
     public void CreateLogFileTest() throws IOException {
         sportService.findAll();
 
-        List<Path> logFile = getFilesInDir(System.getProperty("user.dir"), TEST_LOG_FILE_NAME);
+        List<Path> logFile = getFilesInDir(LoggerConfiguration.getLogFile().substring(0, LoggerConfiguration.getLogFile().lastIndexOf(File.separator)),
+                LoggerConfiguration.getLogFile().substring(LoggerConfiguration.getLogFile().lastIndexOf(File.separator) + 1));
 
         Assert.assertNotNull(logFile,
                 "{user.dir} should contain the specified *.log file!");

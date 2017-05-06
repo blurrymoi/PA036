@@ -7,9 +7,11 @@ import cz.muni.pa036.logging.exceptions.CreateException;
 import cz.muni.pa036.logging.exceptions.DeleteException;
 import cz.muni.pa036.logging.exceptions.FindByException;
 import cz.muni.pa036.logging.exceptions.UpdateException;
+import cz.muni.pa036.logging.log.LogFileDiff;
 import cz.muni.pa036.logging.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.Calendar;
@@ -226,11 +228,12 @@ public class EventServiceTest extends ServiceLayerTest {
     @Test
     public void updateNullEventTest() throws Exception {
         try {
+            logFile.cleanLogFile();
             eventService.update(null);
             fail(nullException);
-        } catch (UpdateException e) {}
-        logFile.reloadLogFile();
-        super.testCUDObject(layerName, className, "update", "null");
+        } catch (IllegalArgumentException e) {}
+        LogFileDiff diff = logFile.reloadLogFile();
+        Assert.assertNull(diff);
     }
 
     @Test
@@ -241,19 +244,21 @@ public class EventServiceTest extends ServiceLayerTest {
             eventService.delete(event);
             fail(nullException);
         } catch (DeleteException e) {}
-        logFile.reloadLogFile();
-        super.testCUDObject(layerName, className, "delete", event.toString());
+        LogFileDiff diff = logFile.reloadLogFile();
+        Assert.assertNotNull(diff);
+        Assert.assertFalse(diff.getLogs().isEmpty());
     }
 
     @Test
     public void deleteNullEventTest() throws Exception {
         try {
+            logFile.cleanLogFile();
             eventService.delete(null);
             fail(nullException);
-        } catch (DeleteException e) {}
+        } catch (IllegalArgumentException e) {}
         logFile.reloadLogFile();
-        super.testCUDObject(layerName, className, "delete", "null");
-    }
+        LogFileDiff diff = logFile.reloadLogFile();
+        Assert.assertNull(diff);    }
 
     private Event getEvent() {
         List<Event> events = eventService.findAll();
