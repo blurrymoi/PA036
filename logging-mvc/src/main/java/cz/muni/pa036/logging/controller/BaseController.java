@@ -28,7 +28,6 @@ public abstract class BaseController {
         }
         return null;
     }
-
     /**
      * Sends redirect so string model attributes are not visible in URL.
      */

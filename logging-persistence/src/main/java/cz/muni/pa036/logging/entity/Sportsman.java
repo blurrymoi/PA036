@@ -4,10 +4,8 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author Matej Majdis
@@ -15,6 +13,8 @@ import java.util.Set;
 @Entity
 @Table(name = "sportsman")
 public class Sportsman {
+
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -162,12 +162,14 @@ public class Sportsman {
 
 	@Override
 	public String toString() {
+		String normalDate = this.birthDate == null ? "NULL" : DATE_FORMAT.format(this.birthDate.getTime());
+
 		return "Sportsman:" +
 				"{" + ", " +
 				"id:" + this.id + ", " +
 				"name:" + this.name + ", " +
 				"surname:" + this.surname + ", " +
-				"birthDate:" + this.birthDate + ", " +
+				"birthDate:" + normalDate + ", " +
 				"is manager:" + this.isManager + ", " +
 				"email:" + this.email +
 				"}";

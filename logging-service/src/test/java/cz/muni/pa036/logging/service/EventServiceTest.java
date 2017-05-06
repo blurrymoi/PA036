@@ -4,6 +4,11 @@ import cz.muni.pa036.logging.dao.*;
 import cz.muni.pa036.logging.entity.*;
 
 import java.util.*;
+
+import cz.muni.pa036.logging.exceptions.CreateException;
+import cz.muni.pa036.logging.exceptions.DeleteException;
+import cz.muni.pa036.logging.exceptions.FindByException;
+import cz.muni.pa036.logging.exceptions.UpdateException;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.ContextConfiguration;
@@ -95,7 +100,7 @@ public class EventServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(eventDAO, times(1)).create(event);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = CreateException.class)
     public void testCreateNull() {
         doThrow(new IllegalArgumentException("Trying to createEvent null object!"))
                 .when(eventDAO)
@@ -104,7 +109,7 @@ public class EventServiceTest extends AbstractTestNGSpringContextTests {
         eventService.create(null);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = CreateException.class)
     public void testCreateUninitializedObject() {
         Event event1 = new Event();
         doThrow(new IllegalArgumentException("Trying to createEvent uninitialized object!"))
@@ -114,7 +119,7 @@ public class EventServiceTest extends AbstractTestNGSpringContextTests {
         eventService.create(event1);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = CreateException.class)
     public void testCreateAlreadyExisted() {
         doThrow(new IllegalArgumentException("Trying to createEvent already existing object!"))
                 .when(eventDAO)
@@ -129,7 +134,7 @@ public class EventServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(eventDAO, times(1)).update(event);
     }
 
-    @Test(expectedExceptions = NullPointerException.class)
+    @Test(expectedExceptions = UpdateException.class)
     public void testUpdateNull() {
         doThrow(new IllegalArgumentException("Trying to updateEvent null object!"))
                 .when(eventDAO)
@@ -138,13 +143,13 @@ public class EventServiceTest extends AbstractTestNGSpringContextTests {
         eventService.update(null);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = DeleteException.class)
     public void testDelete() {
         eventService.delete(event);
         Mockito.verify(eventDAO, times(1)).delete(event);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = DeleteException.class)
     public void testDeleteNotExistingObject() {
         doThrow(new IllegalArgumentException("Trying to deleteEvent not existing object!"))
                 .when(eventDAO)
@@ -153,7 +158,7 @@ public class EventServiceTest extends AbstractTestNGSpringContextTests {
         eventService.delete(new Event());
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = DeleteException.class)
     public void testDeleteNull() {
         doThrow(new IllegalArgumentException("Trying to deleteEvent null object!"))
                 .when(eventDAO)
@@ -178,7 +183,7 @@ public class EventServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(eventDAO, times(1)).findById(id);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void testFindByNullId() {
         doThrow(new IllegalArgumentException("Trying to find object by null id!"))
                 .when(eventDAO)
@@ -204,7 +209,7 @@ public class EventServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(eventDAO, times(1)).findByName(name);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void testFindByNullName() {
         doThrow(new IllegalArgumentException("Trying to find object by null name!"))
                 .when(eventDAO)
@@ -230,7 +235,7 @@ public class EventServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(eventDAO, times(1)).findBySport(sport1);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void testFindByNullSport() {
         doThrow(new IllegalArgumentException("Trying to find object by null sport!"))
                 .when(eventDAO)
@@ -256,7 +261,7 @@ public class EventServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(eventDAO, times(1)).findByCity(city);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void testFindByNullCity() {
         doThrow(new IllegalArgumentException("Trying to find object by null city name!"))
                 .when(eventDAO)
@@ -282,7 +287,7 @@ public class EventServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(eventDAO, times(1)).findByAdmin(admin);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void testFindByNullAdmin() {
         doThrow(new IllegalArgumentException("Trying to find object by null admin!"))
                 .when(eventDAO)
@@ -308,7 +313,7 @@ public class EventServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(eventDAO, times(1)).findByParticipant(participant);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void testFindByNullParticipant() {
         doThrow(new IllegalArgumentException("Trying to find object by null participant!"))
                 .when(eventDAO)
@@ -334,7 +339,7 @@ public class EventServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(eventDAO, times(1)).findByDate(cal);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void testFindByNullDate() {
         doThrow(new IllegalArgumentException("Trying to find object by null participant!"))
                 .when(eventDAO)

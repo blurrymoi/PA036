@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import cz.muni.pa036.logging.interceptor.AllowOriginInterceptor;
+import cz.muni.pa036.logging.interceptor.ControllerLoggerInterceptor;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -84,6 +85,7 @@ public class WebContext extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new AllowOriginInterceptor());
+        registry.addInterceptor(new ControllerLoggerInterceptor());
 
         LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
         localeChangeInterceptor.setParamName("lang");

@@ -1,7 +1,9 @@
 package cz.muni.pa036.logging.controller;
 
+import cz.muni.pa036.logging.dto.SportsmanDTO;
 import cz.muni.pa036.logging.facade.InvitationFacade;
 import cz.muni.pa036.logging.facade.SportsmanFacade;
+import cz.muni.pa036.logging.helper.CRUDLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,15 +20,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class InvitationController extends BaseController {
 
-    @Autowired
-    InvitationFacade invitationFacade;
+    private final CRUDLogger CRUD_LOGGER = new CRUDLogger(this.getClass());
 
     @Autowired
-    SportsmanFacade sportsmanFacade;
+    private InvitationFacade invitationFacade;
+
+    @Autowired
+    private SportsmanFacade sportsmanFacade;
 
     @RequestMapping(value = "/events/{id}/invite", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
     public ResponseEntity invite(@PathVariable Long id, @RequestParam("email") String email) {
-        invitationFacade.invite(id, sportsmanFacade.getByEmail(email).getId());
+
+        CRUD_LOGGER.logFindBy("email", email);
+        SportsmanDTO byEmail = sportsmanFacade.getByEmail(email);
+
+        CRUD_LOGGER.logCustom(" > Trying to invite [" + id + ", " + byEmail.getId() + "]");
+        invitationFacade.invite(id, byEmail.getId());
         return new ResponseEntity(HttpStatus.OK);
     }
 
