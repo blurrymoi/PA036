@@ -8,6 +8,7 @@ import java.util.*;
 import cz.muni.pa036.logging.exceptions.CreateException;
 import cz.muni.pa036.logging.exceptions.DeleteException;
 import cz.muni.pa036.logging.exceptions.FindByException;
+import cz.muni.pa036.logging.exceptions.UpdateException;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.ContextConfiguration;
@@ -133,7 +134,7 @@ public class EventServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(eventDAO, times(1)).update(event);
     }
 
-    @Test(expectedExceptions = NullPointerException.class)
+    @Test(expectedExceptions = UpdateException.class)
     public void testUpdateNull() {
         doThrow(new IllegalArgumentException("Trying to updateEvent null object!"))
                 .when(eventDAO)
@@ -142,13 +143,13 @@ public class EventServiceTest extends AbstractTestNGSpringContextTests {
         eventService.update(null);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = DeleteException.class)
     public void testDelete() {
         eventService.delete(event);
         Mockito.verify(eventDAO, times(1)).delete(event);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = DeleteException.class)
     public void testDeleteNotExistingObject() {
         doThrow(new IllegalArgumentException("Trying to deleteEvent not existing object!"))
                 .when(eventDAO)
@@ -157,7 +158,7 @@ public class EventServiceTest extends AbstractTestNGSpringContextTests {
         eventService.delete(new Event());
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = DeleteException.class)
     public void testDeleteNull() {
         doThrow(new IllegalArgumentException("Trying to deleteEvent null object!"))
                 .when(eventDAO)

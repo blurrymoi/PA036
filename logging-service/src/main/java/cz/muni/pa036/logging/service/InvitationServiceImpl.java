@@ -63,7 +63,7 @@ public class InvitationServiceImpl implements InvitationService {
         }
 
         if (event == null) {
-            throw new IllegalArgumentException("Event not found");
+            throw new FindByException("Event not found", new Exception(), "Event", null);
         }
 
         Sportsman sportsman;
@@ -75,7 +75,7 @@ public class InvitationServiceImpl implements InvitationService {
         }
 
         if (sportsman == null) {
-            throw new IllegalArgumentException("Sportsman not found");
+            throw new FindByException("Sportsman not found", new Exception(), "Sportsman", null);
         }
 
         return invite(event, sportsman);
@@ -85,14 +85,14 @@ public class InvitationServiceImpl implements InvitationService {
     public Invitation invite(Event event, Sportsman invitee) {
 
         if (event == null) {
-            throw new IllegalArgumentException("Event can not be null");
+            throw new FindByException("Event can not be null", new Exception(), "Event", null);
         }
         if (invitee == null) {
-            throw new IllegalArgumentException("Invitee can not be null");
+            throw new FindByException("Invitee can not be null", new Exception(), "Invitee", null);
         }
 
         if (event.getAdmin().equals(invitee)) {
-            throw new IllegalStateException("Cannot invite yourself");
+            throw new FindByException("Cannot invite yourself", new Exception(), "Invitee", invitee);
         }
 
         if (event.getParticipants().contains(invitee)) {
@@ -141,11 +141,12 @@ public class InvitationServiceImpl implements InvitationService {
     public Invitation accept(Invitation invitation) {
 
         if (invitation == null) {
-            throw new IllegalArgumentException("Invitation cannot be null");
+            throw new FindByException("Invitation cannot be null", new Exception(), "Invitation", invitation);
         }
 
         if (isFinished(invitation)) {
-            throw new IllegalStateException("Invitation is already in state: " + invitation.getState());
+            throw new FindByException("Invitation is already in state: " + invitation.getState(),
+                    new Exception(), "Invitation", invitation);
         }
 
         Result result = new Result();
@@ -187,11 +188,12 @@ public class InvitationServiceImpl implements InvitationService {
     public Invitation decline(Invitation invitation) {
 
         if (invitation == null) {
-            throw new IllegalArgumentException("Invitation can not be null");
+            throw new FindByException("Invitation cannot be null", new Exception(), "Invitation", null);
         }
 
         if (isFinished(invitation)) {
-            throw new IllegalStateException("Invitation is already in state: " + invitation.getState());
+            throw new FindByException("Invitation is already in state: " + invitation.getState(),
+                    new Exception(), "Invitation", invitation);
         }
 
         return changeInvitationState(invitation, InvitationState.DECLINED);
