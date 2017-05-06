@@ -225,4 +225,27 @@ public class LoggerConfiguration extends ContextAwareBase implements LoggerConte
 
         return model;
     }
+
+    public static void update(LoggerModel model) {
+        logDir = model.getLogDir();
+        logFile = model.getLogFile();
+        rootLevel = model.getRootLevel().toString().toUpperCase();
+        pa036Level = model.getPa036Level().toString().toUpperCase();
+        springLevel = model.getSpringLevel().toString().toUpperCase();
+        hibernateLevel = model.getHibernateLevel().toString().toUpperCase();
+        hibernateTypeLevel = model.getHibernateTypeLevel().toString().toUpperCase();
+        hibernateSQLLevel = model.getHibernateSQLLevel().toString().toUpperCase();
+
+        dbsLogDestination = model.getDestination().toString().toUpperCase();
+        dbsLoggingDirectory = model.getDirectory();
+        dbsLogFilename = model.getFileName();
+        dbsLogFilemode = String.valueOf(model.getFileMode());
+        dbsRotationAge = String.valueOf(model.getRotationAge());
+        dbsRotationSize = String.valueOf(model.getRotationSize());
+        dbsMinMessage = model.getMinMessage().toString().toUpperCase();
+        dbsMinErrorState = model.getMinErrorState().toString().toUpperCase();
+        dbsLogMinDurationStatement = String.valueOf(model.getMinDuration());
+        dbsLogDuration = model.getLogDuration().toString().toUpperCase();
+        dbsLogLinePrefix = model.getPrefix();
+    }
 }
