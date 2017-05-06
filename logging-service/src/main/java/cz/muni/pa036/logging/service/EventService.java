@@ -3,6 +3,7 @@ package cz.muni.pa036.logging.service;
 import cz.muni.pa036.logging.entity.Event;
 import cz.muni.pa036.logging.entity.Sport;
 import cz.muni.pa036.logging.entity.Sportsman;
+
 import java.util.Calendar;
 import java.util.List;
 
@@ -32,7 +33,4 @@ public interface EventService {
     void update(Event event);
 
     void delete(Event event);
-
-    void edit(Event event);
-
 }

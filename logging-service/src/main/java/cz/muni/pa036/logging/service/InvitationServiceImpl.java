@@ -1,20 +1,28 @@
 package cz.muni.pa036.logging.service;
 
+import cz.muni.pa036.logging.dao.EventDAO;
 import cz.muni.pa036.logging.dao.InvitationDAO;
 import cz.muni.pa036.logging.dao.ResultDAO;
 import cz.muni.pa036.logging.dao.SportsmanDAO;
 import cz.muni.pa036.logging.entity.Event;
 import cz.muni.pa036.logging.entity.Invitation;
 import cz.muni.pa036.logging.entity.Result;
-import cz.muni.pa036.logging.utils.PerformanceUnits;
-import cz.muni.pa036.logging.dao.EventDAO;
 import cz.muni.pa036.logging.entity.Sportsman;
+import cz.muni.pa036.logging.exceptions.CreateException;
+import cz.muni.pa036.logging.exceptions.DeleteException;
+import cz.muni.pa036.logging.exceptions.FindByException;
+import cz.muni.pa036.logging.exceptions.UpdateException;
+import cz.muni.pa036.logging.helper.ActionLogger;
+import cz.muni.pa036.logging.helper.CRUDLogger;
 import cz.muni.pa036.logging.utils.InvitationState;
+import cz.muni.pa036.logging.utils.PerformanceUnits;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -23,182 +31,240 @@ import java.util.Set;
 @Service
 public class InvitationServiceImpl implements InvitationService {
 
-	@Autowired
-	private InvitationDAO invitationDAO;
+    private final CRUDLogger CRUD_LOGGER = new CRUDLogger(this.getClass());
 
-	@Autowired
-	private EventDAO eventDAO;
+    @Autowired
+    private InvitationDAO invitationDAO;
 
-	@Autowired
-	private SportsmanDAO sportsmanDAO;
+    @Autowired
+    private EventDAO eventDAO;
 
-	@Autowired
-	private EmailService emailService;
+    @Autowired
+    private SportsmanDAO sportsmanDAO;
 
-	@Autowired
-	private NotificationService notificationService;
+    @Autowired
+    private EmailService emailService;
 
-	@Autowired
-	private ResultDAO resultDAO;
+    @Autowired
+    private NotificationService notificationService;
 
-	@Override
-	public Invitation invite(long eventId, long sportsmanId) {
+    @Autowired
+    private ResultDAO resultDAO;
 
-		Event event = eventDAO.findById(eventId);
-		if (event == null) {
-			throw new IllegalArgumentException("Event not found");
-		}
+    @Override
+    public Invitation invite(long eventId, long sportsmanId) {
 
-		Sportsman sportsman = sportsmanDAO.findById(sportsmanId);
-		if (sportsman == null) {
-			throw new IllegalArgumentException("Sportsman not found");
-		}
+        Event event;
+        try {
+            CRUD_LOGGER.logFindBy("ID", eventId);
+            event = eventDAO.findById(eventId);
+        } catch (Exception ex) {
+            throw new FindByException("Failed to find Event by ID", ex, "ID", eventId);
+        }
 
-		return invite(event, sportsman);
-	}
+        if (event == null) {
+            throw new IllegalArgumentException("Event not found");
+        }
 
-	@Override
-	public Invitation invite(Event event, Sportsman invitee) {
+        Sportsman sportsman;
+        try {
+            CRUD_LOGGER.logFindBy("ID", sportsmanId);
+            sportsman = sportsmanDAO.findById(sportsmanId);
+        } catch (Exception ex) {
+            throw new FindByException("Failed to find Sportsman by ID", ex, "ID", sportsmanId);
+        }
 
-		if (event == null) {
-			throw new IllegalArgumentException("Event can not be null");
-		}
-		if (invitee == null) {
-			throw new IllegalArgumentException("Invitee can not be null");
-		}
+        if (sportsman == null) {
+            throw new IllegalArgumentException("Sportsman not found");
+        }
 
-		if (event.getAdmin().equals(invitee)) {
-			throw new IllegalStateException("Cannot invite yourself");
-		}
+        return invite(event, sportsman);
+    }
 
-		if (event.getParticipants().contains(invitee)) {
-			return null;
-		}
+    @Override
+    public Invitation invite(Event event, Sportsman invitee) {
 
-		//check and process existing invitations
-		Invitation existingInvitation = invitationDAO.findByEventAndInvitee(event, invitee);
-		if (existingInvitation != null && !isFinished(existingInvitation)) {
-			if (InvitationState.INVITED.equals(existingInvitation.getState())) {
-				emailService.sendInvitationMessage(existingInvitation);
-				return changeInvitationState(existingInvitation, InvitationState.REINVITED);
-			}
-			return existingInvitation;
-		}
+        if (event == null) {
+            throw new IllegalArgumentException("Event can not be null");
+        }
+        if (invitee == null) {
+            throw new IllegalArgumentException("Invitee can not be null");
+        }
 
-		//if there is no existing invitation || is finished create new
-		Invitation newInvitation = new Invitation();
-		newInvitation.setState(InvitationState.INVITED);
-		newInvitation.setEvent(event);
-		newInvitation.setInvitee(invitee);
-		invitationDAO.create(newInvitation);
+        if (event.getAdmin().equals(invitee)) {
+            throw new IllegalStateException("Cannot invite yourself");
+        }
 
-		emailService.sendInvitationMessage(newInvitation);
+        if (event.getParticipants().contains(invitee)) {
+            return null;
+        }
 
-		return newInvitation;
-	}
+        Map<Object, Object> findBy = new HashMap<>();
+        findBy.put("event", event);
+        findBy.put("invitee", invitee);
 
-	@Override
-	public Invitation accept(Invitation invitation) {
+        Invitation existingInvitation;
+        try {
+            CRUD_LOGGER.logFindBy(findBy);
+            existingInvitation = invitationDAO.findByEventAndInvitee(event, invitee);
+        } catch (Exception ex) {
+            throw new FindByException("Failed to find Invitation by Event and Invitee", ex, findBy);
+        }
 
-		if (invitation == null) {
-			throw new IllegalArgumentException("Invitation can not be null");
-		}
+        //check and process existing invitations
+        if (existingInvitation != null && !isFinished(existingInvitation)) {
+            if (InvitationState.INVITED.equals(existingInvitation.getState())) {
+                emailService.sendInvitationMessage(existingInvitation);
+                return changeInvitationState(existingInvitation, InvitationState.REINVITED);
+            }
+            return existingInvitation;
+        }
 
-		if (isFinished(invitation)) {
-			throw new IllegalStateException("Invitation is already in state: " + invitation.getState());
-		}
+        //if there is no existing invitation || is finished create new
+        Invitation newInvitation = new Invitation();
+        newInvitation.setState(InvitationState.INVITED);
+        newInvitation.setEvent(event);
+        newInvitation.setInvitee(invitee);
 
-		Result result = new Result();
-		result.setPerformanceUnit(PerformanceUnits.SECOND);
-		result.setEvent(invitation.getEvent());
-		result.setSportsman(invitation.getInvitee());
-		result.setPosition(new Integer(-1));
-		result.setPerformance(new Double(-1));
-		result.setNote("");
-		resultDAO.create(result);
+        try {
+            CRUD_LOGGER.logCreate(newInvitation);
+            invitationDAO.create(newInvitation);
+        } catch (Exception ex) {
+            throw new CreateException("Failed to create Invitation", ex, newInvitation);
+        }
+        emailService.sendInvitationMessage(newInvitation);
 
-		Event event = invitation.getEvent();
-		Set<Sportsman> participants = event.getParticipants();
-		participants.add(invitation.getInvitee());
-		event.setParticipants(participants);
-		eventDAO.update(event);
+        return newInvitation;
+    }
 
-		return changeInvitationState(invitation, InvitationState.ACCEPTED);
-	}
+    @Override
+    public Invitation accept(Invitation invitation) {
 
-	@Override
-	public Invitation simpleAccept(Invitation invitation) {
-		return changeInvitationState(invitation, InvitationState.ACCEPTED);
-	}
+        if (invitation == null) {
+            throw new IllegalArgumentException("Invitation cannot be null");
+        }
 
-	@Override
-	public Invitation decline(Invitation invitation) {
+        if (isFinished(invitation)) {
+            throw new IllegalStateException("Invitation is already in state: " + invitation.getState());
+        }
 
-		if (invitation == null) {
-			throw new IllegalArgumentException("Invitation can not be null");
-		}
+        Result result = new Result();
+        result.setPerformanceUnit(PerformanceUnits.SECOND);
+        result.setEvent(invitation.getEvent());
+        result.setSportsman(invitation.getInvitee());
+        result.setPosition(-1);
+        result.setPerformance((double) -1);
+        result.setNote("");
 
-		if (isFinished(invitation)) {
-			throw new IllegalStateException("Invitation is already in state: " + invitation.getState());
-		}
+        try {
+            CRUD_LOGGER.logCreate(result);
+            resultDAO.create(result);
+        } catch (Exception ex) {
+            throw new CreateException("Failed to create Result", ex, result);
+        }
 
-		return changeInvitationState(invitation, InvitationState.DECLINED);
-	}
+        Event event = invitation.getEvent();
+        Set<Sportsman> participants = event.getParticipants();
+        participants.add(invitation.getInvitee());
+        event.setParticipants(participants);
 
-	@Override
-	public Invitation findById(Long id) {
-		try {
-			return invitationDAO.findById(id);
-		} catch (Exception e) {
-			throw new DataRetrievalFailureException("Failed to find invitation by id " + id + ", exception: ", e);
-		}
-	}
+        try {
+            CRUD_LOGGER.logUpdate(event);
+            eventDAO.update(event);
+        } catch (Exception ex) {
+            throw new UpdateException("Failed to update Event", ex, event);
+        }
 
-	@Override
-	public Invitation findByEventAndInvitee(Event event, Sportsman invitee) {
-		try {
-			return invitationDAO.findByEventAndInvitee(event, invitee);
-		} catch (Exception e) {
-			throw new DataRetrievalFailureException("Failed to find invitation", e);
-		}
-	}
+        return changeInvitationState(invitation, InvitationState.ACCEPTED);
+    }
 
-	@Override
-	public List<Invitation> findByEvent(Event event) {
-		try {
-			return invitationDAO.findByEvent(event);
-		} catch (Exception e) {
-			throw new DataRetrievalFailureException("Failed to find invitations, exception: ", e);
-		}
-	}
+    @Override
+    public Invitation simpleAccept(Invitation invitation) {
+        return changeInvitationState(invitation, InvitationState.ACCEPTED);
+    }
 
-	@Override
-	public List<Invitation> findByInvitee(Sportsman invitee) {
-		try {
-			return invitationDAO.findByInvitee(invitee);
-		} catch (Exception e) {
-			throw new DataRetrievalFailureException("Failed to find invitations, exception: ", e);
-		}
-	}
+    @Override
+    public Invitation decline(Invitation invitation) {
 
-	@Override
-	public List<Invitation> findAll() {
-		try {
-			return invitationDAO.findAll();
-		} catch (Exception e) {
-			throw new DataRetrievalFailureException("Failed to find all invitations, exception: ", e);
-		}
-	}
+        if (invitation == null) {
+            throw new IllegalArgumentException("Invitation can not be null");
+        }
 
-	private boolean isFinished(Invitation invitation) {
-		InvitationState state = invitation.getState();
-		return state.equals(InvitationState.ACCEPTED) || state.equals(InvitationState.DECLINED);
-	}
+        if (isFinished(invitation)) {
+            throw new IllegalStateException("Invitation is already in state: " + invitation.getState());
+        }
 
-	private Invitation changeInvitationState(Invitation invitation, InvitationState state) {
-		invitation.setState(state);
-		invitationDAO.update(invitation);
+        return changeInvitationState(invitation, InvitationState.DECLINED);
+    }
 
-		return invitation;
-	}
+    @Override
+    public Invitation findById(Long id) {
+        try {
+            CRUD_LOGGER.logFindBy("ID", id);
+            return invitationDAO.findById(id);
+        } catch (Exception ex) {
+            throw new FindByException("Failed to find Invitation by ID", ex, "ID", id);
+        }
+    }
+
+    @Override
+    public Invitation findByEventAndInvitee(Event event, Sportsman invitee) {
+        Map<Object, Object> findBy = new HashMap<>();
+        findBy.put("event", event);
+        findBy.put("invitee", invitee);
+        try {
+            CRUD_LOGGER.logFindBy(findBy);
+            return invitationDAO.findByEventAndInvitee(event, invitee);
+        } catch (Exception ex) {
+            throw new FindByException("Failed to find Invitation by Event & Invitee", ex, findBy);
+        }
+    }
+
+    @Override
+    public List<Invitation> findByEvent(Event event) {
+        try {
+            CRUD_LOGGER.logFindBy("event", event);
+            return invitationDAO.findByEvent(event);
+        } catch (Exception ex) {
+            throw new FindByException("Failed to find Invitation by Event", ex, "event", event);
+        }
+    }
+
+    @Override
+    public List<Invitation> findByInvitee(Sportsman invitee) {
+        try {
+            CRUD_LOGGER.logFindBy("invitee", invitee);
+            return invitationDAO.findByInvitee(invitee);
+        } catch (Exception ex) {
+            throw new FindByException("Failed to find Invitation by invitee", ex, "invitee", invitee);
+        }
+    }
+
+    @Override
+    public List<Invitation> findAll() {
+        try {
+            CRUD_LOGGER.logFindAll();
+            return invitationDAO.findAll();
+        } catch (Exception ex) {
+            throw new FindByException("Failed to find all Invitations", ex, null);
+        }
+    }
+
+    private boolean isFinished(Invitation invitation) {
+        InvitationState state = invitation.getState();
+        return state.equals(InvitationState.ACCEPTED) || state.equals(InvitationState.DECLINED);
+    }
+
+    private Invitation changeInvitationState(Invitation invitation, InvitationState state) {
+        invitation.setState(state);
+
+        try {
+            CRUD_LOGGER.logUpdate(invitation);
+            invitationDAO.update(invitation);
+        } catch (Exception ex) {
+            throw new UpdateException("Failed to update Invitation", ex, invitation);
+        }
+
+        return invitation;
+    }
 }

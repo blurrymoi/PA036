@@ -2,6 +2,8 @@ package cz.muni.pa036.logging.service;
 
 import cz.muni.pa036.logging.dao.*;
 import cz.muni.pa036.logging.entity.*;
+import cz.muni.pa036.logging.exceptions.CreateException;
+import cz.muni.pa036.logging.exceptions.FindByException;
 import cz.muni.pa036.logging.utils.InvitationState;
 
 import org.mockito.InjectMocks;
@@ -163,7 +165,7 @@ public class InvitationServiceTest extends AbstractTestNGSpringContextTests {
         invitationService.accept(invitation);
     }
 
-    @Test(expectedExceptions = NullPointerException.class)
+    @Test(expectedExceptions = CreateException.class)
     public void acceptAddingParticipants(){
         Invitation result = invitationService.accept(invitation);
         //verify(event, times(1)).getParticipants().add(sportsman);
@@ -206,7 +208,7 @@ public class InvitationServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(invitationDAOMock, times(1)).findById(id);
     }
 
-    @Test(expectedExceptions = DataAccessException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void findByIdNull() {
         doThrow(new IllegalArgumentException("Trying to find object by null id!"))
                 .when(invitationDAOMock)

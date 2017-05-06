@@ -1,5 +1,7 @@
 package cz.muni.pa036.logging.configuration;
 
+import cz.muni.pa036.logging.dbsApi.DBSApi;
+import cz.muni.pa036.logging.dbsApi.DBSApiImpl;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -69,6 +71,11 @@ public class DBConfig {
 	@Bean
 	public LoadTimeWeaver instrumentationLoadTimeWeaver() {
 		return new InstrumentationLoadTimeWeaver();
+	}
+
+	@Bean
+	public DBSApi dbsApi() {
+		return new DBSApiImpl(database());
 	}
 
 	@Bean
