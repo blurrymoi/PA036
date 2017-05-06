@@ -1,20 +1,28 @@
 package cz.muni.pa036.logging.service;
 
+import cz.muni.pa036.logging.dao.ResultDAO;
+import cz.muni.pa036.logging.entity.Event;
+import cz.muni.pa036.logging.entity.Result;
+import cz.muni.pa036.logging.entity.Sport;
+import cz.muni.pa036.logging.entity.Sportsman;
+import cz.muni.pa036.logging.exceptions.CreateException;
+import cz.muni.pa036.logging.exceptions.DeleteException;
+import cz.muni.pa036.logging.exceptions.FindByException;
+import cz.muni.pa036.logging.exceptions.UpdateException;
 import cz.muni.pa036.logging.utils.PerformanceUnits;
-import cz.muni.pa036.logging.dao.*;
-import cz.muni.pa036.logging.entity.*;
-
-import java.util.*;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.Assert;
-import org.testng.annotations.*;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import java.util.*;
 
 import static org.hamcrest.CoreMatchers.not;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import static org.mockito.Mockito.*;
 
 /**
@@ -24,7 +32,7 @@ import static org.mockito.Mockito.*;
 public class ResultServiceTest extends AbstractTestNGSpringContextTests {
 
     @InjectMocks
-    private  ResultService resultService = new ResultServiceImpl();
+    private ResultService resultService = new ResultServiceImpl();
 
     @Mock
     private ResultDAO resultDAO;
@@ -103,7 +111,7 @@ public class ResultServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(resultDAO, times(1)).create(result);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = CreateException.class)
     public void testCreateNull() {
         doThrow(new IllegalArgumentException("Trying to createEvent null object!"))
                 .when(resultDAO)
@@ -112,7 +120,7 @@ public class ResultServiceTest extends AbstractTestNGSpringContextTests {
         resultService.create(null);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = CreateException.class)
     public void testCreateUninitializedObject() {
         Result result1 = new Result();
         doThrow(new IllegalArgumentException("Trying to createEvent uninitialized object!"))
@@ -122,7 +130,7 @@ public class ResultServiceTest extends AbstractTestNGSpringContextTests {
         resultService.create(result1);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = CreateException.class)
     public void testCreateAlreadyExisted() {
         doThrow(new IllegalArgumentException("Trying to createEvent already existing object!"))
                 .when(resultDAO)
@@ -137,7 +145,7 @@ public class ResultServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(resultDAO, times(1)).update(result);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = UpdateException.class)
     public void testUpdateNull() {
         doThrow(new IllegalArgumentException("Trying to updateEvent null object!"))
                 .when(resultDAO)
@@ -152,7 +160,7 @@ public class ResultServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(resultDAO, times(1)).delete(result);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = DeleteException.class)
     public void testDeleteNotExistingResult() {
         Result res = new Result();
         res.setPosition(3);
@@ -163,7 +171,7 @@ public class ResultServiceTest extends AbstractTestNGSpringContextTests {
         resultService.delete(res);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = DeleteException.class)
     public void testDeleteNull() {
         doThrow(new IllegalArgumentException("Trying to deleteEvent null object!"))
                 .when(resultDAO)
@@ -188,7 +196,7 @@ public class ResultServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(resultDAO, times(1)).findById(id);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void testFindByNullId() {
         doThrow(new IllegalArgumentException("Trying to find object by null id!"))
                 .when(resultDAO)
@@ -201,7 +209,7 @@ public class ResultServiceTest extends AbstractTestNGSpringContextTests {
     public void testFindExistingBySportsman() {
         List<Result> results = resultService.findBySportsman(sportsman);
         Assert.assertNotNull(results);
-        Assert.assertEquals(results.size(),1);
+        Assert.assertEquals(results.size(), 1);
         Mockito.verify(resultDAO, times(1)).findBySportsman(sportsman);
     }
 
@@ -214,7 +222,7 @@ public class ResultServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(resultDAO, times(1)).findBySportsman(sportsman1);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void testFindByNullSportsman() {
         doThrow(new IllegalArgumentException("Trying to find object by null id!"))
                 .when(resultDAO)
@@ -227,7 +235,7 @@ public class ResultServiceTest extends AbstractTestNGSpringContextTests {
     public void testFindExistingByEvent() {
         List<Result> results = resultService.findByEvent(event);
         Assert.assertNotNull(results);
-        Assert.assertEquals(results.size(),1);
+        Assert.assertEquals(results.size(), 1);
         Mockito.verify(resultDAO, times(1)).findByEvent(event);
     }
 
@@ -240,7 +248,7 @@ public class ResultServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(resultDAO, times(1)).findByEvent(event1);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void testFindByNullEvent() {
         doThrow(new IllegalArgumentException("Trying to find object by null id!"))
                 .when(resultDAO)
@@ -253,7 +261,7 @@ public class ResultServiceTest extends AbstractTestNGSpringContextTests {
     public void testFindExistingBySport() {
         List<Result> results = resultService.findBySport(sport);
         Assert.assertNotNull(results);
-        Assert.assertEquals(results.size(),1);
+        Assert.assertEquals(results.size(), 1);
         Mockito.verify(resultDAO, times(1)).findBySport(sport);
     }
 
@@ -266,7 +274,7 @@ public class ResultServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(resultDAO, times(1)).findBySport(sport1);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void testFindByNullSport() {
         doThrow(new IllegalArgumentException("Trying to find object by null id!"))
                 .when(resultDAO)
@@ -280,7 +288,7 @@ public class ResultServiceTest extends AbstractTestNGSpringContextTests {
         Double performance = 9.2;
         List<Result> results = resultService.findByPerformance(performance);
         Assert.assertNotNull(results);
-        Assert.assertEquals(results.size(),1);
+        Assert.assertEquals(results.size(), 1);
         Mockito.verify(resultDAO, times(1)).findByPerformance(performance);
     }
 
@@ -293,7 +301,7 @@ public class ResultServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(resultDAO, times(1)).findByPerformance(performance);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void testFindByNullPerformance() {
         doThrow(new IllegalArgumentException("Trying to find object by null id!"))
                 .when(resultDAO)
@@ -307,7 +315,7 @@ public class ResultServiceTest extends AbstractTestNGSpringContextTests {
         Integer position = 2;
         List<Result> results = resultService.findByPosition(position);
         Assert.assertNotNull(results);
-        Assert.assertEquals(results.size(),1);
+        Assert.assertEquals(results.size(), 1);
         Mockito.verify(resultDAO, times(1)).findByPosition(position);
     }
 
@@ -320,7 +328,7 @@ public class ResultServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(resultDAO, times(1)).findByPosition(position);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void testFindByNullPosition() {
         doThrow(new IllegalArgumentException("Trying to find object by null id!"))
                 .when(resultDAO)
@@ -334,7 +342,7 @@ public class ResultServiceTest extends AbstractTestNGSpringContextTests {
         String note = "note";
         List<Result> results = resultService.findByNote(note);
         Assert.assertNotNull(results);
-        Assert.assertEquals(results.size(),1);
+        Assert.assertEquals(results.size(), 1);
         Mockito.verify(resultDAO, times(1)).findByNote(note);
     }
 
@@ -347,7 +355,7 @@ public class ResultServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(resultDAO, times(1)).findByNote(note);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void testFindByNullNote() {
         doThrow(new IllegalArgumentException("Trying to find object by null id!"))
                 .when(resultDAO)
@@ -360,7 +368,7 @@ public class ResultServiceTest extends AbstractTestNGSpringContextTests {
     public void testFindAll() {
         List<Result> results = resultService.findAll();
         Assert.assertNotNull(results);
-        Assert.assertEquals(results.size(),1);
+        Assert.assertEquals(results.size(), 1);
         Mockito.verify(resultDAO, times(1)).findAll();
     }
 
