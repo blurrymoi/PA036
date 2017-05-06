@@ -62,7 +62,7 @@ public class LogController extends BaseController {
     public Object apply(@ModelAttribute("logger") LoggerModel loggerModel, Model model) throws Exception {
         logger.debug("apply button clicked:" + loggerModel.toString());
         loggerService.updateLoggingOptions(loggerModel);
-        model.addAttribute("logger", loggerModel);
+        model.addAttribute("logger", loggerService.getLoggerModel());
         return "logging.page";
     }
 
