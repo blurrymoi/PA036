@@ -63,7 +63,7 @@ public class SportServiceImpl implements SportService {
             CRUD_LOGGER.logDelete(sport);
             sportDAO.delete(sport);
         } catch (Exception ex) {
-            throw new UpdateException("Failed to delete Sport", ex, sport);
+            throw new DeleteException("Failed to delete Sport", ex, sport);
         }
     }
 

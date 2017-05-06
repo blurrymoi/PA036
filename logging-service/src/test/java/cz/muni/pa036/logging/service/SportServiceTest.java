@@ -3,6 +3,10 @@ package cz.muni.pa036.logging.service;
 import cz.muni.pa036.logging.dao.SportDAO;
 import cz.muni.pa036.logging.entity.Sport;
 
+import cz.muni.pa036.logging.exceptions.CreateException;
+import cz.muni.pa036.logging.exceptions.DeleteException;
+import cz.muni.pa036.logging.exceptions.FindByException;
+import cz.muni.pa036.logging.exceptions.UpdateException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -63,7 +67,7 @@ public class SportServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(sportDAO, times(1)).findById(id);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void testFindByNullId() {
         doThrow(new IllegalArgumentException("Trying to find object by null id!"))
                 .when(sportDAO)
@@ -89,7 +93,7 @@ public class SportServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(sportDAO, times(1)).findByName(name);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void testFindByNullName() {
         doThrow(new IllegalArgumentException("Trying to find object by null name!"))
                 .when(sportDAO)
@@ -115,7 +119,7 @@ public class SportServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(sportDAO, times(1)).create(sport);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = CreateException.class)
     public void testCreateNull() {
         doThrow(new IllegalArgumentException("Trying to createEvent null object!"))
                 .when(sportDAO)
@@ -124,7 +128,7 @@ public class SportServiceTest extends AbstractTestNGSpringContextTests {
         sportService.create(null);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = CreateException.class)
     public void testCreateUninitializedObject() {
         Sport sport= new Sport();
         doThrow(new IllegalArgumentException("Trying to createEvent uninitialized object!"))
@@ -134,7 +138,7 @@ public class SportServiceTest extends AbstractTestNGSpringContextTests {
         sportService.create(sport);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = CreateException.class)
     public void testCreateAlreadyExisted() {
         doThrow(new IllegalArgumentException("Trying to createEvent already existing object!"))
                 .when(sportDAO)
@@ -153,7 +157,7 @@ public class SportServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(sportDAO, times(1)).update(updateSport);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = UpdateException.class)
     public void testUpdateNull() {
         doThrow(new IllegalArgumentException("Trying to updateEvent null object!"))
                 .when(sportDAO)
@@ -172,7 +176,7 @@ public class SportServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(sportDAO, times(1)).delete(deleteSport);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = DeleteException.class)
     public void testDeleteNull() {
         doThrow(new IllegalArgumentException("Trying to deleteEvent null object!"))
                 .when(sportDAO)

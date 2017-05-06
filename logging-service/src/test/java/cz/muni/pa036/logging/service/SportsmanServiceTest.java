@@ -3,6 +3,9 @@ package cz.muni.pa036.logging.service;
 import cz.muni.pa036.logging.dao.*;
 import cz.muni.pa036.logging.entity.*;
 
+import cz.muni.pa036.logging.exceptions.CreateException;
+import cz.muni.pa036.logging.exceptions.DeleteException;
+import cz.muni.pa036.logging.exceptions.UpdateException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -84,7 +87,7 @@ public class SportsmanServiceTest extends AbstractTestNGSpringContextTests {
         sportsmanService.create(sportsman);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = CreateException.class)
     public void testCreateAlreadyExisted() {
         doThrow(new IllegalArgumentException("Trying to createEvent already existing object!"))
                 .when(sportsmanDAO)
@@ -159,7 +162,7 @@ public class SportsmanServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(sportsmanDAO, times(1)).update(sportsman);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = UpdateException.class)
     public void testUpdateNull() {
         doThrow(new IllegalArgumentException("Trying to updateEvent null object!"))
                 .when(sportsmanDAO)
@@ -174,7 +177,7 @@ public class SportsmanServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(sportsmanDAO, times(1)).delete(sportsman);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = DeleteException.class)
     public void testDeleteNull() {
         doThrow(new IllegalArgumentException("Trying to deleteEvent null object!"))
                 .when(sportsmanDAO)
