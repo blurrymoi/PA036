@@ -39,6 +39,7 @@
 <spring:url value="?lang=cs" var="csLangUrl"/>
 <spring:url value="?lang=en" var="enLangUrl"/>
 <spring:url value="?lang=sk" var="skLangUrl"/>
+<spring:url value="/logging" var="loggingUrl"/>
 
 <!DOCTYPE html>
 <html lang="${language}">
@@ -100,6 +101,7 @@
                             <li><a href="${userLoginUrl}"><spring:message code="link.user.login"/></a></li>
                             <li><a href="${userRegisterUrl}"><spring:message code="link.user.register"/></a></li>
                         </sec:authorize>
+                        <li><a href="${loggingUrl}"><spring:message code="title.logging"/></a></li>
                         <sec:authorize access="isAuthenticated()">
                             <li><a href="${userDetailUrl}"><spring:message code="link.user.detail"/></a></li>
                             <li><a href="${userLogoutUrl}"><spring:message code="link.user.logout"/> -
