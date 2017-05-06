@@ -15,7 +15,7 @@
         <module>logging-service</module>
         <module>logging-mvc</module>
         <module>logging-api</module>
-        <!--<module>logging-integration-tests</module>-->
+        <module>logging-integration-tests</module>
     </modules>
 
     <name>Query Logging Project</name>
@@ -53,6 +53,12 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <dependency>

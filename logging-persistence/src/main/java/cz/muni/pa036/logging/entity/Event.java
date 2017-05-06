@@ -1,6 +1,7 @@
 package cz.muni.pa036.logging.entity;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Objects;
@@ -26,6 +27,8 @@ import org.hibernate.validator.constraints.NotBlank;
 @Entity
 @Table(name = "event")
 public class Event implements Serializable {
+
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -201,12 +204,14 @@ public class Event implements Serializable {
 
     @Override
     public String toString() {
+        String normalDate = this.date == null ? "NULL" : DATE_FORMAT.format(this.date.getTime());
+
         return "Event:" +
                     "{" +
                         "id:" + this.id + ", " +
                         "name:" + this.name + ", " +
                         "description:" + this.description + ", " +
-                        "date:" + this.date + ", " +
+                        "date:" + normalDate + ", " +
                         "sport:" + this.sport + ", " +
                         "capacity:" + this.capacity + ", " +
                         "city:" + this.city + ", " +

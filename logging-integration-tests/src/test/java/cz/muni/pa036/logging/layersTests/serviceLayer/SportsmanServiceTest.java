@@ -6,6 +6,7 @@ import cz.muni.pa036.logging.exceptions.CreateException;
 import cz.muni.pa036.logging.exceptions.DeleteException;
 import cz.muni.pa036.logging.exceptions.FindByException;
 import cz.muni.pa036.logging.exceptions.UpdateException;
+import cz.muni.pa036.logging.log.LogFileDiff;
 import cz.muni.pa036.logging.service.EventService;
 import cz.muni.pa036.logging.service.SportsmanService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -199,9 +200,9 @@ public class SportsmanServiceTest extends ServiceLayerTest {
         try {
             sportsmanService.create(null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
-        logFile.reloadLogFile();
-        super.testCUDObject(layerName, className, "create", "null");
+        } catch (CreateException e) {}
+        LogFileDiff diff = logFile.reloadLogFile();
+        Assert.assertNull(diff, "Expected null diff due to. Special create method(generating pss hash, ...). If null, nothing to happened!");
     }
 
     @Test

@@ -221,8 +221,8 @@ public class EventController extends BaseController {
         result.setPerformanceUnit(PerformanceUnits.POINT);
         result.setEvent(event);
         result.setSportsman(participant);
-        result.setPosition(new Integer(-1));
-        result.setPerformance(new Double(-1));
+        result.setPosition(-1);
+        result.setPerformance((double) -1);
         result.setNote("");
         resultFacade.create(result);
 
@@ -249,7 +249,7 @@ public class EventController extends BaseController {
     public ResponseEntity invite(@RequestBody InviteRequest request) {
         logger.debug("Invitation for event with id=" + request.getEvent_id() +" and for user with email " + request.getInputEmail());
         invitationFacade.invite(request.getEvent_id(), sportsmanFacade.getByEmail(request.getInputEmail()).getId());
-        return new ResponseEntity("{}", HttpStatus.OK);
+        return new ResponseEntity<>("{}", HttpStatus.OK);
     }
 
 }

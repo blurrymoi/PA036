@@ -6,9 +6,17 @@ import cz.muni.pa036.logging.exceptions.FindByException;
 import cz.muni.pa036.logging.exceptions.UpdateException;
 import cz.muni.pa036.logging.helper.ActionLogger;
 import cz.muni.pa036.logging.helper.CRUDLogger;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.ui.ModelMap;
+import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+@EnableWebMvc
 @ControllerAdvice
 public class ControllerAdviser {
 
@@ -47,12 +55,5 @@ public class ControllerAdviser {
                 .causeObject(deleteException.getCauseObject())
                 .build();
         CRUD_LOGGER.logOops(actionLogger, deleteException);
-    }
-
-    // general logging for other exceptions (e.g. thrown and not caught ones)
-    @ExceptionHandler(Throwable.class)
-    public void logException(Throwable throwable) {
-        ActionLogger actionLogger = new ActionLogger.ActionLoggerBuilder().CUSTOM("[UNKNOWN ACTION]").build();
-        CRUD_LOGGER.logOops(actionLogger, (Exception) throwable);
     }
 }

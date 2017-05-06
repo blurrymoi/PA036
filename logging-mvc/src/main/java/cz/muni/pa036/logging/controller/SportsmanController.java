@@ -31,26 +31,25 @@ public class SportsmanController extends BaseController {
     private final CRUDLogger CRUD_LOGGER = new CRUDLogger(this.getClass());
 
     @Autowired
-    BeanMappingService beanMappingService;
+    private BeanMappingService beanMappingService;
 
     @Autowired
-    EventFacade eventFacade;
+    private EventFacade eventFacade;
 
     @Autowired
-    SportsmanFacade sportsmanFacade;
+    private SportsmanFacade sportsmanFacade;
 
     @Inject
-    InvitationFacade invitationFacade;
+    private InvitationFacade invitationFacade;
 
     @Autowired
-    ResultFacade resultFacade;
-
+    private ResultFacade resultFacade;
 
     @RequestMapping("/my-account")
     public String myAccount(Model model) {
         String email;
-        SportsmanDTO sportsman = new SportsmanDTO();
-        List<ResultDTO> results = new ArrayList<>();
+        SportsmanDTO sportsman;
+        List<ResultDTO> results;
         try {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             email = auth.getName();

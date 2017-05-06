@@ -2,6 +2,8 @@ package cz.muni.pa036.logging.service;
 
 import cz.muni.pa036.logging.dao.*;
 import cz.muni.pa036.logging.entity.*;
+import cz.muni.pa036.logging.exceptions.CreateException;
+import cz.muni.pa036.logging.exceptions.FindByException;
 import cz.muni.pa036.logging.utils.InvitationState;
 
 import org.mockito.InjectMocks;
@@ -87,32 +89,32 @@ public class InvitationServiceTest extends AbstractTestNGSpringContextTests {
     }
 
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void inviteWithNotExistingEvent(){
         invitationService.invite(10L, 2L);
     }
     
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void inviteNotExistingSportsman(){
         invitationService.invite(5L, 4L);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void inviteEventNull(){
         invitationService.invite(null, sportsman);
     }
     
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void inviteSportsmanNull(){
         invitationService.invite(event, null);
     }
     
-    @Test(expectedExceptions = IllegalStateException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void inviteSportsmanAlsoAdmin(){
         invitationService.invite(event, eventAdmin);
     }
     
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void inviteSportsmanAlreadyAdded(){
         Invitation invitationR = invitationService.invite(event, anotherSportsman);
         invitationService.accept(invitationR);
@@ -145,25 +147,25 @@ public class InvitationServiceTest extends AbstractTestNGSpringContextTests {
     }
 
     
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void acceptInvitationNull(){
         invitationService.accept(null);
     }
     
     //Finished means Accepted or Declined
-    @Test(expectedExceptions = IllegalStateException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void acceptFinishedACCEPTED(){
         invitation.setState(InvitationState.ACCEPTED);
         invitationService.accept(invitation);
     }
     
-    @Test(expectedExceptions = IllegalStateException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void acceptFinishedDECLINED(){
         invitation.setState(InvitationState.DECLINED);
         invitationService.accept(invitation);
     }
 
-    @Test(expectedExceptions = NullPointerException.class)
+    @Test(expectedExceptions = CreateException.class)
     public void acceptAddingParticipants(){
         Invitation result = invitationService.accept(invitation);
         //verify(event, times(1)).getParticipants().add(sportsman);
@@ -173,18 +175,18 @@ public class InvitationServiceTest extends AbstractTestNGSpringContextTests {
         assertEquals(invitation, result);
     }
     
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void declineInvitationNull(){
         invitationService.decline(null);
     }
     
-    @Test(expectedExceptions = IllegalStateException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void declineInvitationAlreadyDECLINED(){
         invitation.setState(InvitationState.DECLINED);
         invitationService.decline(invitation);
     }
 
-    @Test(expectedExceptions = IllegalStateException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void declineInvitationAlreadyACCEPTED() {
         invitation.setState(InvitationState.ACCEPTED);
         invitationService.decline(invitation);
@@ -206,7 +208,7 @@ public class InvitationServiceTest extends AbstractTestNGSpringContextTests {
         Mockito.verify(invitationDAOMock, times(1)).findById(id);
     }
 
-    @Test(expectedExceptions = DataAccessException.class)
+    @Test(expectedExceptions = FindByException.class)
     public void findByIdNull() {
         doThrow(new IllegalArgumentException("Trying to find object by null id!"))
                 .when(invitationDAOMock)
