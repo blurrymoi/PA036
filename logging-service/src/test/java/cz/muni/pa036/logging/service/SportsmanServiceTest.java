@@ -67,7 +67,7 @@ public class SportsmanServiceTest extends AbstractTestNGSpringContextTests {
     }
 
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = CreateException.class)
     public void testCreateNull() {
         Sportsman create = null;
         doThrow(new IllegalArgumentException("Trying to createEvent null object!"))
@@ -77,7 +77,7 @@ public class SportsmanServiceTest extends AbstractTestNGSpringContextTests {
         sportsmanService.create(create);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = CreateException.class)
     public void testCreateUninitializedObject() {
         Sportsman sportsman = new Sportsman();
         doThrow(new IllegalArgumentException("Trying to createEvent uninitialized object!"))

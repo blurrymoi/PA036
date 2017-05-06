@@ -30,7 +30,7 @@ public class SportsmanServiceImpl implements SportsmanService {
 	public void create(Sportsman sportsman) {
 
 		if(sportsman == null || sportsman.getPassword() == null || sportsman.getPassword().isEmpty()) {
-			throw new IllegalArgumentException("Invalid argument - sportsman");
+            throw new CreateException("Failed to create Sportsman", new Exception(), sportsman);
 		}
 
 		sportsman.setPassword(hashPassword(sportsman.getPassword()));
@@ -49,7 +49,7 @@ public class SportsmanServiceImpl implements SportsmanService {
             CRUD_LOGGER.logFindBy("ID", id);
             return sportsmanDAO.findById(id);
         } catch (Exception ex) {
-            throw new FindByException("Failed to find Sportsman by ID", ex, "ID", id);
+            throw new FindByException ("Failed to find Sportsman by ID", ex, "ID", id);
         }
 	}
 

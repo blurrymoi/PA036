@@ -140,10 +140,10 @@ public class EventServiceImpl implements EventService {
     @Override
     public void delete(Event event) {
         if (event == null) {
-            throw  new IllegalArgumentException("Trying to delete null object");
+            throw new DeleteException("Trying to delete null object", new Exception(), event);
         }
         if (event.getId() == null) {
-            throw  new IllegalArgumentException("Trying to delete in DB non existing event");
+            throw new DeleteException("Trying to delete in DB non existing event", new Exception(), event);
         }
         Set<Sportsman> participants = new HashSet<>();
         if (event.getParticipants() != null) {
