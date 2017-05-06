@@ -231,7 +231,7 @@ public class EventServiceTest extends ServiceLayerTest {
             logFile.cleanLogFile();
             eventService.update(null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (UpdateException e) {}
         LogFileDiff diff = logFile.reloadLogFile();
         Assert.assertNull(diff);
     }
@@ -255,7 +255,7 @@ public class EventServiceTest extends ServiceLayerTest {
             logFile.cleanLogFile();
             eventService.delete(null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (DeleteException e) {}
         logFile.reloadLogFile();
         LogFileDiff diff = logFile.reloadLogFile();
         Assert.assertNull(diff);    }

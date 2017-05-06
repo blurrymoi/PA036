@@ -200,7 +200,7 @@ public class InvitationServiceTest extends ServiceLayerTest {
             logFile.cleanLogFile();
             invitationService.invite(null, invitee);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (FindByException e) {}
         Assert.assertNull(logFile.reloadLogFile());
     }
 
@@ -210,7 +210,7 @@ public class InvitationServiceTest extends ServiceLayerTest {
             logFile.cleanLogFile();
             invitationService.invite(null, null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (FindByException e) {}
         Assert.assertNull(logFile.reloadLogFile());
     }
 
@@ -221,7 +221,7 @@ public class InvitationServiceTest extends ServiceLayerTest {
         try {
             invitationService.accept(invitation);
             fail("Accept already accepted. IllegalStateException should by thrown.");
-        } catch (IllegalStateException e) {}
+        } catch (FindByException e) {}
         logFile.reloadLogFile();
         Assert.assertNull(logFile.getLogFileDiff(), "No logs because invitation already confirmed -> nothing to do!");
     }

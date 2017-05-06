@@ -200,7 +200,7 @@ public class SportsmanServiceTest extends ServiceLayerTest {
         try {
             sportsmanService.create(null);
             fail(nullException);
-        } catch (IllegalArgumentException e) {}
+        } catch (CreateException e) {}
         LogFileDiff diff = logFile.reloadLogFile();
         Assert.assertNull(diff, "Expected null diff due to. Special create method(generating pss hash, ...). If null, nothing to happened!");
     }

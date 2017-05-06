@@ -15,7 +15,7 @@
         <module>logging-service</module>
         <module>logging-mvc</module>
         <module>logging-api</module>
-        <!--<module>logging-integration-tests</module>-->
+        <module>logging-integration-tests</module>
     </modules>
 
     <name>Query Logging Project</name>

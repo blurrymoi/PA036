@@ -78,7 +78,7 @@ public class BasicLogFileTest extends AbstractTestNGSpringContextTests {
         sportService.findAll();
         LogFile logFile;
         try {
-            String testLogfileName = System.getProperty("user.dir") + File.separator + TEST_LOG_FILE_NAME;
+            String testLogfileName = LoggerConfiguration.getLogFile();//.replace(".log", "-test.log");
                     logFile = LogLoader.loadLogFile(testLogfileName);
             sportService.findAll();
             LogFileDiff logFileDiff = logFile.reloadLogFile();
