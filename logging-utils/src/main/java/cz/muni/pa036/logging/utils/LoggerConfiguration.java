@@ -8,12 +8,15 @@ import ch.qos.logback.core.Context;
 import ch.qos.logback.core.spi.ContextAwareBase;
 import ch.qos.logback.core.spi.LifeCycle;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Properties;
 import java.io.File;
 
 public class LoggerConfiguration extends ContextAwareBase implements LoggerContextListener, LifeCycle {
+
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(LoggerConfiguration.class);
 
     private static final String DEFAULT_LOG_DIR = System.getProperty("user.home");
     private static final String DEFAULT_LOG_FILE = "PA036";
@@ -67,6 +70,11 @@ public class LoggerConfiguration extends ContextAwareBase implements LoggerConte
         context.putProperty("HIBERNATE_SQL_LEVEL", resolveOfFallbackToDefault(hibernateSQLLevel));
 
         started = true;
+    }
+
+    public static void setLoggingLevel(String loggerName, Level level) {
+        Logger logger = (Logger) LoggerFactory.getLogger(loggerName);
+        logger.setLevel(level);
     }
 
     private String cutTheDot(String fileName) {
@@ -144,6 +152,7 @@ public class LoggerConfiguration extends ContextAwareBase implements LoggerConte
 
     @Override
     public void onLevelChange(Logger logger, Level level) {
+        LOGGER.debug(" << Logging level changed to " + level + " for Logger " + logger.getName() + " >> ");
     }
 
     public static String getLogFile() {
