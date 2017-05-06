@@ -24,6 +24,9 @@ public class LoggerConfiguration extends ContextAwareBase implements LoggerConte
     private static String logDir;
     private static String logFile;
 
+    private static String actualLogDir;
+    private static String actualLogFile;
+
     private static String rootLevel;
     private static String pa036Level;
     private static String springLevel;
@@ -79,8 +82,8 @@ public class LoggerConfiguration extends ContextAwareBase implements LoggerConte
             e.printStackTrace();
         }
 
-        String actualLogDir = (logDir.length() > 0) ? resolveProperties(logDir) : DEFAULT_LOG_DIR;
-        String actualLogFile = (logFile.length() > 0) ? cutTheDot(resolveProperties(logFile)) : DEFAULT_LOG_FILE;
+        actualLogDir = (logDir.length() > 0) ? resolveProperties(logDir) : DEFAULT_LOG_DIR;
+        actualLogFile = (logFile.length() > 0) ? cutTheDot(resolveProperties(logFile)) : DEFAULT_LOG_FILE;
 
         Context context = getContext();
 
@@ -185,7 +188,11 @@ public class LoggerConfiguration extends ContextAwareBase implements LoggerConte
     }
 
     public static String getLogFile() {
-        return logDir + File.separator + logFile;
+        return actualLogDir + File.separator + actualLogFile + ".log";
+    }
+
+    public static String getTestLogFile() {
+        return actualLogDir + File.separator + actualLogFile + "-test.log";
     }
 
     public static void setLoggerModel(LoggerModel model) {
