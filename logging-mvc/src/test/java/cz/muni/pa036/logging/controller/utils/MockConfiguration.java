@@ -1,32 +1,48 @@
-package cz.muni.pa036.logging.controller;
+package cz.muni.pa036.logging.controller.utils;
 
-import cz.muni.pa036.logging.controller.advisers.ControllerAdviser;
 import cz.muni.pa036.logging.dto.*;
 import cz.muni.pa036.logging.facade.*;
 import cz.muni.pa036.logging.service.BeanMappingService;
-import org.springframework.beans.factory.support.RootBeanDefinition;
-import org.springframework.context.support.StaticApplicationContext;
-import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 import java.util.Calendar;
 import java.util.List;
 
-class TestUtils {
+import static org.mockito.Mockito.mock;
 
-    static ExceptionHandlerExceptionResolver createExceptionResolver() {
-        final ExceptionHandlerExceptionResolver exceptionHandlerExceptionResolver = new ExceptionHandlerExceptionResolver();
+@Configuration
+public class MockConfiguration {
 
-        //here we need to setup a dummy application context that only registers the GlobalControllerExceptionHandler
-        final StaticApplicationContext applicationContext = new StaticApplicationContext();
-        applicationContext.registerBeanDefinition("advice", new RootBeanDefinition(ControllerAdviser.class, null, null));
+    @Bean
+    @Primary
+    public EventFacade eventFacade() {
+        return mock(EventFacade.class);
+    }
 
-        //set the application context of the resolver to the dummy application context we just created
-        exceptionHandlerExceptionResolver.setApplicationContext(applicationContext);
+    @Bean
+    @Primary
+    public InvitationFacade invitationFacade() {
+        return mock(InvitationFacade.class);
+    }
 
-        //needed in order to force the exception resolver to update it's internal caches
-        exceptionHandlerExceptionResolver.afterPropertiesSet();
+    @Bean
+    @Primary
+    public ResultFacade resultFacade() {
+        return mock(ResultFacade.class);
+    }
 
-        return exceptionHandlerExceptionResolver;
+    @Bean
+    @Primary
+    public SportFacade sportFacade() {
+        return mock(SportFacade.class);
+    }
+
+    @Bean
+    @Primary
+    public SportsmanFacade sportsmanFacade() {
+        return mock(SportsmanFacade.class);
     }
 
     class EventFacadeStub implements EventFacade {
