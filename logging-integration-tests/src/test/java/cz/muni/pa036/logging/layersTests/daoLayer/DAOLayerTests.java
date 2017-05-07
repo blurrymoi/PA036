@@ -4,6 +4,7 @@ import cz.muni.pa036.logging.layersTests.BasicLayerTest;
 import cz.muni.pa036.logging.log.Log;
 import cz.muni.pa036.logging.logService.LogLoader;
 import cz.muni.pa036.logging.utils.LoggerConfiguration;
+import org.slf4j.event.Level;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
@@ -30,12 +31,12 @@ public abstract class DAOLayerTests extends BasicLayerTest {
     @Override
     @BeforeClass
     public void initTest() throws Exception {
-        //todo finish path to log file
         logFile = LogLoader.loadLogFile(LoggerConfiguration.getLogFile(), true);
         logFile.cleanLogFile();
 
-        isDebugLevelEnabled = true; //todo load from config
-        isTraceLevelEnabled = true; //todo load from config
+        isDebugLevelEnabled = LoggerConfiguration.getLoggerModel().getPa036Level() == Level.DEBUG ||
+                LoggerConfiguration.getLoggerModel().getPa036Level() == Level.TRACE;
+        isTraceLevelEnabled = LoggerConfiguration.getLoggerModel().getHibernateSQLLevel() == Level.TRACE;
     }
 
     @BeforeTest
