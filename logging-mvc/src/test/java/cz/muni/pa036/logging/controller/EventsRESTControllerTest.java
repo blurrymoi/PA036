@@ -21,6 +21,7 @@ import cz.muni.pa036.logging.facade.SportsmanFacade;
 import cz.muni.pa036.logging.log.LogFile;
 import cz.muni.pa036.logging.log.LogFileDiff;
 import cz.muni.pa036.logging.logService.LogLoader;
+import cz.muni.pa036.logging.service.LoggerService;
 import cz.muni.pa036.logging.utils.LoggerConfiguration;
 import cz.muni.pa036.logging.utils.LoggerModel;
 import org.junit.Assert;
@@ -40,6 +41,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.testng.annotations.BeforeClass;
 
 import java.util.ArrayList;
 
@@ -73,12 +75,21 @@ public class EventsRESTControllerTest {
 
     private MockMvc mockMvc;
 
-    private boolean isDebugEnabled = LoggerConfiguration.getLoggerModel().getPa036Level() == Level.DEBUG
-            || LoggerConfiguration.getLoggerModel().getPa036Level() ==Level.TRACE;
+    private boolean isDebugEnabled;
 
+    @Autowired
+    private LoggerService loggerService;
 
     @Before
     public void setUp() throws Exception {
+        LoggerModel model = loggerService.getLoggerModel();
+        model.setPa036Level(Level.DEBUG);
+        model.setHibernateSQLLevel(Level.DEBUG);
+        loggerService.updateLoggingOptions(model);
+
+        isDebugEnabled = LoggerConfiguration.getLoggerModel().getPa036Level() == Level.DEBUG
+                || LoggerConfiguration.getLoggerModel().getPa036Level() ==Level.TRACE;
+
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac)
                 .apply(springSecurity())
                 .build();
