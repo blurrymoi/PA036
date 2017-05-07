@@ -63,7 +63,9 @@ public class ResultServiceTest extends ServiceLayerTest {
     public void findAllTest() throws Exception{
         resultService.findAll();
         logFile.reloadLogFile();
-        super.testFindAllMethod(layerName, className);
+        if (isDebugLevelEnabled) {
+            super.testFindAllMethod(layerName, className);
+        }
     }
 
     @Test

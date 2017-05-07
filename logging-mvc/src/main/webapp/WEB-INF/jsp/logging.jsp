@@ -7,6 +7,9 @@
 
 <spring:url value="/logging/apply" var="applyUrl"/>
 
+<c:set var="dis" value="Not enabled to edit in runtime. Possible to edit in properties before application start!"/>
+<c:set var="diss" value="Not enabled to edit in runtime. Required to set by dbs admin on DBS system!"/>
+
 <c:set var="dest" value="PostgreSQL supports several methods for logging server messages, including stderr, csvlog and syslog. On Windows, eventlog is also supported. Set this parameter to a list of desired log destinations separated by commas. The default is to log to stderr only. This parameter can only be set in the postgresql.conffile or on the server command line."/>
 <c:set var="coll" value="This parameter enables the logging collector, which is a background process that captures log messages sent to stderr and redirects them into log files. This approach is often more useful than logging to syslog, since some types of messages might not appear in syslog output. (One common example is dynamic-linker failure messages; another is error messages produced by scripts such as archive_command.) This parameter can only be set at server start."/>
 <c:set var="dir" value="When logging_collector is enabled, this parameter determines the directory n which log files will be created. It can be specified as an absolute path, or relative to the cluster data directory. This parameter can only be set in the postgresql.conf file or on the server command line. The default is pg_log."/>
@@ -20,7 +23,7 @@
 <c:set var="logdur" value="Causes the duration of every completed statement to be logged. The default is off. Only superusers can change this setting. For clients using extended query protocol, durations of the Parse, Bind, and Execute steps are logged independently."/>
 <c:set var="pref" value="This is a printf-style string that is output at the beginning of each log line. % characters begin 'escape sequences' that are replaced with status information as outlined below. Unrecognized escapes are ignored. Other characters are copied straight to the log line. Some escapes are only recognized by session processes, and will be treated as empty by background processes such as the main server process. Status information may be aligned either left or right by specifying a numeric literal after the % and before the option. A negative value will cause the status information to be padded on the right with spaces to give it a minimum width, whereas a positive value will pad on the left. Padding can be useful to aid human readability in log files. This parameter can only be set in the postgresql.conf file or on the server command line. The default is an empty string."/>
 
-
+<small>Logging management is publicly available due to project.</small>
 <form:form class="form-horizontal" modelAttribute="logger" action="${applyUrl}" method="POST">
     <%--<div class = "panel panel-default">--%>
         <%--<div class = "panel-heading">--%>
@@ -38,11 +41,11 @@
         <div class="card card-block">
     <spring:bind path="logDir">
     <div class="form-group form-group-lg" title="${dir}">
-        <form:label path="logDir" class="col-sm-3 control-label">
+        <form:label path="logDir" class="col-sm-3 control-label" >
             <spring:message code="logging.directory"/>
         </form:label>
-        <div class="col-sm-5">
-            <form:input path="logDir" class="form-control"/>
+        <div class="col-sm-5" title="${dis}">
+            <form:input path="logDir" class="form-control" readonly="true"/>
         </div>
     </div>
     </spring:bind>
@@ -52,8 +55,8 @@
             <form:label path="logFile" class="col-sm-3 control-label">
                 <spring:message code="logging.filename"/>
             </form:label>
-            <div class="col-sm-5">
-                <form:input path="logFile" class="form-control"/>
+            <div class="col-sm-5" title="${dis}">
+                <form:input path="logFile" class="form-control" readonly="true"/>
             </div>
         </div>
     </spring:bind>
@@ -156,9 +159,10 @@
         </button>
     </p>
     <div class="collapse" id="collapseExample2">
+        <div class="alert alert-warning" role="alert">
+            <strong>Warning!</strong>The properties should only be edited by experienced DBS users.
+        </div>
         <div class="card card-block">
-
-
         <spring:bind path="destination">
         <div class="form-group form-group-lg" title="${dest}">
             <form:label path="destination" class="col-sm-3 control-label">
@@ -183,8 +187,8 @@
             <form:label path="directory" class="col-sm-3 control-label">
                 <spring:message code="logging.directory"/>
             </form:label>
-            <div class="col-sm-5">
-                <form:input path="directory" class="form-control"/>
+            <div class="col-sm-5" title="${diss}">
+                <form:input path="directory" class="form-control" readonly="true"/>
             </div>
         </div>
     </spring:bind>
@@ -194,8 +198,8 @@
             <form:label path="fileName" class="col-sm-3 control-label">
                 <spring:message code="logging.filename"/>
             </form:label>
-            <div class="col-sm-5">
-                <form:input path="fileName" class="form-control"/>
+            <div class="col-sm-5" title="${diss}">
+                <form:input path="fileName" class="form-control" readonly="true"/>
             </div>
         </div>
     </spring:bind>
@@ -205,8 +209,8 @@
             <form:label path="fileMode" class="col-sm-3 control-label">
                 <spring:message code="logging.filemode"/>
             </form:label>
-            <div class="col-sm-5">
-                <form:input path="fileMode" class="form-control"/>
+            <div class="col-sm-5" title="${diss}">
+                <form:input path="fileMode" class="form-control" readonly="true"/>
             </div>
         </div>
     </spring:bind>
@@ -214,7 +218,7 @@
     <spring:bind path="rotationAge">
         <div class="form-group form-group-lg" title="${rotAge}">
             <form:label path="rotationAge" class="col-sm-3 control-label">
-                <spring:message code="logging.rotationage"/>
+                <spring:message code="logging.rotationage"/>(min)
             </form:label>
             <div class="col-sm-5">
                 <form:input path="rotationAge" class="form-control"/>
@@ -225,7 +229,7 @@
     <spring:bind path="rotationSize">
         <div class="form-group form-group-lg" title="${size}">
             <form:label path="rotationSize" class="col-sm-3 control-label">
-                <spring:message code="logging.rotationsize"/>
+                <spring:message code="logging.rotationsize"/>(kb)
             </form:label>
             <div class="col-sm-5">
                 <form:input path="rotationSize" class="form-control"/>
@@ -265,7 +269,7 @@
     <spring:bind path="minDuration">
         <div class="form-group form-group-lg" title="${mindur}">
             <form:label path="minDuration" class="col-sm-3 control-label">
-                <spring:message code="logging.minduration"/>
+                <spring:message code="logging.minduration"/>(ms)
             </form:label>
             <div class="col-sm-5">
                 <form:input path="minDuration" class="form-control"/>

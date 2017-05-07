@@ -60,7 +60,9 @@ public class InvitationServiceTest extends ServiceLayerTest {
     public void findAllTest()throws Exception{
         invitationService.findAll();
         logFile.reloadLogFile();
-        super.testFindAllMethod(layerName, className);
+        if (isDebugLevelEnabled) {
+            super.testFindAllMethod(layerName, className);
+        }
     }
 
     @Test

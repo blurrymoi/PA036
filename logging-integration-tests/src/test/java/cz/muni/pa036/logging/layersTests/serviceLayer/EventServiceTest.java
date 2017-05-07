@@ -210,7 +210,9 @@ public class EventServiceTest extends ServiceLayerTest {
     public void findAllEventsTest() throws Exception {
         eventService.findAll();
         logFile.reloadLogFile();
-        super.testFindAllMethod(layerName, className);
+        if (isDebugLevelEnabled) {
+            super.testFindAllMethod(layerName, className);
+        }
     }
 
 
