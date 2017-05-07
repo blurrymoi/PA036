@@ -73,7 +73,8 @@ public class EventsRESTControllerTest {
 
     private MockMvc mockMvc;
 
-    private boolean isDebugEnabled = LoggerConfiguration.getLoggerModel().getPa036Level() == Level.DEBUG;
+    private boolean isDebugEnabled = LoggerConfiguration.getLoggerModel().getPa036Level() == Level.DEBUG
+            || LoggerConfiguration.getLoggerModel().getPa036Level() ==Level.TRACE;
 
 
     @Before
