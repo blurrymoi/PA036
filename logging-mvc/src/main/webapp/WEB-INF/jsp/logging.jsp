@@ -7,6 +7,8 @@
 
 <spring:url value="/logging/apply" var="applyUrl"/>
 
+<c:set var="dis" value="Not enabled to edit in runtime. Possible to edit in properties before application start!"/>
+
 <c:set var="dest" value="PostgreSQL supports several methods for logging server messages, including stderr, csvlog and syslog. On Windows, eventlog is also supported. Set this parameter to a list of desired log destinations separated by commas. The default is to log to stderr only. This parameter can only be set in the postgresql.conffile or on the server command line."/>
 <c:set var="coll" value="This parameter enables the logging collector, which is a background process that captures log messages sent to stderr and redirects them into log files. This approach is often more useful than logging to syslog, since some types of messages might not appear in syslog output. (One common example is dynamic-linker failure messages; another is error messages produced by scripts such as archive_command.) This parameter can only be set at server start."/>
 <c:set var="dir" value="When logging_collector is enabled, this parameter determines the directory n which log files will be created. It can be specified as an absolute path, or relative to the cluster data directory. This parameter can only be set in the postgresql.conf file or on the server command line. The default is pg_log."/>
@@ -38,11 +40,11 @@
         <div class="card card-block">
     <spring:bind path="logDir">
     <div class="form-group form-group-lg" title="${dir}">
-        <form:label path="logDir" class="col-sm-3 control-label">
+        <form:label path="logDir" class="col-sm-3 control-label" >
             <spring:message code="logging.directory"/>
         </form:label>
-        <div class="col-sm-5">
-            <form:input path="logDir" class="form-control"/>
+        <div class="col-sm-5" title="${dis}">
+            <form:input path="logDir" class="form-control" readonly="true"/>
         </div>
     </div>
     </spring:bind>
@@ -52,8 +54,8 @@
             <form:label path="logFile" class="col-sm-3 control-label">
                 <spring:message code="logging.filename"/>
             </form:label>
-            <div class="col-sm-5">
-                <form:input path="logFile" class="form-control"/>
+            <div class="col-sm-5" title="${dis}">
+                <form:input path="logFile" class="form-control" readonly="true"/>
             </div>
         </div>
     </spring:bind>
