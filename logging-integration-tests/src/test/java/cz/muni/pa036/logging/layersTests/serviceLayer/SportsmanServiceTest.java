@@ -55,7 +55,9 @@ public class SportsmanServiceTest extends ServiceLayerTest {
     public void findAllTest() throws Exception{
         sportsmanService.findAll();
         logFile.reloadLogFile();
-        super.testFindAllMethod(layerName, className);
+        if (isDebugLevelEnabled) {
+            super.testFindAllMethod(layerName, className);
+        }
     }
 
     @Test
@@ -87,7 +89,9 @@ public class SportsmanServiceTest extends ServiceLayerTest {
             fail(nullException);
         } catch (FindByException e) {}
         logFile.reloadLogFile();
-        super.testFindByParamsMethod(layerName, className, param, value);
+        if (isDebugLevelEnabled) {
+            super.testFindByParamsMethod(layerName, className, param, value);
+        }
     }
 
     @Test

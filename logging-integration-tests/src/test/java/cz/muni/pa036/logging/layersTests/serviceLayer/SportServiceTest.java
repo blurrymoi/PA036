@@ -50,7 +50,9 @@ public class SportServiceTest extends ServiceLayerTest {
     public void findAllTest() throws Exception{
         sportService.findAll();
         logFile.reloadLogFile();
-        super.testFindAllMethod(layerName, className);
+        if (isDebugLevelEnabled) {
+            super.testFindAllMethod(layerName, className);
+        }
     }
 
     @Test

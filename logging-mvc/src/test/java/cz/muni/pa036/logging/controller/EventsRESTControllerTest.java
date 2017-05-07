@@ -22,12 +22,14 @@ import cz.muni.pa036.logging.log.LogFile;
 import cz.muni.pa036.logging.log.LogFileDiff;
 import cz.muni.pa036.logging.logService.LogLoader;
 import cz.muni.pa036.logging.utils.LoggerConfiguration;
+import cz.muni.pa036.logging.utils.LoggerModel;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.slf4j.event.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
@@ -71,6 +73,9 @@ public class EventsRESTControllerTest {
 
     private MockMvc mockMvc;
 
+    private boolean isDebugEnabled = LoggerConfiguration.getLoggerModel().getPa036Level() == Level.DEBUG;
+
+
     @Before
     public void setUp() throws Exception {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac)
@@ -96,18 +101,23 @@ public class EventsRESTControllerTest {
     public void whenCreateMethodOnFacadeThrowsException_thenThisExceptionIsLoggedUsingControllerAdviser() throws Exception {
         doThrow(new CreateException("Create failed", null, null)).when(eventFacade).create(any());
 
+        logFile.cleanLogFile();
         try {
             this.mockMvc.perform(post("/rest/events/create")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(JSONifier.toJSON(eventDTO)))
                     .andDo(MockMvcResultHandlers.print());
         } catch (ExistingResourceException ex) {}
-
         LogFileDiff diff = logFile.reloadLogFile();
 
-        Assert.assertNotEquals(0.0, logFile.getFileSize());
-        Assert.assertNotNull(diff);
-        Assert.assertFalse(diff.getLogs().isEmpty());
+        if (isDebugEnabled) {
+            Assert.assertNotEquals(0.0, logFile.getFileSize());
+            Assert.assertNotNull(diff);
+            Assert.assertFalse(diff.getLogs().isEmpty());
+        } else {
+            Assert.assertEquals(new Long(0), logFile.getFileSize());
+            Assert.assertNull(diff);
+        }
     }
 
     @Ignore
@@ -132,6 +142,7 @@ public class EventsRESTControllerTest {
     public void whenUpdateMethodOnFacadeThrowsException_thenThisExceptionIsLoggedUsingControllerAdviser() throws Exception {
         doThrow(new UpdateException("Update failed", null, null)).when(eventFacade).update(any());
 
+        logFile.cleanLogFile();
         try {
             this.mockMvc.perform(put("/rest/events/update")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -141,9 +152,14 @@ public class EventsRESTControllerTest {
 
         LogFileDiff diff = logFile.reloadLogFile();
 
-        Assert.assertNotEquals(0.0, logFile.getFileSize());
-        Assert.assertNotNull(diff);
-        Assert.assertFalse(diff.getLogs().isEmpty());
+        if (isDebugEnabled) {
+            Assert.assertNotEquals(0.0, logFile.getFileSize());
+            Assert.assertNotNull(diff);
+            Assert.assertFalse(diff.getLogs().isEmpty());
+        } else {
+            Assert.assertEquals(new Long(0), logFile.getFileSize());
+            Assert.assertNull(diff);
+        }
     }
 
     @Ignore
