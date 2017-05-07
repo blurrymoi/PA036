@@ -22,7 +22,7 @@
 <c:set var="logdur" value="Causes the duration of every completed statement to be logged. The default is off. Only superusers can change this setting. For clients using extended query protocol, durations of the Parse, Bind, and Execute steps are logged independently."/>
 <c:set var="pref" value="This is a printf-style string that is output at the beginning of each log line. % characters begin 'escape sequences' that are replaced with status information as outlined below. Unrecognized escapes are ignored. Other characters are copied straight to the log line. Some escapes are only recognized by session processes, and will be treated as empty by background processes such as the main server process. Status information may be aligned either left or right by specifying a numeric literal after the % and before the option. A negative value will cause the status information to be padded on the right with spaces to give it a minimum width, whereas a positive value will pad on the left. Padding can be useful to aid human readability in log files. This parameter can only be set in the postgresql.conf file or on the server command line. The default is an empty string."/>
 
-
+<small>Logging management is publicly available due to project.</small>
 <form:form class="form-horizontal" modelAttribute="logger" action="${applyUrl}" method="POST">
     <%--<div class = "panel panel-default">--%>
         <%--<div class = "panel-heading">--%>
@@ -158,9 +158,10 @@
         </button>
     </p>
     <div class="collapse" id="collapseExample2">
+        <div class="alert alert-warning" role="alert">
+            <strong>Warning!</strong>The properties should only be edited by experienced DBS users.
+        </div>
         <div class="card card-block">
-
-
         <spring:bind path="destination">
         <div class="form-group form-group-lg" title="${dest}">
             <form:label path="destination" class="col-sm-3 control-label">
