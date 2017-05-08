@@ -1,7 +1,6 @@
 package cz.muni.pa036.logging.dbsApi;
 
 import cz.muni.pa036.logging.utils.DBLogLevel;
-import cz.muni.pa036.logging.utils.LogDestination;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
@@ -32,15 +31,15 @@ public class DBSApiImpl implements DBSApi {
     }
 
     @Override
-    public void turnOnLogging(boolean enabled) throws Exception {
+    public void setLogStatement(String statement, boolean enabled) throws Exception {
         final String option = "log_statement";
-        jdbc.execute(getQuery(option, "'all'", String.valueOf(enabled)));
+        jdbc.execute(getQuery(option, "'" + statement + "'", String.valueOf(enabled)));
     }
 
     @Override
-    public void setLogDestination(LogDestination destination, boolean enabled) throws Exception {
+    public void setLogDestination(String destination, boolean enabled) throws Exception {
         final String option = "log_destination";
-        jdbc.execute(getQuery(option, destination.toString().toLowerCase(), String.valueOf(enabled)));
+        jdbc.execute(getQuery(option, destination, String.valueOf(enabled)));
     }
 
     @Override

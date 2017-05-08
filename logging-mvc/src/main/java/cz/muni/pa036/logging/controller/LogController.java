@@ -5,6 +5,7 @@ import cz.muni.pa036.logging.utils.DBLogLevel;
 import cz.muni.pa036.logging.utils.LogDestination;
 import cz.muni.pa036.logging.service.DBSystemLogAPI;
 import cz.muni.pa036.logging.service.LoggerService;
+import cz.muni.pa036.logging.utils.LogStatement;
 import cz.muni.pa036.logging.utils.LoggerModel;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.slf4j.event.Level;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -56,9 +62,19 @@ public class LogController extends BaseController {
     @RequestMapping
     public String renderList(Model model) throws Exception {
         logger.info("Logging management page loaded");
-        model.addAttribute("logger", loggerService.getLoggerModel());
-        model.addAttribute("dests", LogDestination.values());
+        LoggerModel loggerModel = loggerService.getLoggerModel();
+        List<LogDestination> dest = new ArrayList<LogDestination>(Arrays.asList(LogDestination.values()));
+        dest.removeAll(loggerModel.getDestinations());
+        String OS = System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH);
+        if (!OS.contains("win")) {
+            dest.remove(LogDestination.EVENTLOG);
+        }
+
+        model.addAttribute("logger", loggerModel);
+        model.addAttribute("dests", dest.toArray());
+        model.addAttribute("destsc", loggerModel.getDestinations().toArray());
         model.addAttribute("dblevels", DBLogLevel.values());
+        model.addAttribute("stats", LogStatement.values());
         model.addAttribute("levels", Level.values());
         return "logging.page";
     }
@@ -67,8 +83,22 @@ public class LogController extends BaseController {
     public Object apply(@ModelAttribute("logger") LoggerModel loggerModel, Model model) throws Exception {
         logger.debug("apply button clicked:" + loggerModel.toString());
         loggerService.updateLoggingOptions(loggerModel);
-        model.addAttribute("logger", loggerService.getLoggerModel());
-        return "logging.page";
+        LoggerModel loggerModel2 = loggerService.getLoggerModel();
+        List<LogDestination> dest = new ArrayList<LogDestination>(Arrays.asList(LogDestination.values()));
+        dest.removeAll(loggerModel2.getDestinations());
+        String OS = System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH);
+        if (!OS.contains("win")) {
+            dest.remove(LogDestination.EVENTLOG);
+        }
+
+        model.addAttribute("logger", loggerModel2);
+        model.addAttribute("dests", dest.toArray());
+        model.addAttribute("destsc", loggerModel2.getDestinations().toArray());
+        model.addAttribute("dblevels", DBLogLevel.values());
+        model.addAttribute("stats", LogStatement.values());
+        model.addAttribute("levels", Level.values());
+
+        return redirect(URL);
     }
 
     @RequestMapping(value = "/longrun/{time}", method = RequestMethod.GET)

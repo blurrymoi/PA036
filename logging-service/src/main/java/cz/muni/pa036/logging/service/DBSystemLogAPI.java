@@ -8,7 +8,7 @@ import cz.muni.pa036.logging.utils.LogDestination;
  */
 public interface DBSystemLogAPI {
 
-    void turnOnLogging(boolean enabled) throws Exception;
+    void setLogStatement(String statement) throws Exception;
 
     /**
      * PostgreSQL supports several methods for logging server messages,
@@ -21,7 +21,7 @@ public interface DBSystemLogAPI {
      * @param destination
      * @throws Exception
      */
-    void setLogDestination(LogDestination destination, boolean enabled) throws Exception;
+    void setLogDestination(String destination, boolean enabled) throws Exception;
 
     /**
      * When logging_collector is enabled, this parameter determines the directory
