@@ -2,8 +2,7 @@ package cz.muni.pa036.logging.utils;
 
 import org.slf4j.event.Level;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Kamil Triscik.
@@ -20,8 +19,8 @@ public class LoggerModel {
     private Level hibernateTypeLevel;
     private Level hibernateSQLLevel;
 
-
-    private LogDestination destination;
+    private LogStatement logStatement;
+    private List<LogDestination> destination;
     private String directory;
     private String fileName;
     private Integer fileMode;
@@ -37,6 +36,14 @@ public class LoggerModel {
 
     }
 
+    public LogStatement getLogStatement() {
+        return logStatement;
+    }
+
+    public void setLogStatement(LogStatement logStatement) {
+        this.logStatement = logStatement;
+    }
+
     public String getPrefix() {
         return prefix;
     }
@@ -45,16 +52,38 @@ public class LoggerModel {
         this.prefix = prefix;
     }
 
-    public LogDestination getDestination() {
+    public List<LogDestination> getDestinations() {
         return destination;
     }
 
+    public String getDestination() {
+        StringBuilder builder = new StringBuilder();
+        for (LogDestination destination : destination) {
+            builder.append(destination.toString());
+            builder.append(",");
+        }
+        String res = builder.toString();
+        if (res.endsWith(",")) {
+            res = res.substring(0, res.length() - 1);
+        }
+        return res;
+    }
+
     public void setDestination(LogDestination destination) {
+        this.destination = new ArrayList<LogDestination>(1) {{add(destination);}};
+    }
+
+    public void setDestination(List<LogDestination> destination) {
         this.destination = destination;
     }
 
     public void setDestination(String destination) {
-        this.destination = LogDestination.valueOf(destination);
+        String[] values = destination.replace(" ", "").split(",");
+        List<LogDestination> dest = new ArrayList<>(values.length);
+        for (String value : values) {
+            dest.add(LogDestination.valueOf(value));
+        }
+        this.destination = dest;
     }
 
     public String getDirectory() {
@@ -194,7 +223,6 @@ public class LoggerModel {
     public void setHibernateLevel(Level hibernateLevel) {
         this.hibernateLevel = hibernateLevel;
     }
-
 
     public Level getHibernateTypeLevel() {
         return hibernateTypeLevel;

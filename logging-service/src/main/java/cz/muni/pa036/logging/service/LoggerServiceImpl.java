@@ -15,7 +15,7 @@ import java.util.Objects;
  * @author Kamil Triscik.
  */
 @Service
-public class LoggerServiceImpl implements LoggerService{
+public class LoggerServiceImpl implements LoggerService {
 
     Logger logger = org.slf4j.LoggerFactory.getLogger(LoggerServiceImpl.class);
 
@@ -41,7 +41,12 @@ public class LoggerServiceImpl implements LoggerService{
 
         boolean changed = false;
 
-        if (old.getDestination() != loggerModel.getDestination()) {
+        if (!Objects.equals(old.getLogStatement(), loggerModel.getLogStatement())) {
+            dbsApi.setLogStatement(loggerModel.getLogStatement().toString().toLowerCase(), true);
+            changed = true;
+        }
+
+        if (!Objects.equals(old.getDestination(), loggerModel.getDestination())) {
             dbsApi.setLogDestination(loggerModel.getDestination(), true);
             changed = true;
         }

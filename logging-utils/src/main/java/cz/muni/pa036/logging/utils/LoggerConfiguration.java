@@ -34,6 +34,7 @@ public class LoggerConfiguration extends ContextAwareBase implements LoggerConte
     private static String hibernateTypeLevel;
     private static String hibernateSQLLevel;
 
+    private static String dbsLogStatement;
     private static String dbsLogDestination;
     private static String dbsLoggingDirectory;
     private static String dbsLogFilename;
@@ -66,6 +67,7 @@ public class LoggerConfiguration extends ContextAwareBase implements LoggerConte
             hibernateTypeLevel = properties.getProperty("HIBERNATE_TYPE_LEVEL");
             hibernateSQLLevel = properties.getProperty("HIBERNATE_SQL_LEVEL");
 
+            dbsLogStatement = properties.getProperty("DBS_LOG_STATEMENT");
             dbsLogDestination = properties.getProperty("DBS_LOG_DESTINATION");
             dbsLoggingDirectory = properties.getProperty("DBS_LOGGING_DIRECTORY");
             dbsLogFilename = properties.getProperty("DBS_LOG_FILENAME");
@@ -216,7 +218,8 @@ public class LoggerConfiguration extends ContextAwareBase implements LoggerConte
         model.setHibernateTypeLevel(hibernateTypeLevel);
         model.setHibernateSQLLevel(hibernateSQLLevel);
 
-        model.setDestination(LogDestination.valueOf(dbsLogDestination));
+        model.setLogStatement(LogStatement.valueOf(dbsLogStatement.toUpperCase()));
+        model.setDestination(dbsLogDestination);
         model.setDirectory(dbsLoggingDirectory);
         model.setFileName(dbsLogFilename);
         model.setFileMode(Integer.valueOf(dbsLogFilemode));
@@ -241,7 +244,8 @@ public class LoggerConfiguration extends ContextAwareBase implements LoggerConte
         hibernateTypeLevel = model.getHibernateTypeLevel().toString().toUpperCase();
         hibernateSQLLevel = model.getHibernateSQLLevel().toString().toUpperCase();
 
-        dbsLogDestination = model.getDestination().toString().toUpperCase();
+        dbsLogStatement = model.getLogStatement().toString().toLowerCase();
+        dbsLogDestination = model.getDestination().toUpperCase();
         dbsLoggingDirectory = model.getDirectory();
         dbsLogFilename = model.getFileName();
         dbsLogFilemode = String.valueOf(model.getFileMode());

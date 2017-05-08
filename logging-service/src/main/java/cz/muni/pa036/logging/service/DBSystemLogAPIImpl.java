@@ -16,12 +16,12 @@ public class DBSystemLogAPIImpl implements DBSystemLogAPI {
     private DBSApi dbsApi;
 
     @Override
-    public void turnOnLogging(boolean enabled) throws Exception {
-        dbsApi.turnOnLogging(enabled);
+    public void setLogStatement(String statement) throws Exception {
+        dbsApi.setLogStatement(statement, true);
     }
 
     @Override
-    public void setLogDestination(LogDestination destination, boolean enabled) throws Exception {
+    public void setLogDestination(String destination, boolean enabled) throws Exception {
         dbsApi.setLogDestination(destination, enabled);
     }
 

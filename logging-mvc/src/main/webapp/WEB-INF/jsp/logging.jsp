@@ -22,6 +22,8 @@
 <c:set var="mindur" value="Causes the duration of each completed statement to be logged if the statement ran for at least the specified number of milliseconds. Setting this to zero prints all statement durations. Minus-one (the default) disables logging statement durations. For example, if you set it to 250ms then all SQL statements that run 250ms or longer will be logged. Enabling this parameter can be helpful in tracking down unoptimized queries in your applications. Only superusers can change this setting"/>
 <c:set var="logdur" value="Causes the duration of every completed statement to be logged. The default is off. Only superusers can change this setting. For clients using extended query protocol, durations of the Parse, Bind, and Execute steps are logged independently."/>
 <c:set var="pref" value="This is a printf-style string that is output at the beginning of each log line. % characters begin 'escape sequences' that are replaced with status information as outlined below. Unrecognized escapes are ignored. Other characters are copied straight to the log line. Some escapes are only recognized by session processes, and will be treated as empty by background processes such as the main server process. Status information may be aligned either left or right by specifying a numeric literal after the % and before the option. A negative value will cause the status information to be padded on the right with spaces to give it a minimum width, whereas a positive value will pad on the left. Padding can be useful to aid human readability in log files. This parameter can only be set in the postgresql.conf file or on the server command line. The default is an empty string."/>
+<c:set var="stat" value="Controls which SQL statements are logged. Valid values are none (off), ddl, mod, and all (all statements). ddl logs all data definition statements, such as CREATE, ALTER, and DROP statements. mod logs all ddl statements, plus data-modifying statements such as INSERT, UPDATE, DELETE, TRUNCATE, and COPY FROM. PREPARE, EXECUTE, and EXPLAIN ANALYZE statements are also logged if their contained command is of an appropriate type. For clients using extended query protocol, logging occurs when an Execute message is received, and values of the Bind parameters are included (with any embedded single-quote marks doubled)."/>
+
 
 <small>Logging management is publicly available due to project.</small>
 <form:form class="form-horizontal" modelAttribute="logger" action="${applyUrl}" method="POST">
@@ -163,6 +165,19 @@
             <strong>Warning!</strong>The properties should only be edited by experienced DBS users.
         </div>
         <div class="card card-block">
+            <spring:bind path="logStatement">
+                <div class="form-group form-group-lg" title="${stat}">
+                    <form:label path="logStatement" class="col-sm-3 control-label">
+                        <spring:message code="logging.statement"/>
+                    </form:label>
+                    <div class="col-sm-5">
+                        <form:select path="logStatement" class="form-control">
+                            <form:options items="${stats}"/>
+                        </form:select>
+                    </div>
+                </div>
+            </spring:bind>
+
         <spring:bind path="destination">
         <div class="form-group form-group-lg" title="${dest}">
             <form:label path="destination" class="col-sm-3 control-label">
@@ -174,9 +189,13 @@
                         <%--<form:option value="{item.value}"><spring:eval expression="item"/></form:option>--%>
                     <%--</c:forEach>--%>
                 <%--</form:select>--%>
-                    <form:select path="destination" class="form-control">
-                        <form:option value="">-</form:option>
-                        <form:options items="${logDestinations}"/>
+                    <form:select multiple="true" path="destination" class="form-control">
+                        <c:forEach items="${dests}" var="desti">
+                            <option value="${desti.type}">${desti.type} - ${desti.destination} </option>s
+                        </c:forEach>
+                        <c:forEach items="${destsc}" var="desti">
+                            <option selected="selected" value="${desti.type}">${desti.type} - ${desti.destination} </option>
+                        </c:forEach>
                     </form:select>
             </div>
         </div>
@@ -205,7 +224,7 @@
     </spring:bind>
 
     <spring:bind path="fileMode">
-        <div class="form-group form-group-lg" title="${mode}">
+        <div class="form-group form-group-lg" title="${mode}" style="display: none">
             <form:label path="fileMode" class="col-sm-3 control-label">
                 <spring:message code="logging.filemode"/>
             </form:label>
@@ -244,7 +263,6 @@
             </form:label>
             <div class="col-sm-5">
                 <form:select path="minMessage" class="form-control">
-                    <form:option value="">-</form:option>
                     <form:options items="${logLevels}"/>
                 </form:select>
             </div>
@@ -258,8 +276,7 @@
             </form:label>
             <div class="col-sm-5">
                 <form:select path="minErrorState" class="form-control">
-                    <form:option value="">-</form:option>
-                    <form:options items="${logLevels}"/>
+s                    <form:options items="${logLevels}"/>
                 </form:select>
             </div>
         </div>
@@ -290,7 +307,7 @@
 
 
     <spring:bind path="prefix">
-        <div class="form-group form-group-lg" title="${pref}">
+        <div class="form-group form-group-lg" title="${pref}"  style="display: none">
             <form:label path="prefix" class="col-sm-3 control-label">
                 <spring:message code="logging.prefix"/>
             </form:label>

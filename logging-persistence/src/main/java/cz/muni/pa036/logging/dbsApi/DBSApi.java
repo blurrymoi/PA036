@@ -1,14 +1,24 @@
 package cz.muni.pa036.logging.dbsApi;
 
 import cz.muni.pa036.logging.utils.DBLogLevel;
-import cz.muni.pa036.logging.utils.LogDestination;
 
 /**
  * @author Kamil Triscik.
  */
 public interface DBSApi {
 
-    void turnOnLogging(boolean enabled) throws Exception;
+    /**
+     * Controls which SQL statements are logged. Valid values are none (off), ddl, mod, and all (all statements).
+     * ddl logs all data definition statements, such as CREATE, ALTER, and DROP statements. mod logs all ddl statements,
+     * plus data-modifying statements such as INSERT, UPDATE, DELETE, TRUNCATE, and COPY FROM. PREPARE, EXECUTE, and EXPLAIN ANALYZE
+     * statements are also logged if their contained command is of an appropriate type. For clients using extended query protocol,
+     * logging occurs when an Execute message is received, and values of the Bind parameters are included
+     * (with any embedded single-quote marks doubled)..
+     *
+     * @param statement
+     * @throws Exception
+     */
+    void setLogStatement(String statement, boolean enabled) throws Exception;
 
     /**
      * PostgreSQL supports several methods for logging server messages,
@@ -21,7 +31,7 @@ public interface DBSApi {
      * @param destination
      * @throws Exception
      */
-    void setLogDestination(LogDestination destination, boolean enabled) throws Exception;
+    void setLogDestination(String destination, boolean enabled) throws Exception;
 
     /**
      * When logging_collector is enabled, this parameter determines the directory
